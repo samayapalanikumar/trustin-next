@@ -1,6 +1,6 @@
 "use client";
-import "../../globals.css";
-import "../../satoshi.css";
+import "../globals.css";
+import "../satoshi.css";
 import { useState, useEffect } from "react";
 import Loader from "@/components/common/Loader";
 
@@ -9,7 +9,6 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
@@ -17,16 +16,20 @@ export default function RootLayout({
   }, []);
 
   return (
-    <div className="dark:bg-boxdark-2 dark:text-bodydark">
-      {loading ? (
-        <Loader />
-      ) : (
-        <div className="flex h-screen overflow-hidden">
-          <main>
-            <div className="mx-auto max-w-screen-2xl">{children}</div>
-          </main>
+    <html lang="en">
+      <body suppressHydrationWarning={true}>
+        <div className="dark:bg-boxdark-2 dark:text-bodydark">
+          {loading ? (
+            <Loader />
+          ) : (
+            <div className=" h-screen overflow-hidden">
+              <main>
+                <div className="mx-auto max-w-screen-2xl">{children}</div>
+              </main>
+            </div>
+          )}
         </div>
-      )}
-    </div>
+      </body>
+    </html>
   );
 }

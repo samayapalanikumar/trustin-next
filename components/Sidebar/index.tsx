@@ -188,7 +188,79 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                                 pathname === "/" && "text-white"
                               } `}
                             >
-                              eCommerce
+                              Home
+                            </Link>
+                          </li>
+                          <li>
+                            <Link
+                              href="/branches"
+                              className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
+                                pathname === "/branches" && "text-white"
+                              } `}
+                            >
+                              Branches
+                            </Link>
+                          </li>
+                          <li>
+                            <Link
+                              href="/users"
+                              className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
+                                pathname === "/users" && "text-white"
+                              } `}
+                            >
+                              Users
+                            </Link>
+                          </li>
+                          <li>
+                            <Link
+                              href="/customers"
+                              className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
+                                pathname === "/customers" && "text-white"
+                              } `}
+                            >
+                              Customers
+                            </Link>
+                          </li>
+                          <li>
+                            <Link
+                              href="/followup"
+                              className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
+                                pathname === "/followup" && "text-white"
+                              } `}
+                            >
+                              Customer Followup
+                            </Link>
+                          </li>
+                          <li>
+                            <Link
+                              href="/testtype"
+                              className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
+                                pathname === "/testtype" && "text-white"
+                              } `}
+                            >
+                              Test Type
+                            </Link>
+                          </li>
+                        
+                          <li>
+                            <Link
+                              href="/products"
+                              className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
+                                pathname === "/products" && "text-white"
+                              } `}
+                            >
+                              Products
+                            </Link>
+                          </li>
+                        
+                          <li>
+                            <Link
+                              href="/parameters"
+                              className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
+                                pathname === "/parameters" && "text-white"
+                              } `}
+                            >
+                              Test Parameters
                             </Link>
                           </li>
                         </ul>

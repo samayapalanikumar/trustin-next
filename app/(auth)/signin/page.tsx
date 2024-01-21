@@ -2,14 +2,17 @@ import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
-import { Metadata } from "next";
-export const metadata: Metadata = {
-  title: "Signin Page | Next.js E-commerce Dashboard Template",
-  description: "This is Signin page for TailAdmin Next.js",
-  // other metadata
-};
+// import { Metadata } from "next";
+import { signin } from "./actions";
 
-const SignIn: React.FC = () => {
+
+// export const metadata: Metadata = {
+//   title: "Signin Page | Next.js E-commerce Dashboard Template",
+//   description: "This is Signin page for TailAdmin Next.js",
+//   // other metadata
+// };
+
+export default function SignIn() {
   return (
     <>
       <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
@@ -169,7 +172,7 @@ const SignIn: React.FC = () => {
                 Sign In to Trustin
               </h2>
 
-              <form>
+              <form action={signin} method="POST">
                 <div className="mb-4">
                   <label className="mb-2.5 block font-medium text-black dark:text-white">
                     Email
@@ -177,6 +180,7 @@ const SignIn: React.FC = () => {
                   <div className="relative">
                     <input
                       type="email"
+                      name="username"
                       placeholder="Enter your email"
                       className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                     />
@@ -208,6 +212,7 @@ const SignIn: React.FC = () => {
                   <div className="relative">
                     <input
                       type="password"
+                      name='password'
                       placeholder="6+ Characters, 1 Capital letter"
                       className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                     />
@@ -237,11 +242,11 @@ const SignIn: React.FC = () => {
                 </div>
 
                 <div className="mb-5">
-                  <input
+                  <button
                     type="submit"
-                    value="Sign In"
+                    // value="Sign In"
                     className="w-full cursor-pointer rounded-lg border border-primary bg-primary p-4 text-white transition hover:bg-opacity-90"
-                  />
+                  > sign in</button>
                 </div>
 
                
@@ -255,4 +260,3 @@ const SignIn: React.FC = () => {
   );
 };
 
-export default SignIn;

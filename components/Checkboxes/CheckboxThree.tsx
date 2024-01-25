@@ -1,11 +1,11 @@
 "use client";
-import { useState } from 'react';
+import { useState } from "react";
 
-const CheckboxThree = () => {
+const CheckboxThree = ({ name, label , value, }: { name: string; label: string, value?:string|number|undefined }) => {
   const [isChecked, setIsChecked] = useState<boolean>(false);
 
   return (
-    <div>
+    <div >
       <label
         htmlFor="checkboxLabelThree"
         className="flex cursor-pointer select-none items-center"
@@ -14,6 +14,8 @@ const CheckboxThree = () => {
           <input
             type="checkbox"
             id="checkboxLabelThree"
+            value={value}
+            name={name}
             className="sr-only"
             onChange={() => {
               setIsChecked(!isChecked);
@@ -21,12 +23,12 @@ const CheckboxThree = () => {
           />
           <div
             className={`box mr-4 flex h-5 w-5 items-center justify-center rounded border ${
-              isChecked && 'border-primary bg-gray dark:bg-transparent'
+              isChecked && "border-primary bg-gray dark:bg-transparent"
             }`}
           >
             <span
               className={`text-primary opacity-0 ${
-                isChecked && '!opacity-100'
+                isChecked && "!opacity-100"
               }`}
             >
               <svg
@@ -45,7 +47,7 @@ const CheckboxThree = () => {
             </span>
           </div>
         </div>
-        Checkbox Text
+        {label}
       </label>
     </div>
   );

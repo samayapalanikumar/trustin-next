@@ -3,7 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 // import { Metadata } from "next";
-import { signin } from "./actions";
+import { signin, signinJwt } from "./actions";
 
 
 // export const metadata: Metadata = {
@@ -172,7 +172,7 @@ export default function SignIn() {
                 Sign In to Trustin
               </h2>
 
-              <form action={signin} method="POST">
+              <form action={signinJwt}  >
                 <div className="mb-4">
                   <label className="mb-2.5 block font-medium text-black dark:text-white">
                     Email

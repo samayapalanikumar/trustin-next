@@ -1,16 +1,18 @@
-import ECommerce from "@/components/Dashboard/E-commerce";
-import { Metadata } from "next";
+'use client'
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
-export const metadata: Metadata = {
-  title: "TailAdmin | Next.js E-commerce Dashboard Template",
-  description: "This is Home Blog page for TailAdmin Next.js",
-  // other metadata
-};
+
 
 export default function Home() {
-  return (
-    <>
-      <ECommerce />
-    </>
-  );
+  const router = useRouter();
+
+  useEffect(() => {
+    // Redirect to the '/dashboard' route when the component mounts
+    router.push('/dashboard');
+  }, []);
+
+  // This component doesn't need to render anything as it redirects immediately
+  return null;
+
 }

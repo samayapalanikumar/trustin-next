@@ -59,7 +59,7 @@ export async function createCustomers(formData: FormData) {
   jsonObject["contact_persons"] = contact_persons;
   console.log(jsonObject);
   const access_token = cookies().get('access_token')
-    try {
+
       const res = await fetch("http://localhost:8000/customers/", {
         method: "POST", // *GET, POST, PUT, DELETE, etc.
         // mode: "cors", // no-cors, *cors, same-origin
@@ -72,24 +72,13 @@ export async function createCustomers(formData: FormData) {
         body: JSON.stringify(jsonObject),
       });
 
-      const resJson = await res.json();
-
-      console.log(resJson);
-    } catch (e) {
-      console.log(e);
-    }
-
-    redirect("/dashboard/customers");
+  
+    if(res.status===401) redirect('/signin');
+    if (res.status===201) redirect("/dashboard/customers");
 }
 
 export async function updateCustomers(id, formData: FormData) {
-  let jsonObject  = Array.from(formData.entries()).reduce(
-    (acc, [key, value]) => {
-      acc[key] = value;
-      return acc;
-    },
-    {}
-  );
+  let jsonObject  = Object.fromEntries(formData.entries());
   const contact_persons = [
     {
       person_name: jsonObject.person_name,
@@ -120,14 +109,9 @@ export async function updateCustomers(id, formData: FormData) {
         body: JSON.stringify(jsonObject),
       });
 
-      if (!res.ok){
-        redirect('/signin')
-      }
+    
 
-      const resJson = await res.json();
+    if(res.status===401) redirect('/signin');
 
-      console.log(resJson);
-
-
-    redirect("/dashboard/customers");
+    if (res.status===204) redirect("/dashboard/customers");
 }

@@ -38,7 +38,7 @@ const BranchTable = ({ data }: { data: BranchType  }) => {
                   <div className="flex items-center space-x-3.5">
                     <Link
                       className="hover:text-primary"
-                      href={`branch/${packageItem.id}`}
+                      href={`branches/${packageItem.id}`}
                     >
                       <svg
                         className="fill-current"

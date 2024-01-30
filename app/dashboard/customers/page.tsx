@@ -3,11 +3,19 @@ import { cookies } from "next/headers";
 import CustomerTable from "./customer";
 import { redirect } from "next/navigation";
 
+import { Metadata } from "next";
+
+
+export const metadata: Metadata = {
+  title: "Customers | Trustin",
+  description: "This is Customers page ",
+  // other metadata
+};
+
 async function getData() {
   const cookieStore = cookies();
   const access_token = cookieStore.get("access_token");
   console.log(access_token);
-  try {
     const res = await fetch("http://localhost:8000/customers/", {
       headers: {
         "Content-Type": "application/json",
@@ -22,14 +30,11 @@ async function getData() {
       // console.log(res)
       // throw new Error("Failed to fetch data");
       console.log("error");
-      redirect("/signin");
     }
-
+    if(res.status===401) redirect('/signin');
     const resjson = await res.json();
     return resjson;
-  } catch (e) {
-    console.log(e);
-  }
+
 }
 
 const CustomerPage = async () => {

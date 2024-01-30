@@ -4,38 +4,38 @@ import Link from "next/link";
 
 import { redirect } from "next/navigation";
 import ParametersTable, { ParametersType } from "./parametes-table";
+import { Metadata } from "next";
 
+export const metadata: Metadata = {
+  title: "Test Parameters | Trustin",
+  description: "This is Test Parameters page ",
+  // other metadata
+};
 async function getData() {
   const cookieStore = cookies();
   const access_token = cookieStore.get("access_token");
-  try {
-    const res = await fetch("http://localhost:8000/parameters/", {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${access_token?.value}`,
-      },
-    });
-    // The return value is *not* serialized
-    // You can return Date, Map, Set, etc.
+  const res = await fetch("http://localhost:8000/parameters/", {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${access_token?.value}`,
+    },
+  });
 
-    if (!res.ok) {
-      // This will activate the closest `error.js` Error Boundary
-      // console.log(res)
-      // throw new Error("Failed to fetch data");
-      console.log("error");
-      redirect("/signin");
-    }
 
-    const resjson = await res.json();
-    console.log(resjson)
-    return resjson;
-  } catch (e) {
-    console.log(e);
+  if (!res.ok) {
+    // This will activate the closest `error.js` Error Boundary
+    // console.log(res)
+    // throw new Error("Failed to fetch data");
+    console.log("error");
   }
+
+  if (res.status === 401) redirect("/signin");
+  const resjson = await res.json();
+  return resjson;
 }
 
 const TestParameterPage = async () => {
-  const data:ParametersType = await getData()
+  const data: ParametersType = await getData();
   return (
     <>
       <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">

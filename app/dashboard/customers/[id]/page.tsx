@@ -66,7 +66,7 @@ const EditCustomerPage = async ({
                   <input
                     type="text"
                     name="company_name"
-                    value={data.company_name}
+                    defaultValue={data.company_name}
                     placeholder="Company Name"
                     className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                   />
@@ -79,7 +79,7 @@ const EditCustomerPage = async ({
                   <input
                     type="text"
                     name="customer_address_line1"
-                    value={data.customer_address_line1}
+                    defaultValue={data.customer_address_line1}
                     placeholder="Floor, Street name"
                     className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                   />
@@ -92,7 +92,7 @@ const EditCustomerPage = async ({
                   <input
                     type="text"
                     name="customer_address_line2"
-                    value={data.customer_address_line2}
+                    defaultValue={data.customer_address_line2}
                     placeholder="City , District"
                     className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                   />
@@ -105,7 +105,7 @@ const EditCustomerPage = async ({
                     <input
                       type="text"
                       name="city"
-                      value={data.city}
+                      defaultValue={data.city}
                       placeholder="Enter City"
                       className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                     />
@@ -118,7 +118,7 @@ const EditCustomerPage = async ({
                     <input
                       type="text"
                       name="state"
-                      value={data.state}
+                      defaultValue={data.state}
                       placeholder="Enter State"
                       className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                     />
@@ -131,7 +131,7 @@ const EditCustomerPage = async ({
                   <input
                     type="text"
                     name="pincode_no"
-                    value={data.pincode}
+                    defaultValue={data.pincode}
                     placeholder="Enter Pincode"
                     className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                   />
@@ -144,7 +144,7 @@ const EditCustomerPage = async ({
                   <input
                     type="email"
                     name="email"
-                    value={data.email}
+                    defaultValue={data.email}
                     placeholder="Enter your email address"
                     className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                   />
@@ -157,7 +157,7 @@ const EditCustomerPage = async ({
                   <input
                     type="url"
                     name="website"
-                    value={data.website}
+                    defaultValue={data.website}
                     placeholder="Enter website"
                     className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                   />
@@ -170,7 +170,7 @@ const EditCustomerPage = async ({
                   <input
                     type="text"
                     name="nature_of_business"
-                    value="nature_of_business"
+                    defaultValue="nature_of_business"
                     placeholder="Enter Nature of business"
                     className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                   />
@@ -182,7 +182,7 @@ const EditCustomerPage = async ({
                   <input
                     type="text"
                     name="product_details"
-                    value={data.product_details}
+                    defaultValue={data.product_details}
                     placeholder="Enter Product Detail"
                     className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                   />
@@ -195,7 +195,7 @@ const EditCustomerPage = async ({
                   <input
                     type="text"
                     name="market"
-                    value={data.market}
+                    defaultValue={data.market}
                     placeholder="Enter Market"
                     className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                   />
@@ -207,7 +207,7 @@ const EditCustomerPage = async ({
                   <input
                     type="text"
                     name="regulatory"
-                    value={data.regulatory}
+                    defaultValue={data.regulatory}
                     placeholder="Enter Regulatory                    "
                     className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                   />
@@ -221,7 +221,7 @@ const EditCustomerPage = async ({
                     <input
                       type="text"
                       name="pan"
-                      value={data.pan}
+                      defaultValue={data.pan}
                       placeholder="Enter Pan"
                       className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                     />
@@ -234,7 +234,7 @@ const EditCustomerPage = async ({
                     <input
                       type="text"
                       name="gst"
-                      value={data.gst}
+                      defaultValue={data.gst}
                       placeholder="Enter GST"
                       className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                     />
@@ -254,7 +254,7 @@ const EditCustomerPage = async ({
                   <input
                     type="text"
                     name="person_name"
-                    value={data.contact_persons[0].person_name}
+                    defaultValue={data?.contact_persons?.[0]?.person_name}
                     placeholder="Enter Name"
                     className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                   />
@@ -266,7 +266,7 @@ const EditCustomerPage = async ({
                   <input
                     type="text"
                     name="designation"
-                    value={data.contact_persons[0].designation}
+                    defaultValue={data?.contact_persons?.[0]?.designation}
                     placeholder="Enter Designation"
                     className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                   />
@@ -278,7 +278,7 @@ const EditCustomerPage = async ({
                   <input
                     type="text"
                     name="mobile_number"
-                    value={data.contact_persons[0].mobile_number}
+                    defaultValue={data?.contact_persons?.[0]?.mobile_number}
                     placeholder="Enter Mobile Number"
                     className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                   />
@@ -290,7 +290,7 @@ const EditCustomerPage = async ({
                   <input
                     type="text"
                     name="landline_number"
-                    value={data.contact_persons[0].landline_number}
+                    defaultValue={data?.contact_persons?.[0]?.landline_number}
                     placeholder="Enter Landline Number"
                     className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                   />
@@ -303,7 +303,7 @@ const EditCustomerPage = async ({
                   <input
                     type="text"
                     name="contact_email"
-                    value={data.contact_persons[0].contact_email}
+                    defaultValue={data?.contact_persons?.[0]?.contact_email}
                     placeholder="Enter Email"
                     className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                   />

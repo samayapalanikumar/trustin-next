@@ -1,15 +1,65 @@
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import { Metadata } from "next";
+import { redirect } from "next/navigation";
+import { cookies } from "next/headers";
+import { BranchType } from "../branch-table";
+import { updateBranch } from "../actions";
 export const metadata: Metadata = {
   title: "Edit  Branch | Trustin",
   description: "This is Form Layout page for TailAdmin Next.js",
   // other metadata
 };
 
-const EditBranchPage = () => {
+async function getData(id:string) {
+  const cookieStore = cookies();
+  const access_token = cookieStore.get("access_token");
+
+  const res = await fetch(`http://localhost:8000/branch/${id}`, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${access_token?.value}`,
+    },
+  });
+  
+  // The return value is *not* serialized
+  // You can return Date, Map, Set, etc.
+
+  if (!res.ok) {
+    // This will activate the closest `error.js` Error Boundary
+    // console.log(res)
+    // throw new Error("Failed to fetch data");
+    console.log("error");
+    redirect("/signin");
+  }
+  const branch = await res.json();
+  return branch;
+}
+
+type Data = {
+  branch_name: string;
+  address_line1: string;
+  address_line2: string;
+  mobile_number: string;
+  landline_number: string;
+  email: string;  // Assuming EmailStr is a custom type that represents a valid email string
+  pan_no: string;
+  cin: string;
+  gstin: string;
+  bank_details: string;
+  ifsc_code: string;
+}
+
+const EditBranchPage = async({
+  params: { id },
+}: {
+  params: { id: string };
+}) => {
+  const data:Data = await getData(id);
+  const updateBranchWithId = updateBranch.bind(null, id)
+
   return (
     <>
-      <Breadcrumb pageName="Edit Branch" />
+      <Breadcrumb pageName="Add New Branch" />
 
       <div className="grid grid-cols-1 gap-9 sm:grid-cols-1">
         <div className="flex flex-col gap-9">
@@ -20,31 +70,49 @@ const EditBranchPage = () => {
                 Contact Form
               </h3>
             </div> */}
-            <form action="#">
+            <form action={updateBranchWithId}>
               <div className="p-6.5">
-                <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
-                  <div className="w-full xl:w-1/2">
-                    <label className="mb-2.5 block text-black dark:text-white">
-                      First name
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="Enter your first name"
-                      className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-                    />
-                  </div>
-
-                  <div className="w-full xl:w-1/2">
-                    <label className="mb-2.5 block text-black dark:text-white">
-                      Last name
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="Enter your last name"
-                      className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-                    />
-                  </div>
+                <div className="mb-4.5">
+                  <label className="mb-2.5 block text-black dark:text-white">
+                    Branch Name
+                  </label>
+                  <input
+                    type="text"
+                    name="branch_name"
+                    defaultValue={data.branch_name}
+                    placeholder="Branch Name"
+                    className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                  />
                 </div>
+
+                <div className="mb-4.5">
+                  <label className="mb-2.5 block text-black dark:text-white">
+                    Address Line 1
+                  </label>
+                  <input
+                    type="text"
+                    name="address_line1"
+                    defaultValue={data.address_line1}
+
+                    placeholder="Floor, Street name"
+                    className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                  />
+                </div>
+
+                <div className="mb-4.5">
+                  <label className="mb-2.5 block text-black dark:text-white">
+                    Address Line 2
+                  </label>
+                  <input
+                    type="text"
+                    name="address_line2"
+                    defaultValue={data.address_line2}
+
+                    placeholder="City , District"
+                    className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                  />
+                </div>
+              
 
                 <div className="mb-4.5">
                   <label className="mb-2.5 block text-black dark:text-white">
@@ -52,68 +120,119 @@ const EditBranchPage = () => {
                   </label>
                   <input
                     type="email"
+                    name="email"
+                    defaultValue={data.email}
+
                     placeholder="Enter your email address"
                     className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                   />
                 </div>
 
+         
+
                 <div className="mb-4.5">
                   <label className="mb-2.5 block text-black dark:text-white">
-                    Subject
+                    Mobile Number
                   </label>
                   <input
                     type="text"
-                    placeholder="Select subject"
+                    name="mobile_number"
+                    defaultValue={data.mobile_number}
+
+                    placeholder="Enter Mobile Number"
+                    className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                  />
+                </div>
+                <div className="mb-4.5">
+                  <label className="mb-2.5 block text-black dark:text-white">
+                    Landline Number
+                  </label>
+                  <input
+                    type="text"
+                    name="landline_number"
+                    defaultValue={data.landline_number}
+
+                    placeholder="Enter landline number"
                     className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                   />
                 </div>
 
-                <div className="mb-4.5">
-                  <label className="mb-2.5 block text-black dark:text-white">
-                    Subject
-                  </label>
-                  <div className="relative z-20 bg-transparent dark:bg-form-input">
-                    <select className="relative z-20 w-full appearance-none rounded border border-stroke bg-transparent py-3 px-5 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary">
-                      <option value="">Type your subject</option>
-                      <option value="">USA</option>
-                      <option value="">UK</option>
-                      <option value="">Canada</option>
-                    </select>
-                    <span className="absolute top-1/2 right-4 z-30 -translate-y-1/2">
-                      <svg
-                        className="fill-current"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <g opacity="0.8">
-                          <path
-                            fillRule="evenodd"
-                            clipRule="evenodd"
-                            d="M5.29289 8.29289C5.68342 7.90237 6.31658 7.90237 6.70711 8.29289L12 13.5858L17.2929 8.29289C17.6834 7.90237 18.3166 7.90237 18.7071 8.29289C19.0976 8.68342 19.0976 9.31658 18.7071 9.70711L12.7071 15.7071C12.3166 16.0976 11.6834 16.0976 11.2929 15.7071L5.29289 9.70711C4.90237 9.31658 4.90237 8.68342 5.29289 8.29289Z"
-                            fill=""
-                          ></path>
-                        </g>
-                      </svg>
-                    </span>
+
+                <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
+                  <div className="w-full xl:w-1/2">
+                    <label className="mb-2.5 block text-black dark:text-white">
+                      Pan Number
+                    </label>
+                    <input
+                      type="text"
+                      name="pan_no"
+                      defaultValue={data.pan_no}
+
+                      placeholder="Enter Pan"
+                      className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                    />
+                  </div>
+
+                  <div className="w-full xl:w-1/2">
+                    <label className="mb-2.5 block text-black dark:text-white">
+                      GSTIN Number
+                    </label>
+                    <input
+                      type="text"
+                      name="gstin"
+                      defaultValue={data.gstin}
+
+                      placeholder="Enter GST"
+                      className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                    />
                   </div>
                 </div>
-
-                <div className="mb-6">
+                <div className="mb-4.5">
                   <label className="mb-2.5 block text-black dark:text-white">
-                    Message
+                    CIN Number
                   </label>
-                  <textarea
-                    rows={6}
-                    placeholder="Type your message"
+                  <input
+                    type="text"
+                    name="cin"
+                    defaultValue={data.cin}
+
+                    placeholder="Enter CIN number"
                     className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-                  ></textarea>
+                  />
+                </div>
+                <div className="mb-4.5">
+                  <label className="mb-2.5 block text-black dark:text-white">
+                    Bank Details
+                  </label>
+                  <input
+                    type="text"
+                    name="bank_details"
+                    defaultValue={data.bank_details}
+
+                    placeholder="Enter CIN number"
+                    className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                  />
+                </div>
+                <div className="mb-4.5">
+                  <label className="mb-2.5 block text-black dark:text-white">
+                    IFSC Code
+                  </label>
+                  <input
+                    type="text"
+                    name="ifsc_code"
+                    defaultValue={data.ifsc_code}
+
+                    placeholder="Enter IFSC"
+                    className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                  />
                 </div>
 
-                <button className="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray">
-                  Send Message
+              
+              
+
+
+                <button type="submit" className="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray">
+                  Submit
                 </button>
               </div>
             </form>

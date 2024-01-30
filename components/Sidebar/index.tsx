@@ -3,6 +3,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import SidebarLinkGroup from "./SidebarLinkGroup";
 import Image from "next/image";
+import { UserCheck, Users } from "lucide-react";
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -107,8 +108,110 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
             </h3>
 
             <ul className="mb-6 flex flex-col gap-1.5">
+                          <li>
+                            <Link
+                              href="/dashboard"
+                              className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
+                                pathname === "/dashboard" && "text-white"
+                              } `}
+                            >
+                              Home
+                            </Link>
+                          </li>
+                          <li>
+                            <Link
+                              href="/dashboard/branches"
+                              className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
+                                pathname === "/dashboard/branches" &&
+                                "text-white"
+                              } `}
+                            >
+                              Branches
+                            </Link>
+                          </li>
+                          <li>
+                            <Link
+                              href="/dashboard/users"
+                              className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
+                                pathname === "/dashboard/users" && "text-white"
+                              } `}
+                            >
+                              Users
+                            </Link>
+                          </li>
+                          <li>
+                            <Link
+                              href="/dashboard/customers"
+                              className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
+                                pathname === "/dashboard/customers" &&
+                                "text-white"
+                              } `}
+                            >
+                              <Users />
+                              Customers
+                            </Link>
+                          </li>
+                          <li>
+                            <Link
+                              href="/dashboard/followup"
+                              className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
+                                pathname === "/dashboard/followup" &&
+                                "text-white"
+                              } `}
+                            >
+                              <UserCheck />
+
+                              Customer Followup
+                            </Link>
+                          </li>
+                          <li>
+                            <Link
+                              href="/dashboard/testtype"
+                              className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
+                                pathname === "/dashboard/testtype" &&
+                                "text-white"
+                              } `}
+                            >
+                              Test Type
+                            </Link>
+                          </li>
+
+                          <li>
+                            <Link
+                              href="/dashboard/products"
+                              className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
+                                pathname === "/dashboard/products" &&
+                                "text-white"
+                              } `}
+                            >
+                              Products
+                            </Link>
+                          </li>
+
+                          <li>
+                            <Link
+                              href="/dashboard/parameters"
+                              className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
+                                pathname === "/dashboard/parameters" &&
+                                "text-white"
+                              } `}
+                            >
+                              Test Parameters
+                            </Link>
+                          </li>
+                          <li>
+                            <Link
+                              href="/dashboard/trf"
+                              className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
+                                pathname === "/dashboard/trf" &&
+                                "text-white"
+                              } `}
+                            >
+                              TRF
+                            </Link>
+                          </li>
               {/* <!-- Menu Item Dashboard --> */}
-              <SidebarLinkGroup
+              {/* <SidebarLinkGroup
                 activeCondition={
                   pathname === "/" || pathname.includes("dashboard")
                 }
@@ -174,119 +277,18 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                           />
                         </svg>
                       </Link>
-                      {/* <!-- Dropdown Menu Start --> */}
+                     
                       <div
                         className={`translate transform overflow-hidden ${
                           !open && "hidden"
                         }`}
                       >
-                        <ul className="mt-4 mb-5.5 flex flex-col gap-2.5 pl-6">
-                          <li>
-                            <Link
-                              href="/dashboard"
-                              className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
-                                pathname === "/dashboard" && "text-white"
-                              } `}
-                            >
-                              Home
-                            </Link>
-                          </li>
-                          <li>
-                            <Link
-                              href="/dashboard/branches"
-                              className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
-                                pathname === "/dashboard/branches" &&
-                                "text-white"
-                              } `}
-                            >
-                              Branches
-                            </Link>
-                          </li>
-                          <li>
-                            <Link
-                              href="/dashboard/users"
-                              className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
-                                pathname === "/dashboard/users" && "text-white"
-                              } `}
-                            >
-                              Users
-                            </Link>
-                          </li>
-                          <li>
-                            <Link
-                              href="/dashboard/customers"
-                              className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
-                                pathname === "/dashboard/customers" &&
-                                "text-white"
-                              } `}
-                            >
-                              Customers
-                            </Link>
-                          </li>
-                          <li>
-                            <Link
-                              href="/dashboard/followup"
-                              className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
-                                pathname === "/dashboard/followup" &&
-                                "text-white"
-                              } `}
-                            >
-                              Customer Followup
-                            </Link>
-                          </li>
-                          <li>
-                            <Link
-                              href="/dashboard/testtype"
-                              className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
-                                pathname === "/dashboard/testtype" &&
-                                "text-white"
-                              } `}
-                            >
-                              Test Type
-                            </Link>
-                          </li>
-
-                          <li>
-                            <Link
-                              href="/dashboard/products"
-                              className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
-                                pathname === "/dashboard/products" &&
-                                "text-white"
-                              } `}
-                            >
-                              Products
-                            </Link>
-                          </li>
-
-                          <li>
-                            <Link
-                              href="/dashboard/parameters"
-                              className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
-                                pathname === "/dashboard/parameters" &&
-                                "text-white"
-                              } `}
-                            >
-                              Test Parameters
-                            </Link>
-                          </li>
-                          <li>
-                            <Link
-                              href="/dashboard/trf"
-                              className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
-                                pathname === "/dashboard/trf" &&
-                                "text-white"
-                              } `}
-                            >
-                              TRF
-                            </Link>
-                          </li>
-                        </ul>
+                       
                       </div>
-                      {/* <!-- Dropdown Menu End --> */}
                     </React.Fragment>
                   );
                 }}
-              </SidebarLinkGroup>
+              </SidebarLinkGroup> */}
               {/* <!-- Menu Item Dashboard --> */}
 
               {/* <!-- Menu Item Calendar --> */}

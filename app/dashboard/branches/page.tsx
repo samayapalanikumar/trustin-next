@@ -1,9 +1,16 @@
-import TableThree from "@/components/Tables/TableThree";
 import Link from "next/link";
 
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 import BranchTable, { BranchType } from "./branch-table";
+import { Metadata } from "next";
+
+
+export const metadata: Metadata = {
+  title: "Branch | Trustin",
+  description: "This is Branch page ",
+  // other metadata
+};
 
 async function getData() {
   const cookieStore = cookies();
@@ -24,8 +31,9 @@ async function getData() {
     // console.log(res)
     // throw new Error("Failed to fetch data");
     console.log("error");
-    redirect("/signin");
   }
+
+  if(res.status === 401) redirect('signin');
 
   const branch = await res.json();
 

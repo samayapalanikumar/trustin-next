@@ -6,10 +6,18 @@ import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 import ProductTable, { ProductType } from "./product-table";
 
+import { Metadata } from "next";
+
+
+export const metadata: Metadata = {
+  title: "Products | Trustin",
+  description: "This is Products page ",
+  // other metadata
+};
+
 async function getData() {
   const cookieStore = cookies();
   const access_token = cookieStore.get("access_token");
-  try {
     const res = await fetch("http://localhost:8000/products/", {
       headers: {
         "Content-Type": "application/json",
@@ -24,14 +32,11 @@ async function getData() {
       // console.log(res)
       // throw new Error("Failed to fetch data");
       console.log("error");
-      redirect("/signin")
     }
-
+    if(res.status===401) redirect('/signin');
     const resjson = await res.json();
     return resjson;
-  } catch (e) {
-    console.log(e);
-  }
+ 
 }
 
 const ProductPage = async () => {

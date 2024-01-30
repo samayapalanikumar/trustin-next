@@ -54,7 +54,7 @@ const TRFTable = ({ data }: { data: TRFType }) => {
                   <div className="flex items-center space-x-3.5">
                     <Link
                       className="hover:text-primary"
-                      href={`parameters/${packageItem.id}`}
+                      href={`trf/${packageItem.id}`}
                     >
                       <svg
                         className="fill-current"

@@ -16,23 +16,14 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-type Data = {
-  products: {
-    id: number;
-    product_name: string;
-  }[];
-  test_types: {
-    id: number;
-    name: string;
-  }[];
-};
+import { Data } from "./typings";
 
 type ParametersType = {
-  id:number;
-  testing_parameters:string;
-  test_type:{
-    name:string;
-  }
+  id: number;
+  testing_parameters: string;
+  test_type: {
+    name: string;
+  };
 }[];
 
 const yesOrNoSchema = z.enum(["YES", "NO"]);
@@ -53,7 +44,7 @@ const testDetailSchema = z.object({
   parameter_id: z.coerce.number(),
 });
 
-const trfSchema = z.object({
+export const trfSchema = z.object({
   sample_id: z.string(),
   sample_name: z.string(),
   description: z.string(),
@@ -113,91 +104,78 @@ const DOCTYPE = {
   IF_ANY_OTHER: "IF ANY OTHER",
 };
 
-const TRFForm = ({trf, updateAction}) => {
+const TRFAdminForm = ({
+  data,
+  updateAction,
+}: {
+  data: Data;
+  updateAction: (data) => void;
+}) => {
   //   const data: Data = await getData();
-  const [data, setData] = useState<Data>();
-  const [parameters, setParameters] =
-    useState<ParametersType>();
+  //   const [data, setData] = useState<Data>();
+  const [parameters, setParameters] = useState<ParametersType>();
   const form = useForm<z.infer<typeof trfSchema>>({
     resolver: zodResolver(trfSchema),
     defaultValues: {
-      testing_process: [],
-      report_sent_by: [],
-      submission_of_documents: [],
-      test_types_ids: [],
-      nabl_logo: "0",
+      sample_name: data.trf.sample_name,
+      sample_id: data.trf.sample_id,
+      description: data.trf.description,
+      no_of_samples: data.trf.no_of_samples,
+      manufactured_by: data.trf.manufactured_by,
+      manufactured_date: data.trf.manufactured_date,
+      expiry_date: data.trf.expiry_date,
+      batch_or_lot_no: data.trf.batch_or_lot_no,
+      batch_size: data.trf.batch_size,
+      format_name: data.trf.format_name,
+      sample_storage_condition: data.trf.sample_storage_condition,
+      sample_disposal_process: data.trf.sample_disposal_process,
+      sampling_by: data.trf.sampling_by,
+      binary_decision_rule: data.trf.binary_decision_rule,
+      fail_statement_sent: data.trf.fail_statement_sent,
+      specific_decision_rule: data.trf.specific_decision_rule,
+      test_types_ids: data.trf.test_types_ids,
+
+      testing_process: data.trf.testing_process,
+      report_sent_by: data.trf.report_sent_by,
+      submission_of_documents: data.trf.submission_of_documents,
+      nabl_logo: data.trf.nabl_logo ? "1" : "0",
+      testing_details: data.trf.test_details
     },
   });
   const { fields, append, remove, replace } = useFieldArray({
     control: form.control,
     name: "testing_details", // Name of the array in your schema
+  
   });
 
   const testTypes = useWatch({
     control: form.control,
     name: "test_types_ids", // Replace with the actual name of your checkbox group
-    defaultValue: [],
-  });
-  const product = useWatch({
-    control: form.control,
-    name: "product_id", // Replace with the actual name of your checkbox group
+    defaultValue: data.trf.test_types_ids,
   });
 
   async function fetchTestParameters(query: string, product: string) {
-    let res = await fetch(
-      `http://localhost:8000/parameters/trf/1/?${query}`
-    );
-    const response:ParametersType = await res.json();
+    let res = await fetch(`http://localhost:8000/parameters/trf/${data.trf.product_id}/?${query}`);
+    const response: ParametersType = await res.json();
     setParameters(response);
-    
+
     replace(response);
   }
 
-  useEffect(() => {
-    if (testTypes) {
-      if (testTypes.length > 0) {
-        replace([]);
-        const query = testTypes
-          .map((value, index) => `test_type=${encodeURIComponent(value)}`)
-          .join("&");
+  // useEffect(() => {
+  //   if (testTypes) {
+  //     if (testTypes.length > 0) {
+  //       replace([]);
+  //       const query = testTypes
+  //         .map((value, index) => `test_type=${encodeURIComponent(value)}`)
+  //         .join("&");
 
-        fetchTestParameters(query, "1");
-      }
-    }
-  }, [testTypes]);
+  //       fetchTestParameters(query, "1");
+  //     }
+  //   }
+  // }, [testTypes]);
 
-  useEffect(() => {
-    async function getData() {
-      const res2 = await fetch("http://localhost:8000/products/trf", {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      const res3 = await fetch("http://localhost:8000/testtypes/trf", {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      // The return value is *not* serialized
-      // You can return Date, Map, Set, etc.
 
-      if (!res2.ok) {
-        // This will activate the closest `error.js` Error Boundary
-        // console.log(res)
-        // throw new Error("Failed to fetch data");
-        console.log("error");
-        redirect("/signin");
-      }
-
-      const products = await res2.json();
-      const test_types = await res3.json();
-      setData({
-        products,
-        test_types,
-      });
-    }
-    getData();
-  }, []);
 
   return (
     <>
@@ -206,9 +184,11 @@ const TRFForm = ({trf, updateAction}) => {
       <div>
         {Object.keys(form.formState.errors).length > 0 && (
           <ul>
-            {Object.entries(form.formState.errors).map(([fieldName, fieldError]) => (
-              <li key={fieldName}>{fieldError.message}</li>
-            ))}
+            {Object.entries(form.formState.errors).map(
+              ([fieldName, fieldError]) => (
+                <li key={fieldName}>{fieldError.message}</li>
+              )
+            )}
           </ul>
         )}
       </div>
@@ -224,11 +204,10 @@ const TRFForm = ({trf, updateAction}) => {
             </div> */}
             <Form {...form}>
               <form
-              
-                onSubmit={form.handleSubmit((data) =>{
-                  console.log(data)
-                  updateAction(data)
-                } )}
+                onSubmit={form.handleSubmit((data) => {
+                  console.log(data);
+                  updateAction(data);
+                })}
                 // action={updateAction}
               >
                 <div className="p-6.5">
@@ -776,7 +755,7 @@ const TRFForm = ({trf, updateAction}) => {
                       Product Name:
                     </label>
                     <div className="relative z-20 bg-transparent dark:bg-form-input">
-                     <p className='font-extrabold'>{trf.product.product_name}</p>
+                      {/* <p className='font-extrabold'>{trf.product.product_name}</p> */}
                     </div>
                   </div>
 
@@ -865,20 +844,21 @@ const TRFForm = ({trf, updateAction}) => {
                               </td>
                               <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
                                 <h5 className="font-medium text-black dark:text-white">
-                                  { parameters?.[index]?.testing_parameters}
+                                  {data.trf?.test_details?.[index]?.parameter?.testing_parameters}
                                 </h5>
                                 <input
                                   type="hidden"
                                   {...form.register(
                                     `testing_details.${index}.parameter_id`
                                   )}
-                                  defaultValue={parameters && parameters[index]?.id}
+                                 
                                   className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                                 />
                               </td>
                               <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
                                 <h5 className="font-medium text-black dark:text-white">
-                                { parameters?.[index]?.test_type?.name}
+                                  {data.trf?.test_details?.[index]?.parameter?.test_type?.name}
+
                                 </h5>
                               </td>
                               <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
@@ -887,7 +867,6 @@ const TRFForm = ({trf, updateAction}) => {
                                   {...form.register(
                                     `testing_details.${index}.priority_order`
                                   )}
-                                  defaultValue={index+1}
                                   className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                                 />
                               </td>
@@ -922,4 +901,4 @@ const TRFForm = ({trf, updateAction}) => {
   );
 };
 
-export default TRFForm;
+export default TRFAdminForm;

@@ -86,7 +86,7 @@ const NewTestParameterPage = async () => {
               <div className="p-6.5">
                 <div className="mb-4.5">
                   <label className="mb-2.5 block text-black dark:text-white">
-                    Customer
+                    Branch
                   </label>
                   <div className="relative z-20 bg-transparent dark:bg-form-input">
                     <select

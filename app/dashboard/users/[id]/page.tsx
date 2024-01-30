@@ -1,15 +1,71 @@
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import { Metadata } from "next";
+import { object } from "zod";
+import { updateUser } from "../actions";
+import { cookies } from "next/headers";
+import { RoleType } from "../user-table";
+import { redirect } from "next/navigation";
 export const metadata: Metadata = {
   title: "Edit  User | Trustin",
   description: "This is Form Layout page for TailAdmin Next.js",
   // other metadata
 };
 
-const EditUserPage = () => {
+async function getData(id:string) {
+  const cookieStore = cookies();
+  const access_token = cookieStore.get("access_token");
+
+  const res = await fetch(`http://localhost:8000/users/${id}`, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${access_token?.value}`,
+    },
+  });
+  
+  // The return value is *not* serialized
+  // You can return Date, Map, Set, etc.
+
+  if (!res.ok) {
+    // This will activate the closest `error.js` Error Boundary
+    // console.log(res)
+    // throw new Error("Failed to fetch data");
+    console.log("error");
+    redirect("/signin");
+  }
+  const user = await res.json();
+  return user;
+}
+
+type Data = {
+  id: number;
+  first_name: string;
+  last_name: string;
+  email: string;
+  phone:string;
+  role: RoleType;
+}
+
+
+
+
+const roleTypeObject = {
+  HOD: 'HOD',
+  MARKETING: 'MARKETING',
+  ADMIN: 'ADMIN',
+  MANAGEMENT: 'MANAGEMENT',
+  ANALYST: 'ANALYST',
+} as const;
+
+const EditUserPage =  async ({
+  params: { id },
+}: {
+  params: { id: string };
+}) => {
+  const data:Data = await getData(id)
+  const updateUserWithId = updateUser.bind(null, id)
   return (
     <>
-      <Breadcrumb pageName="Edit  User" />
+      <Breadcrumb pageName="Add New User" />
 
       <div className="grid grid-cols-1 gap-9 sm:grid-cols-1">
         <div className="flex flex-col gap-9">
@@ -20,7 +76,7 @@ const EditUserPage = () => {
                 Contact Form
               </h3>
             </div> */}
-            <form action="#">
+            <form action={updateUserWithId}>
               <div className="p-6.5">
                 <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
                   <div className="w-full xl:w-1/2">
@@ -29,6 +85,8 @@ const EditUserPage = () => {
                     </label>
                     <input
                       type="text"
+                      name='first_name'
+                      defaultValue={data.first_name}
                       placeholder="Enter your first name"
                       className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                     />
@@ -40,6 +98,9 @@ const EditUserPage = () => {
                     </label>
                     <input
                       type="text"
+                      name='last_name'
+                      defaultValue={data.last_name}
+
                       placeholder="Enter your last name"
                       className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                     />
@@ -52,32 +113,38 @@ const EditUserPage = () => {
                   </label>
                   <input
                     type="email"
+                    name='email'
+                    defaultValue={data.email}
+
+                    placeholder="Enter your email address"
+                    className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                  />
+                </div>
+                <div className="mb-4.5">
+                  <label className="mb-2.5 block text-black dark:text-white">
+                    Phone <span className="text-meta-1">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    name='phone'
+                    defaultValue={data.phone}
+
                     placeholder="Enter your email address"
                     className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                   />
                 </div>
 
-                <div className="mb-4.5">
-                  <label className="mb-2.5 block text-black dark:text-white">
-                    Subject
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="Select subject"
-                    className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-                  />
-                </div>
+                
 
                 <div className="mb-4.5">
                   <label className="mb-2.5 block text-black dark:text-white">
-                    Subject
+                    Role
                   </label>
                   <div className="relative z-20 bg-transparent dark:bg-form-input">
-                    <select className="relative z-20 w-full appearance-none rounded border border-stroke bg-transparent py-3 px-5 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary">
-                      <option value="">Type your subject</option>
-                      <option value="">USA</option>
-                      <option value="">UK</option>
-                      <option value="">Canada</option>
+                    <select name='role' defaultValue={data.role} className="relative z-20 w-full appearance-none rounded border border-stroke bg-transparent py-3 px-5 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary">
+                      {Object.entries(roleTypeObject).map(([key, values])=>(
+                      <option value={key} key={key}>{values}</option>
+                      ))}
                     </select>
                     <span className="absolute top-1/2 right-4 z-30 -translate-y-1/2">
                       <svg
@@ -101,19 +168,10 @@ const EditUserPage = () => {
                   </div>
                 </div>
 
-                <div className="mb-6">
-                  <label className="mb-2.5 block text-black dark:text-white">
-                    Message
-                  </label>
-                  <textarea
-                    rows={6}
-                    placeholder="Type your message"
-                    className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-                  ></textarea>
-                </div>
+          
 
                 <button className="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray">
-                  Send Message
+                  Submit
                 </button>
               </div>
             </form>

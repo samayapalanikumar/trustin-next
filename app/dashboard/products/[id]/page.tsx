@@ -1,12 +1,74 @@
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import { Metadata } from "next";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
+import { updateProducts } from "../actions";
 export const metadata: Metadata = {
   title: "Edit  Product | Trustin",
   description: "This is Form Layout page for TailAdmin Next.js",
   // other metadata
 };
 
-const EditProductPage = () => {
+
+async function getData(id:string) {
+  const cookieStore = cookies();
+  const access_token = cookieStore.get("access_token");
+
+  const res = await fetch(`http://localhost:8000/products/${id}`, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${access_token?.value}`,
+    },
+  });
+  
+  const res2 = await fetch("http://localhost:8000/branch/", {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${access_token?.value}`,
+    },
+  });
+
+
+  // The return value is *not* serialized
+  // You can return Date, Map, Set, etc.
+
+  if (!res.ok) {
+    // This will activate the closest `error.js` Error Boundary
+    // console.log(res)
+    // throw new Error("Failed to fetch data");
+    console.log("error");
+    redirect("/signin");
+  }
+  const data = await res.json();
+  const branches = await res2.json();
+  return {
+    product:data,
+    branches
+  };
+}
+
+type Data = {
+  product:{
+    branch_id: number;
+    product_name : string;
+    description : string;
+
+  }
+  branches: {
+    id:number;
+    branch_name: string;
+  }[]
+}
+
+const EditProductPage =  async ({
+  params: { id },
+}: {
+  params: { id: string };
+}) => {
+
+  const data:Data = await getData(id)
+  const updateProductWithId = updateProducts.bind(null, id)
+
   return (
     <>
       <Breadcrumb pageName="Edit  Product" />
@@ -20,64 +82,23 @@ const EditProductPage = () => {
                 Contact Form
               </h3>
             </div> */}
-            <form action="#">
+            <form action={updateProductWithId}>
               <div className="p-6.5">
-                <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
-                  <div className="w-full xl:w-1/2">
-                    <label className="mb-2.5 block text-black dark:text-white">
-                      First name
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="Enter your first name"
-                      className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-                    />
-                  </div>
-
-                  <div className="w-full xl:w-1/2">
-                    <label className="mb-2.5 block text-black dark:text-white">
-                      Last name
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="Enter your last name"
-                      className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-                    />
-                  </div>
-                </div>
-
                 <div className="mb-4.5">
                   <label className="mb-2.5 block text-black dark:text-white">
-                    Email <span className="text-meta-1">*</span>
-                  </label>
-                  <input
-                    type="email"
-                    placeholder="Enter your email address"
-                    className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-                  />
-                </div>
-
-                <div className="mb-4.5">
-                  <label className="mb-2.5 block text-black dark:text-white">
-                    Subject
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="Select subject"
-                    className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-                  />
-                </div>
-
-                <div className="mb-4.5">
-                  <label className="mb-2.5 block text-black dark:text-white">
-                    Subject
+                    Branch
                   </label>
                   <div className="relative z-20 bg-transparent dark:bg-form-input">
-                    <select className="relative z-20 w-full appearance-none rounded border border-stroke bg-transparent py-3 px-5 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary">
-                      <option value="">Type your subject</option>
-                      <option value="">USA</option>
-                      <option value="">UK</option>
-                      <option value="">Canada</option>
+                    <select
+                      name="branch_id"
+                      defaultValue={data.product.branch_id}
+                      className="relative z-20 w-full appearance-none rounded border border-stroke bg-transparent py-3 px-5 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                    >
+                      {data.branches.map((branch) => (
+                        <option value={branch.id} key={branch.id}>
+                          {branch.branch_name}
+                        </option>
+                      ))}
                     </select>
                     <span className="absolute top-1/2 right-4 z-30 -translate-y-1/2">
                       <svg
@@ -101,18 +122,33 @@ const EditProductPage = () => {
                   </div>
                 </div>
 
+                <div className="mb-4.5">
+                  <label className="mb-2.5 block text-black dark:text-white">
+                    Product Name <span className="text-meta-1">*</span>
+                  </label>
+                  <input
+                    type="Text"
+                    name="product_name"
+                    defaultValue={data.product.product_name}
+
+                    className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                  />
+                </div>
+
                 <div className="mb-6">
                   <label className="mb-2.5 block text-black dark:text-white">
-                    Message
+                    Description
                   </label>
                   <textarea
                     rows={6}
-                    placeholder="Type your message"
+                    name="description"
+                    defaultValue={data.product.description}
+
                     className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                   ></textarea>
                 </div>
 
-                <button className="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray">
+                <button type="submit" className="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray">
                   Send Message
                 </button>
               </div>

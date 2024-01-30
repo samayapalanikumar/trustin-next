@@ -19,7 +19,7 @@ export async function createFollowup(formData: FormData) {
 
 
   const access_token = cookies().get('access_token')
-    try {
+
       const res = await fetch("http://localhost:8000/followups/", {
         method: "POST", // *GET, POST, PUT, DELETE, etc.
         // mode: "cors", // no-cors, *cors, same-origin
@@ -32,17 +32,13 @@ export async function createFollowup(formData: FormData) {
         body: JSON.stringify(jsonObject),
       });
 
-      const resJson = await res.json();
-
-      console.log(resJson);
-    } catch (e) {
-      console.log(e);
-    }
-
-    redirect("/dashboard/followup");
+    
+    if(res.status===401) redirect('/signin');
+    if (res.status===201) redirect("/dashboard/followup");
 }
 
-export async function updateCustomers(id, formData: FormData) {
+
+export async function updateFollowup(id:string,formData: FormData) {
   let jsonObject  = Array.from(formData.entries()).reduce(
     (acc, [key, value]) => {
       acc[key] = value;
@@ -50,25 +46,12 @@ export async function updateCustomers(id, formData: FormData) {
     },
     {}
   );
-  const contact_persons = [
-    {
-      person_name: jsonObject.person_name,
-      designation: jsonObject.designation,
-      mobile_number: jsonObject.mobile_number,
-      landline_number: jsonObject.landline_number,
-      contact_email: jsonObject.contact_email,
-    },
-  ];
-  delete jsonObject["person_name"];
-  delete jsonObject["designation"];
-  delete jsonObject["mobile_number"];
-  delete jsonObject["landline_number"];
-  delete jsonObject["contact_email"];
+ 
 
-  jsonObject["contact_persons"] = contact_persons;
-  console.log(jsonObject);
+
   const access_token = cookies().get('access_token')
-      const res = await fetch(`http://localhost:8000/customers/${id}`, {
+  
+      const res = await fetch(`http://localhost:8000/followups/${id}`, {
         method: "PUT", // *GET, POST, PUT, DELETE, etc.
         // mode: "cors", // no-cors, *cors, same-origin
         headers: {
@@ -80,14 +63,7 @@ export async function updateCustomers(id, formData: FormData) {
         body: JSON.stringify(jsonObject),
       });
 
-      if (!res.ok){
-        redirect('/signin')
-      }
-
-      const resJson = await res.json();
-
-      console.log(resJson);
-
-
-    redirect("/dashboard/customers");
+   
+    if(res.status===401) redirect('/signin');
+    if (res.status===204) redirect("/dashboard/followup");
 }

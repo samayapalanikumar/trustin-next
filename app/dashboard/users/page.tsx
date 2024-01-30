@@ -4,6 +4,14 @@ import UserTable, { UserType } from "./user-table";
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Users | Trustin",
+  description: "This is Users page ",
+  // other metadata
+};
+
 async function getData() {
   const cookieStore = cookies();
   const access_token = cookieStore.get("access_token");
@@ -23,8 +31,9 @@ async function getData() {
     // console.log(res)
     // throw new Error("Failed to fetch data");
     console.log("error");
-    redirect("/signin");
   }
+
+  if (res.status === 401) redirect("signin");
 
   const users = await res.json();
 

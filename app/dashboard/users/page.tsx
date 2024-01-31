@@ -33,7 +33,7 @@ async function getData() {
     console.log("error");
   }
 
-  if (res.status === 401) redirect("signin");
+  if (res.status === 401) redirect("/signin");
 
   const users = await res.json();
 

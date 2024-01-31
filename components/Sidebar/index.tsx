@@ -3,7 +3,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import SidebarLinkGroup from "./SidebarLinkGroup";
 import Image from "next/image";
-import { UserCheck, Users } from "lucide-react";
+import { FlaskConical, Home, LibraryBig, Split, TestTube2, TestTubes, UserCheck, UserRound, Users } from "lucide-react";
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -107,7 +107,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
               MENU
             </h3>
 
-            <ul className="mb-6 flex flex-col gap-1.5">
+            <ul className="mb-6 flex flex-col gap-2.5">
                           <li>
                             <Link
                               href="/dashboard"
@@ -115,6 +115,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                                 pathname === "/dashboard" && "text-white"
                               } `}
                             >
+                            <Home />
                               Home
                             </Link>
                           </li>
@@ -126,6 +127,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                                 "text-white"
                               } `}
                             >
+                              <Split />
                               Branches
                             </Link>
                           </li>
@@ -136,6 +138,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                                 pathname === "/dashboard/users" && "text-white"
                               } `}
                             >
+                              <UserRound />
                               Users
                             </Link>
                           </li>
@@ -172,6 +175,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                                 "text-white"
                               } `}
                             >
+                              <TestTube2 />
                               Test Type
                             </Link>
                           </li>
@@ -184,6 +188,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                                 "text-white"
                               } `}
                             >
+                              <FlaskConical />
                               Products
                             </Link>
                           </li>
@@ -196,6 +201,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                                 "text-white"
                               } `}
                             >
+                              <TestTubes />
                               Test Parameters
                             </Link>
                           </li>
@@ -207,6 +213,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                                 "text-white"
                               } `}
                             >
+                              <LibraryBig />
                               TRF
                             </Link>
                           </li>

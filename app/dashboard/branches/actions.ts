@@ -26,7 +26,14 @@ export async function createBranch(formData: FormData) {
     body: JSON.stringify(jsonObject),
   });
 
-
+  if (res.status == 422) {
+    const resJson = await res.json()
+    console.log(resJson)
+    resJson.detail.map((error) => {
+      console.log(error.loc);
+      // console.log(error.input)
+    });
+  }
 
 
   if (res.status === 401) redirect("/signin");

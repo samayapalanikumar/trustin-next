@@ -145,7 +145,7 @@ const TRFForm = ({trf, updateAction}) => {
 
   async function fetchTestParameters(query: string, product: string) {
     let res = await fetch(
-      `http://localhost:8000/parameters/trf/1/?${query}`
+      `http://localhost:8000/parameters/trf/${product}/?${query}`
     );
     const response:ParametersType = await res.json();
     setParameters(response);
@@ -161,7 +161,7 @@ const TRFForm = ({trf, updateAction}) => {
           .map((value, index) => `test_type=${encodeURIComponent(value)}`)
           .join("&");
 
-        fetchTestParameters(query, "1");
+        fetchTestParameters(query, trf.product_id);
       }
     }
   }, [testTypes]);

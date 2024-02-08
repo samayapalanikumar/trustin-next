@@ -123,7 +123,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                             <Link
                               href="/dashboard/branches"
                               className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
-                                pathname === "/dashboard/branches" &&
+                               ( pathname === "/dashboard/branches" ||
+                                pathname.includes("branches")) &&
                                 "text-white"
                               } `}
                             >
@@ -135,7 +136,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                             <Link
                               href="/dashboard/users"
                               className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
-                                pathname === "/dashboard/users" && "text-white"
+                                (pathname === "/dashboard/users" ||
+                                pathname.includes("users")) && "text-white"
                               } `}
                             >
                               <UserRound />
@@ -146,7 +148,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                             <Link
                               href="/dashboard/customers"
                               className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
-                                pathname === "/dashboard/customers" &&
+                                (pathname === "/dashboard/customers"||
+                                pathname.includes("customers")) &&
                                 "text-white"
                               } `}
                             >
@@ -158,7 +161,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                             <Link
                               href="/dashboard/followup"
                               className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
-                                pathname === "/dashboard/followup" &&
+                              (  pathname === "/dashboard/followup" ||
+                              pathname.includes("followup")) &&
                                 "text-white"
                               } `}
                             >
@@ -171,7 +175,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                             <Link
                               href="/dashboard/testtype"
                               className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
-                                pathname === "/dashboard/testtype" &&
+                               ( pathname === "/dashboard/testtype"||
+                               pathname.includes("testtype")) &&
                                 "text-white"
                               } `}
                             >
@@ -184,7 +189,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                             <Link
                               href="/dashboard/products"
                               className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
-                                pathname === "/dashboard/products" &&
+                                (pathname === "/dashboard/products"||
+                                pathname.includes("products")) &&
                                 "text-white"
                               } `}
                             >
@@ -197,7 +203,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                             <Link
                               href="/dashboard/parameters"
                               className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
-                                pathname === "/dashboard/parameters" &&
+                                (pathname === "/dashboard/parameters"||
+                                pathname.includes("parameters")) &&
                                 "text-white"
                               } `}
                             >
@@ -209,7 +216,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                             <Link
                               href="/dashboard/trf"
                               className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
-                                pathname === "/dashboard/trf" &&
+                               ( pathname === "/dashboard/trf" ||
+                               pathname.includes("trf")) &&
                                 "text-white"
                               } `}
                             >

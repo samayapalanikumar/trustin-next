@@ -139,13 +139,12 @@ const TRFAdminForm = ({
       report_sent_by: data.trf.report_sent_by,
       submission_of_documents: data.trf.submission_of_documents,
       nabl_logo: data.trf.nabl_logo ? "1" : "0",
-      testing_details: data.trf.test_details
+      testing_details: data.trf.test_details,
     },
   });
   const { fields, append, remove, replace } = useFieldArray({
     control: form.control,
     name: "testing_details", // Name of the array in your schema
-  
   });
 
   const testTypes = useWatch({
@@ -155,27 +154,28 @@ const TRFAdminForm = ({
   });
 
   async function fetchTestParameters(query: string, product: string) {
-    let res = await fetch(`http://localhost:8000/parameters/trf/${data.trf.product_id}/?${query}`);
+    let res = await fetch(
+      `http://localhost:8000/parameters/trf/${data.trf.product_id}/?${query}`
+    );
     const response: ParametersType = await res.json();
     setParameters(response);
-
-    replace(response);
   }
 
-  // useEffect(() => {
-  //   if (testTypes) {
-  //     if (testTypes.length > 0) {
-  //       replace([]);
-  //       const query = testTypes
-  //         .map((value, index) => `test_type=${encodeURIComponent(value)}`)
-  //         .join("&");
+  useEffect(() => {
+    if (testTypes) {
+      if (testTypes.length > 0) {
+        const query = testTypes
+          .map((value, index) => `test_type=${encodeURIComponent(value)}`)
+          .join("&");
 
-  //       fetchTestParameters(query, "1");
-  //     }
-  //   }
-  // }, [testTypes]);
+        fetchTestParameters(query, data.trf.product_id);
+      }
+    }
+  }, [testTypes]);
 
-
+  const getTestTypeName = ()=>{
+    return ''
+  }
 
   return (
     <>
@@ -755,7 +755,9 @@ const TRFAdminForm = ({
                       Product Name:
                     </label>
                     <div className="relative z-20 bg-transparent dark:bg-form-input">
-                      {/* <p className='font-extrabold'>{trf.product.product_name}</p> */}
+                      <p className="font-extrabold">
+                        {data.trf.product.product_name}
+                      </p>
                     </div>
                   </div>
 
@@ -843,22 +845,58 @@ const TRFAdminForm = ({
                                 </h5>
                               </td>
                               <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
-                                <h5 className="font-medium text-black dark:text-white">
-                                  {data.trf?.test_details?.[index]?.parameter?.testing_parameters}
+                                {/* <h5 className="font-medium text-black dark:text-white">
+                                  {
+                                    data.trf?.test_details?.[index]?.parameter
+                                      ?.testing_parameters
+                                  }
                                 </h5>
                                 <input
                                   type="hidden"
                                   {...form.register(
                                     `testing_details.${index}.parameter_id`
                                   )}
-                                 
                                   className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-                                />
+                                /> */}
+                                <div className="relative z-20 bg-transparent dark:bg-form-input">
+                                  <select
+                                    {...form.register(
+                                      `testing_details.${index}.parameter_id`
+                                    )}
+                                    className="relative z-20 w-full appearance-none rounded border border-stroke bg-transparent py-3 px-5 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                                  >
+                                    {parameters?.map((parameter) => (
+                                      <option value={parameter.id} key={parameter.id}>
+                                        {parameter.testing_parameters}
+                                      </option>
+                                    ))}
+                                  </select>
+                                  <span className="absolute top-1/2 right-4 z-30 -translate-y-1/2">
+                                    <svg
+                                      className="fill-current"
+                                      width="24"
+                                      height="24"
+                                      viewBox="0 0 24 24"
+                                      fill="none"
+                                      xmlns="http://www.w3.org/2000/svg"
+                                    >
+                                      <g opacity="0.8">
+                                        <path
+                                          fillRule="evenodd"
+                                          clipRule="evenodd"
+                                          d="M5.29289 8.29289C5.68342 7.90237 6.31658 7.90237 6.70711 8.29289L12 13.5858L17.2929 8.29289C17.6834 7.90237 18.3166 7.90237 18.7071 8.29289C19.0976 8.68342 19.0976 9.31658 18.7071 9.70711L12.7071 15.7071C12.3166 16.0976 11.6834 16.0976 11.2929 15.7071L5.29289 9.70711C4.90237 9.31658 4.90237 8.68342 5.29289 8.29289Z"
+                                          fill=""
+                                        ></path>
+                                      </g>
+                                    </svg>
+                                  </span>
+                                </div>
                               </td>
                               <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
                                 <h5 className="font-medium text-black dark:text-white">
-                                  {data.trf?.test_details?.[index]?.parameter?.test_type?.name}
-
+                                  {
+                                    getTestTypeName()
+                                  }
                                 </h5>
                               </td>
                               <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
@@ -882,6 +920,9 @@ const TRFAdminForm = ({
                           ))}
                         </tbody>
                       </table>
+                      <button type="button" onClick={() => append({ testing_details: { parameter_id: 1, priority_order: 0 } })}>
+                        Add Test
+                      </button>
                     </div>
                   </div>
 

@@ -18,6 +18,7 @@ async function getData(id:string) {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${access_token?.value}`,
+      cache: 'no-store'
 
     },
   });

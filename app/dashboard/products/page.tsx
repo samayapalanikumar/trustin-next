@@ -5,6 +5,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 import ProductTable, { ProductType } from "./product-table";
+import { SERVER_API_URL } from "@/app/constant";
 
 import { Metadata } from "next";
 
@@ -18,7 +19,7 @@ export const metadata: Metadata = {
 async function getData() {
   const cookieStore = cookies();
   const access_token = cookieStore.get("access_token");
-    const res = await fetch("http://localhost:8000/products/", {
+    const res = await fetch(`${SERVER_API_URL}products/`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${access_token?.value}`,

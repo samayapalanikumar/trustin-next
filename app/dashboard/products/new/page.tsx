@@ -3,6 +3,7 @@ import { Metadata } from "next";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { createProduct } from "../actions";
+import { SERVER_API_URL } from "@/app/constant";
 export const metadata: Metadata = {
   title: "Add New Product | Trustin",
   description: "This is Form Layout page for TailAdmin Next.js",
@@ -13,7 +14,7 @@ async function getData() {
   const cookieStore = cookies();
   const access_token = cookieStore.get("access_token");
 
-  const res = await fetch("http://localhost:8000/branch/", {
+  const res = await fetch(`${SERVER_API_URL}branch/`, {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${access_token?.value}`,

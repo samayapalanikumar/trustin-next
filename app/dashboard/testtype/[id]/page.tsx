@@ -3,6 +3,7 @@ import { Metadata } from "next";
 import { updateTestType } from "../action";
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
+import { SERVER_API_URL } from "@/app/constant";
 export const metadata: Metadata = {
   title: "Edit  Test Type | Trustin",
   description: "This is Form Layout page for TailAdmin Next.js",
@@ -13,7 +14,7 @@ async function getData(id:string) {
   const cookieStore = cookies();
   const access_token = cookieStore.get("access_token");
 
-  const res = await fetch(`http://localhost:8000/testtypes/${id}`, {
+  const res = await fetch(`${SERVER_API_URL}testtypes/${id}`, {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${access_token?.value}`,

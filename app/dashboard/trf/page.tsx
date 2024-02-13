@@ -5,6 +5,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import TRFTable, { TRFType } from "./trf-table";
 import { Metadata } from "next";
+import { SERVER_API_URL } from "@/app/constant";
 
 
 export const metadata: Metadata = {
@@ -15,7 +16,7 @@ export const metadata: Metadata = {
 async function getData() {
   const cookieStore = cookies();
   const access_token = cookieStore.get("access_token");
-    const res = await fetch("http://localhost:8000/trf/", {
+    const res = await fetch(`${SERVER_API_URL}trf/`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${access_token?.value}`,

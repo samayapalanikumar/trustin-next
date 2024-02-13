@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import TestTypeTable, { TestTypeData } from "./testtype-table";
 import { cookies } from "next/headers";
 import { Metadata } from "next";
+import { SERVER_API_URL } from "@/app/constant";
 
 export const metadata: Metadata = {
   title: "Test Type | Trustin",
@@ -14,7 +15,7 @@ export const metadata: Metadata = {
 async function getData() {
   const cookieStore = cookies();
   const access_token = cookieStore.get("access_token");
-  const res = await fetch("http://localhost:8000/testtypes/", {
+  const res = await fetch(`${SERVER_API_URL}testtypes/`, {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${access_token?.value}`,

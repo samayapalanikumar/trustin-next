@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/form";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Data } from "./typings";
+import { SERVER_API_URL } from "@/app/constant";
 
 type ParametersType = {
   id: number;
@@ -155,7 +156,7 @@ const TRFAdminForm = ({
 
   async function fetchTestParameters(query: string, product: string) {
     let res = await fetch(
-      `http://localhost:8000/parameters/trf/${data.trf.product_id}/?${query}`
+      `${SERVER_API_URL}parameters/trf/${data.trf.product_id}/?${query}`
     );
     const response: ParametersType = await res.json();
     setParameters(response);

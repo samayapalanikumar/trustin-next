@@ -3,6 +3,7 @@ import { cookies } from "next/headers";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import FollowupTable, { FollowUP } from "./followup-table";
+import { SERVER_API_URL } from "@/app/constant";
 
 import { Metadata } from "next";
 
@@ -15,7 +16,7 @@ export const metadata: Metadata = {
 async function getData() {
   const cookieStore = cookies();
   const access_token = cookieStore.get("access_token");
-  const res = await fetch("http://localhost:8000/followups/", {
+  const res = await fetch(`${SERVER_API_URL}followups/`, {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${access_token?.value}`,

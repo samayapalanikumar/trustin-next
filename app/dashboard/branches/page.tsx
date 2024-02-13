@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 import BranchTable, { BranchType } from "./branch-table";
 import { Metadata } from "next";
+import { SERVER_API_URL } from "@/app/constant";
 
 
 export const metadata: Metadata = {
@@ -16,7 +17,7 @@ async function getData() {
   const cookieStore = cookies();
   const access_token = cookieStore.get("access_token");
 
-  const res = await fetch("http://localhost:8000/branch/", {
+  const res = await fetch(`${SERVER_API_URL}branch/`, {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${access_token?.value}`,

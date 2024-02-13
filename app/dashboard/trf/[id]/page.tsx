@@ -5,6 +5,7 @@ import TRFAdminForm from "./form";
 import { updateTRFAdmin } from "../actions";
 import { cookies } from "next/headers";
 import { Data } from "./typings";
+import { SERVER_API_URL } from "@/app/constant";
 export const metadata: Metadata = {
   title: "Edit TRF | Trustin",
   description: "This is Form Layout page for TailAdmin Next.js",
@@ -14,7 +15,7 @@ export const metadata: Metadata = {
 async function getData(id:string) {
   const cookieStore = cookies();
   const access_token = cookieStore.get("access_token");
-  const res = await fetch(`http://localhost:8000/trf/${id}`, {
+  const res = await fetch(`${SERVER_API_URL}trf/${id}`, {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${access_token?.value}`,
@@ -22,12 +23,12 @@ async function getData(id:string) {
 
     },
   });
-  const res2 = await fetch("http://localhost:8000/products/trf", {
+  const res2 = await fetch(`${SERVER_API_URL}products/trf`, {
     headers: {
       "Content-Type": "application/json",
     },
   });
-  const res3 = await fetch("http://localhost:8000/testtypes/trf", {
+  const res3 = await fetch(`${SERVER_API_URL}testtypes/trf`, {
     headers: {
       "Content-Type": "application/json",
     },

@@ -5,6 +5,7 @@ import { updateUser } from "../actions";
 import { cookies } from "next/headers";
 import { RoleType } from "../user-table";
 import { redirect } from "next/navigation";
+import { SERVER_API_URL } from "@/app/constant";
 export const metadata: Metadata = {
   title: "Edit  User | Trustin",
   description: "This is Form Layout page for TailAdmin Next.js",
@@ -15,7 +16,7 @@ async function getData(id:string) {
   const cookieStore = cookies();
   const access_token = cookieStore.get("access_token");
 
-  const res = await fetch(`http://localhost:8000/users/${id}`, {
+  const res = await fetch(`${SERVER_API_URL}users/${id}`, {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${access_token?.value}`,

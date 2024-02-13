@@ -2,13 +2,14 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { URLSearchParams } from "url";
+import { SERVER_API_URL } from "@/app/constant";
 
 export async function signin(formData: any) {
   console.log("HI");
   const username = formData.get("username");
   const password = formData.get("password");
 
-  const res = await fetch("http://localhost:8000/auth/login/", {
+  const res = await fetch(`${SERVER_API_URL}/auth/login/`, {
     method: "POST", // *GET, POST, PUT, DELETE, etc.
     // mode: "cors", // no-cors, *cors, same-origin
     headers: {
@@ -40,7 +41,7 @@ export async function signinJwt(formData: any) {
   params.append("client_secret", "");
 
   try {
-    const res = await fetch("http://localhost:8000/auth/", {
+    const res = await fetch(`${SERVER_API_URL}auth/`, {
       method: "POST", // *GET, POST, PUT, DELETE, etc.
       // mode: "cors", // no-cors, *cors, same-origin
       headers: {

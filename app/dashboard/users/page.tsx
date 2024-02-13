@@ -3,6 +3,7 @@ import Link from "next/link";
 import UserTable, { UserType } from "./user-table";
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
+import { SERVER_API_URL } from "@/app/constant";
 
 import { Metadata } from "next";
 
@@ -16,7 +17,7 @@ async function getData() {
   const cookieStore = cookies();
   const access_token = cookieStore.get("access_token");
 
-  const res = await fetch("http://localhost:8000/users/", {
+  const res = await fetch(`${SERVER_API_URL}users/`, {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${access_token?.value}`,

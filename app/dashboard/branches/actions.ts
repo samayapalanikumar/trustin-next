@@ -3,6 +3,7 @@
 "use server";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { SERVER_API_URL } from "@/app/constant";
 
 export async function createBranch(formData: FormData) {
   let jsonObject = Array.from(formData.entries()).reduce(
@@ -15,7 +16,7 @@ export async function createBranch(formData: FormData) {
 
   const access_token = cookies().get("access_token");
 
-  const res = await fetch("http://localhost:8000/branch/", {
+  const res = await fetch(`${SERVER_API_URL}branch/`, {
     method: "POST", // *GET, POST, PUT, DELETE, etc.
     // mode: "cors", // no-cors, *cors, same-origin
     headers: {
@@ -45,7 +46,7 @@ export async function updateBranch(id: string, formData: FormData) {
 
   const access_token = cookies().get("access_token");
 
-  const res = await fetch(`http://localhost:8000/branch/${id}`, {
+  const res = await fetch(`${SERVER_API_URL}branch/${id}`, {
     method: "PUT", // *GET, POST, PUT, DELETE, etc.
     // mode: "cors", // no-cors, *cors, same-origin
     headers: {

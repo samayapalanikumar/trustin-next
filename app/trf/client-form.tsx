@@ -5,6 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { redirect } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useFieldArray, useForm, useWatch } from "react-hook-form";
+import { SERVER_API_URL } from "../constant";
 import * as z from "zod";
 import {
   Form,
@@ -145,7 +146,7 @@ const TRFForm = ({trf, updateAction}) => {
 
   async function fetchTestParameters(query: string, product: string) {
     let res = await fetch(
-      `http://localhost:8000/parameters/trf/${product}/?${query}`
+      `${SERVER_API_URL}parameters/trf/${product}/?${query}`
     );
     const response:ParametersType = await res.json();
     setParameters(response);
@@ -168,12 +169,12 @@ const TRFForm = ({trf, updateAction}) => {
 
   useEffect(() => {
     async function getData() {
-      const res2 = await fetch("http://localhost:8000/products/trf", {
+      const res2 = await fetch(`${SERVER_API_URL}products/trf`, {
         headers: {
           "Content-Type": "application/json",
         },
       });
-      const res3 = await fetch("http://localhost:8000/testtypes/trf", {
+      const res3 = await fetch(`${SERVER_API_URL}testtypes/trf`, {
         headers: {
           "Content-Type": "application/json",
         },

@@ -3,6 +3,7 @@ import { Metadata } from "next";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { createParameters } from "../actions";
+import { SERVER_API_URL } from "@/app/constant";
 export const metadata: Metadata = {
   title: "Add New Test Parameter | Trustin",
   description: "This is Form Layout page for TailAdmin Next.js",
@@ -13,19 +14,19 @@ async function getData() {
   const cookieStore = cookies();
   const access_token = cookieStore.get("access_token");
 
-  const res = await fetch("http://localhost:8000/branch/", {
+  const res = await fetch(`${SERVER_API_URL}branch/`, {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${access_token?.value}`,
     },
   });
-  const res2 = await fetch("http://localhost:8000/products/", {
+  const res2 = await fetch(`${SERVER_API_URL}products/`, {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${access_token?.value}`,
     },
   });
-  const res3 = await fetch("http://localhost:8000/testtypes/", {
+  const res3 = await fetch(`${SERVER_API_URL}testtypes/`, {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${access_token?.value}`,

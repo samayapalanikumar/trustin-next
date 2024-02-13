@@ -3,6 +3,7 @@
 "use server";
 import { cookies } from "next/headers";
 import { permanentRedirect } from "next/navigation";
+import { SERVER_API_URL } from "../constant";
 
 export async function updateTRF(trf_code: string, formData) {
   console.log(formData);
@@ -40,7 +41,7 @@ export async function updateTRF(trf_code: string, formData) {
 
   const access_token = cookies().get("access_token");
 
-  const res = await fetch(`http://localhost:8000/trf/${trf_code}`, {
+  const res = await fetch(`${SERVER_API_URL}trf/${trf_code}`, {
     method: "PUT", // *GET, POST, PUT, DELETE, etc.
     // mode: "cors", // no-cors, *cors, same-origin
     headers: {

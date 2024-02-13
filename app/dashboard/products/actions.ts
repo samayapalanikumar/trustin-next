@@ -3,6 +3,7 @@
 "use server";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { SERVER_API_URL } from "@/app/constant";
 
 
 
@@ -14,7 +15,7 @@ export async function createProduct(formData: FormData) {
 
   const access_token = cookies().get('access_token')
 
-      const res = await fetch("http://localhost:8000/products/", {
+      const res = await fetch(`${SERVER_API_URL}products/`, {
         method: "POST", // *GET, POST, PUT, DELETE, etc.
         // mode: "cors", // no-cors, *cors, same-origin
         headers: {
@@ -42,7 +43,7 @@ export async function updateProducts(id:string,formData: FormData) {
 
   const access_token = cookies().get('access_token')
 
-      const res = await fetch(`http://localhost:8000/products/${id}`, {
+      const res = await fetch(`${SERVER_API_URL}products/${id}`, {
         method: "PUT", // *GET, POST, PUT, DELETE, etc.
         // mode: "cors", // no-cors, *cors, same-origin
         headers: {

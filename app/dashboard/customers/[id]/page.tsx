@@ -2,6 +2,7 @@ import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import { Metadata } from "next";
 import { cookies } from "next/headers";
 import { updateCustomers } from "../actions";
+import { SERVER_API_URL } from "@/app/constant";
 export const metadata: Metadata = {
   title: "Edit  Customer | Trustin",
   description: "This is Form Layout page for TailAdmin Next.js",
@@ -13,7 +14,7 @@ async function getData(id: string) {
   const access_token = cookieStore.get("access_token");
   console.log(access_token);
   try {
-    const res = await fetch(`http://localhost:8000/customers/${id}`, {
+    const res = await fetch(`${SERVER_API_URL}customers/${id}`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${access_token?.value}`,

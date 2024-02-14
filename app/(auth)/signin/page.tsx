@@ -36,7 +36,7 @@ export default function SignIn() {
               </Link>
 
               <p className="2xl:px-20">
-                samaya palani kumar
+                Yugesh kumar
               </p>
 
               <span className="mt-15 inline-block">

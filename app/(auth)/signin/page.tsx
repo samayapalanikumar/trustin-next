@@ -36,8 +36,7 @@ export default function SignIn() {
               </Link>
 
               <p className="2xl:px-20">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit
-                suspendisse.
+                samaya palani kumar
               </p>
 
               <span className="mt-15 inline-block">

@@ -29,6 +29,8 @@ const config = {
       },
     },
     colors: {
+      ...tColors,
+
       current: "currentColor",
       transparent: "transparent",
       white: "#FFFFFF",
@@ -64,7 +66,6 @@ const config = {
       success: "#219653",
       danger: "#D34053",
       warning: "#FFA70B",
-      ...tColors,
     },
     extend: {
       fontSize: {

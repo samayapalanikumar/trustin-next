@@ -6,7 +6,6 @@ import BranchTable, { BranchType } from "./branch-table";
 import { Metadata } from "next";
 import { SERVER_API_URL } from "@/app/constant";
 
-
 export const metadata: Metadata = {
   title: "Branch | Trustin",
   description: "This is Branch page ",
@@ -34,16 +33,15 @@ async function getData() {
     console.log("error");
   }
 
-  if(res.status === 401) redirect('/signin');
+  if (res.status === 401) redirect("/signin");
 
   const branch = await res.json();
 
   return branch;
 }
 
-
 const BranchesPage = async () => {
-  const data:BranchType = await getData();
+  const data: BranchType = await getData();
   return (
     <>
       <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">

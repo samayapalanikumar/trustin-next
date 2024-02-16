@@ -1,14 +1,15 @@
-import type { Config } from "tailwindcss"
+import type { Config } from "tailwindcss";
 import defaultTheme from "tailwindcss/defaultTheme";
+import tColors from "tailwindcss/colors";
 
 const config = {
   darkMode: ["class"],
   content: [
-    './pages/**/*.{ts,tsx}',
-    './components/**/*.{ts,tsx}',
-    './app/**/*.{ts,tsx}',
-    './src/**/*.{ts,tsx}',
-	],
+    "./pages/**/*.{ts,tsx}",
+    "./components/**/*.{ts,tsx}",
+    "./app/**/*.{ts,tsx}",
+    "./src/**/*.{ts,tsx}",
+  ],
   prefix: "",
   theme: {
     fontFamily: {
@@ -63,9 +64,9 @@ const config = {
       success: "#219653",
       danger: "#D34053",
       warning: "#FFA70B",
+      ...tColors,
     },
     extend: {
-
       fontSize: {
         "title-xxl": ["44px", "55px"],
         "title-xl": ["36px", "45px"],
@@ -249,10 +250,8 @@ const config = {
         1: "0px 1px 0px #E2E8F0",
         2: "0px 1px 4px rgba(0, 0, 0, 0.12)",
       },
-      
 
       colors: {
-        
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
@@ -286,6 +285,7 @@ const config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        ...defaultTheme.colors,
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -315,11 +315,9 @@ const config = {
         "spin-2": "spin 2s linear infinite",
         "spin-3": "spin 3s linear infinite",
       },
-
-      
     },
   },
   plugins: [require("tailwindcss-animate")],
-} satisfies Config
+} satisfies Config;
 
-export default config
+export default config;

@@ -31,7 +31,7 @@ const NewBranchPage = () => {
                     </label>
                     <input
                       type="text"
-                      name="customer-trf-no"
+                      name="customer_trf_no"
                       placeholder="Enter Trf No"
                       className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                     />
@@ -43,7 +43,7 @@ const NewBranchPage = () => {
                     </label>
                     <input
                       type="text"
-                      name="test-type"
+                      name="test_type"
                       placeholder="Enter Test Type"
                       className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                     />
@@ -59,7 +59,7 @@ const NewBranchPage = () => {
                     </label>
                     <input
                       type="text"
-                      name="company-name"
+                      name="company_name"
                       placeholder="Enter Company Name"
                       className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                     />
@@ -70,7 +70,7 @@ const NewBranchPage = () => {
                     </label>
                     <input
                       type="text"
-                      name="company-name"
+                      name="company_id"
                       placeholder="Enter id"
                       className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                     />
@@ -83,7 +83,7 @@ const NewBranchPage = () => {
                     </label>
                     <input
                       type="text"
-                      name="test-method"
+                      name="test_method"
                       placeholder="Enter Test Method"
                       className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                     />
@@ -98,7 +98,7 @@ const NewBranchPage = () => {
                     </label>
                     <input
                       type="text"
-                      name="contact-person"
+                      name="contact_person"
                       placeholder="Enter Contact Person"
                       className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                     />
@@ -110,7 +110,7 @@ const NewBranchPage = () => {
                     </label>
                     <input
                       type="text"
-                      name="sample-id"
+                      name="sample_id"
                       placeholder="Enter Sample ID"
                       className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                     />
@@ -125,7 +125,7 @@ const NewBranchPage = () => {
                     </label>
                     <input
                       type="text"
-                      name="contact-number"
+                      name="contact_number"
                       placeholder="Enter Contact Number"
                       className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                     />
@@ -137,7 +137,7 @@ const NewBranchPage = () => {
                     </label>
                     <input
                       type="text"
-                      name="sample-type"
+                      name="sample_type"
                       placeholder="Enter Sample Type"
                       className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                     />
@@ -152,7 +152,7 @@ const NewBranchPage = () => {
                     </label>
                     <input
                       type="email"
-                      name="email-id"
+                      name="email_id"
                       placeholder="Enter Email ID"
                       className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                     />
@@ -164,7 +164,7 @@ const NewBranchPage = () => {
                     </label>
                     <input
                       type="text"
-                      name="sample-name"
+                      name="sample_name"
                       placeholder="Enter Sample Name"
                       className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                     />
@@ -179,7 +179,7 @@ const NewBranchPage = () => {
                     </label>
                     <input
                       type="text"
-                      name="address-line-1"
+                      name="address_line_1"
                       placeholder="Enter Address Line 1"
                       className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                     />
@@ -206,7 +206,7 @@ const NewBranchPage = () => {
                     </label>
                     <input
                       type="text"
-                      name="address-line-2"
+                      name="address_line_2"
                       placeholder="Enter Address Line 2"
                       className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                     />
@@ -218,7 +218,7 @@ const NewBranchPage = () => {
                     </label>
                     <input
                       type="text"
-                      name="manufactur-date"
+                      name="manufactur_date"
                       placeholder="Enter Manufactury Date"
                       className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                     />
@@ -245,7 +245,7 @@ const NewBranchPage = () => {
                     </label>
                     <input
                       type="text"
-                      name="batch-lot--no"
+                      name="batch_lot_no"
                       placeholder="Enter Batch No / Lot No"
                       className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                     />
@@ -272,7 +272,7 @@ const NewBranchPage = () => {
                     </label>
                     <input
                       type="text"
-                      name="manufacture-date"
+                      name="manufacture_date"
                       placeholder="Enter Manufacture Date"
                       className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                     />
@@ -299,7 +299,7 @@ const NewBranchPage = () => {
                     </label>
                     <input
                       type="date"
-                      name="expiry-date"
+                      name="expiry_date"
                       placeholder="Enter Expiry Date"
                       className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                     />
@@ -314,7 +314,7 @@ const NewBranchPage = () => {
                     </label>
                     <input
                       type="text"
-                      name="gst-no"
+                      name="gst_no"
                       placeholder="Enter Gst No"
                       className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                     />
@@ -326,7 +326,7 @@ const NewBranchPage = () => {
                     </label>
                     <input
                       type="date"
-                      name="batch-date"
+                      name="batch_date"
                       placeholder="Enter Batch Date"
                       className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                     />
@@ -341,7 +341,7 @@ const NewBranchPage = () => {
                     </label>
                     <input
                       type="date"
-                      name="date-of-regi"
+                      name="date_of_registration"
                       placeholder="Enter Date Of Registration"
                       className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                     />
@@ -353,7 +353,7 @@ const NewBranchPage = () => {
                     </label>
                     <input
                       type="text"
-                      name="recived-qual"
+                      name="recived_quality"
                       placeholder="Enter Recived Quality"
                       className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                     />
@@ -368,7 +368,7 @@ const NewBranchPage = () => {
                     </label>
                     <input
                       type="date"
-                      name="date-of-rec"
+                      name="date_of_recived"
                       placeholder="Enter Date Of Recived"
                       className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                     />
@@ -380,7 +380,7 @@ const NewBranchPage = () => {
                     </label>
                     <input
                       type="date"
-                      name="extec-deli-date"
+                      name="extection_deliver_date"
                       placeholder="Enter Extection Deliver Date"
                       className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                     />

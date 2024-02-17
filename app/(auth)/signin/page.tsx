@@ -2,8 +2,7 @@ import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Metadata } from "next";
-import {  signinJwt } from "./actions";
-
+import { signinJwt } from "./actions";
 
 export const metadata: Metadata = {
   title: "Signin Page | Next.js E-commerce Dashboard Template",
@@ -171,7 +170,7 @@ export default function SignIn() {
                 Sign In to Trustin
               </h2>
 
-              <form action={signinJwt}  >
+              <form action={signinJwt}>
                 <div className="mb-4">
                   <label className="mb-2.5 block font-medium text-black dark:text-white">
                     Email
@@ -211,7 +210,7 @@ export default function SignIn() {
                   <div className="relative">
                     <input
                       type="password"
-                      name='password'
+                      name="password"
                       placeholder="6+ Characters, 1 Capital letter"
                       className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                     />
@@ -245,11 +244,11 @@ export default function SignIn() {
                     type="submit"
                     // value="Sign In"
                     className="w-full cursor-pointer rounded-lg border border-primary bg-primary p-4 text-white transition hover:bg-opacity-90"
-                  > sign in</button>
+                  >
+                    {" "}
+                    sign in
+                  </button>
                 </div>
-
-               
-
               </form>
             </div>
           </div>
@@ -257,5 +256,4 @@ export default function SignIn() {
       </div>
     </>
   );
-};
-
+}

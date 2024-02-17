@@ -4,6 +4,7 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { z } from "zod";
+import { SERVER_API_URL } from "@/app/constant";
 
 const contactPersonsSchema = z.object({
   person_name: z.string(),
@@ -60,7 +61,7 @@ export async function createCustomers(formData: FormData) {
   console.log(jsonObject);
   const access_token = cookies().get('access_token')
 
-      const res = await fetch("http://localhost:8000/customers/", {
+      const res = await fetch(`${SERVER_API_URL}customers/`, {
         method: "POST", // *GET, POST, PUT, DELETE, etc.
         // mode: "cors", // no-cors, *cors, same-origin
         headers: {
@@ -97,7 +98,7 @@ export async function updateCustomers(id, formData: FormData) {
   jsonObject["contact_persons"] = contact_persons;
   console.log(jsonObject);
   const access_token = cookies().get('access_token')
-      const res = await fetch(`http://localhost:8000/customers/${id}`, {
+      const res = await fetch(`${SERVER_API_URL}customers/${id}`, {
         method: "PUT", // *GET, POST, PUT, DELETE, etc.
         // mode: "cors", // no-cors, *cors, same-origin
         headers: {

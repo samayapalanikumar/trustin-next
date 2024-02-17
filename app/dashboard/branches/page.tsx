@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 import BranchTable, { BranchType } from "./branch-table";
 import { Metadata } from "next";
-
+import { SERVER_API_URL } from "@/app/constant";
 
 export const metadata: Metadata = {
   title: "Branch | Trustin",
@@ -16,7 +16,7 @@ async function getData() {
   const cookieStore = cookies();
   const access_token = cookieStore.get("access_token");
 
-  const res = await fetch("http://localhost:8000/branch/", {
+  const res = await fetch(`${SERVER_API_URL}branch/`, {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${access_token?.value}`,
@@ -33,16 +33,15 @@ async function getData() {
     console.log("error");
   }
 
-  if(res.status === 401) redirect('/signin');
+  if (res.status === 401) redirect("/signin");
 
   const branch = await res.json();
 
   return branch;
 }
 
-
 const BranchesPage = async () => {
-  const data:BranchType = await getData();
+  const data: BranchType = await getData();
   return (
     <>
       <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">

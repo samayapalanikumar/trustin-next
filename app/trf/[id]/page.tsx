@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { useEffect, useState } from "react";
 import TRFForm from "../client-form";
 import { updateTRF } from "../actions";
+import { SERVER_API_URL } from "@/app/constant";
 export const metadata: Metadata = {
   title: "TRF | Trustin",
   description: "This is Form Layout page for TailAdmin Next.js",
@@ -14,7 +15,7 @@ export const metadata: Metadata = {
 async function getData(id:string) {
 
 
-  const res = await fetch(`http://localhost:8000/trf/customer/${id}`, {
+  const res = await fetch(`${SERVER_API_URL}trf/customer/${id}`, {
     headers: {
       "Content-Type": "application/json",
     },

@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 import { BranchType } from "../branch-table";
 import { updateBranch } from "../actions";
+import { SERVER_API_URL } from "@/app/constant";
 export const metadata: Metadata = {
   title: "Edit  Branch | Trustin",
   description: "This is Form Layout page for TailAdmin Next.js",
@@ -14,7 +15,7 @@ async function getData(id:string) {
   const cookieStore = cookies();
   const access_token = cookieStore.get("access_token");
 
-  const res = await fetch(`http://localhost:8000/branch/${id}`, {
+  const res = await fetch(`${SERVER_API_URL}branch/${id}`, {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${access_token?.value}`,

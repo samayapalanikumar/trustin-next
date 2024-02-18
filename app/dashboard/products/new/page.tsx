@@ -118,8 +118,11 @@ const NewProductPage = async () => {
                   ></textarea>
                 </div>
 
-                <button type="submit" className="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray">
-                  Send Message
+                <button
+                  type="submit"
+                  className="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray"
+                >
+                  Submit
                 </button>
               </div>
             </form>

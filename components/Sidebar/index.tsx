@@ -3,7 +3,17 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import SidebarLinkGroup from "./SidebarLinkGroup";
 import Image from "next/image";
-import { FlaskConical, Home, LibraryBig, Split, TestTube2, TestTubes, UserCheck, UserRound, Users } from "lucide-react";
+import {
+  FlaskConical,
+  Home,
+  LibraryBig,
+  Split,
+  TestTube2,
+  TestTubes,
+  UserCheck,
+  UserRound,
+  Users,
+} from "lucide-react";
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -107,124 +117,124 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
               MENU
             </h3>
 
-            <ul className="mb-6 flex flex-col gap-2.5">
-                          <li>
-                            <Link
-                              href="/dashboard"
-                              className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
-                                pathname === "/dashboard" && "text-white"
-                              } `}
-                            >
-                            <Home />
-                              Home
-                            </Link>
-                          </li>
-                          <li>
-                            <Link
-                              href="/dashboard/branches"
-                              className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
-                               ( pathname === "/dashboard/branches" ||
-                                pathname.includes("branches")) &&
-                                "text-white"
-                              } `}
-                            >
-                              <Split />
-                              Branches
-                            </Link>
-                          </li>
-                          <li>
-                            <Link
-                              href="/dashboard/users"
-                              className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
-                                (pathname === "/dashboard/users" ||
-                                pathname.includes("users")) && "text-white"
-                              } `}
-                            >
-                              <UserRound />
-                              Users
-                            </Link>
-                          </li>
-                          <li>
-                            <Link
-                              href="/dashboard/customers"
-                              className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
-                                (pathname === "/dashboard/customers"||
-                                pathname.includes("customers")) &&
-                                "text-white"
-                              } `}
-                            >
-                              <Users />
-                              Customers
-                            </Link>
-                          </li>
-                          <li>
-                            <Link
-                              href="/dashboard/followup"
-                              className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
-                              (  pathname === "/dashboard/followup" ||
-                              pathname.includes("followup")) &&
-                                "text-white"
-                              } `}
-                            >
-                              <UserCheck />
+            <ul className="mb-6 flex flex-col gap-2.5 gap-y-8">
+              <li>
+                <Link
+                  href="/dashboard"
+                  className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
+                    pathname === "/dashboard" && "text-white"
+                  } `}
+                >
+                  <Home />
+                  Home
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/dashboard/branches"
+                  className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
+                    (pathname === "/dashboard/branches" ||
+                      pathname.includes("branches")) &&
+                    "text-white"
+                  } `}
+                >
+                  <Split />
+                  Branches
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/dashboard/users"
+                  className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
+                    (pathname === "/dashboard/users" ||
+                      pathname.includes("users")) &&
+                    "text-white"
+                  } `}
+                >
+                  <UserRound />
+                  Users
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/dashboard/customers"
+                  className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
+                    (pathname === "/dashboard/customers" ||
+                      pathname.includes("customers")) &&
+                    "text-white"
+                  } `}
+                >
+                  <Users />
+                  Customers
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/dashboard/followup"
+                  className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
+                    (pathname === "/dashboard/followup" ||
+                      pathname.includes("followup")) &&
+                    "text-white"
+                  } `}
+                >
+                  <UserCheck />
+                  Customer Followup
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/dashboard/testtype"
+                  className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
+                    (pathname === "/dashboard/testtype" ||
+                      pathname.includes("testtype")) &&
+                    "text-white"
+                  } `}
+                >
+                  <TestTube2 />
+                  Test Type
+                </Link>
+              </li>
 
-                              Customer Followup
-                            </Link>
-                          </li>
-                          <li>
-                            <Link
-                              href="/dashboard/testtype"
-                              className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
-                               ( pathname === "/dashboard/testtype"||
-                               pathname.includes("testtype")) &&
-                                "text-white"
-                              } `}
-                            >
-                              <TestTube2 />
-                              Test Type
-                            </Link>
-                          </li>
+              <li>
+                <Link
+                  href="/dashboard/products"
+                  className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
+                    (pathname === "/dashboard/products" ||
+                      pathname.includes("products")) &&
+                    "text-white"
+                  } `}
+                >
+                  <FlaskConical />
+                  Products
+                </Link>
+              </li>
 
-                          <li>
-                            <Link
-                              href="/dashboard/products"
-                              className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
-                                (pathname === "/dashboard/products"||
-                                pathname.includes("products")) &&
-                                "text-white"
-                              } `}
-                            >
-                              <FlaskConical />
-                              Products
-                            </Link>
-                          </li>
-
-                          <li>
-                            <Link
-                              href="/dashboard/parameters"
-                              className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
-                                (pathname === "/dashboard/parameters"||
-                                pathname.includes("parameters")) &&
-                                "text-white"
-                              } `}
-                            >
-                              <TestTubes />
-                              Test Parameters
-                            </Link>
-                          </li>
-                          <li>
-                            <Link
-                              href="/dashboard/trf"
-                              className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
-                               ( pathname === "/dashboard/trf" ||
-                               pathname.includes("trf")) &&
-                                "text-white"
-                              } `}
-                            >
-                              <LibraryBig />
-                              TRF
-                            </Link>
-                          </li>
+              <li>
+                <Link
+                  href="/dashboard/parameters"
+                  className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
+                    (pathname === "/dashboard/parameters" ||
+                      pathname.includes("parameters")) &&
+                    "text-white"
+                  } `}
+                >
+                  <TestTubes />
+                  Test Parameters
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/dashboard/trf"
+                  className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
+                    (pathname === "/dashboard/trf" ||
+                      pathname.includes("trf")) &&
+                    "text-white"
+                  } `}
+                >
+                  <LibraryBig />
+                  TRF
+                </Link>
+              </li>
               {/* <!-- Menu Item Dashboard --> */}
               {/* <SidebarLinkGroup
                 activeCondition={
@@ -687,7 +697,9 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
 
               {/* <!-- Menu Item Ui Elements --> */}
               <SidebarLinkGroup
-                activeCondition={pathname === "/tail/ui" || pathname.includes("ui")}
+                activeCondition={
+                  pathname === "/tail/ui" || pathname.includes("ui")
+                }
               >
                 {(handleClick, open) => {
                   return (
@@ -695,7 +707,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                       <Link
                         href="#"
                         className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                          (pathname === "/tail/ui" || pathname.includes("ui")) &&
+                          (pathname === "/tail/ui" ||
+                            pathname.includes("ui")) &&
                           "bg-graydark dark:bg-meta-4"
                         }`}
                         onClick={(e) => {

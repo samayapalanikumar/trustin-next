@@ -5,58 +5,44 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { SERVER_API_URL } from "@/app/constant";
 
-
-
-
 export async function createProduct(formData: FormData) {
-  let jsonObject  = Object.fromEntries(formData.entries())
- 
+  let jsonObject = Object.fromEntries(formData.entries());
 
+  const access_token = cookies().get("access_token");
 
-  const access_token = cookies().get('access_token')
+  const res = await fetch(`${SERVER_API_URL}products/`, {
+    method: "POST", // *GET, POST, PUT, DELETE, etc.
+    // mode: "cors", // no-cors, *cors, same-origin
+    headers: {
+      "Content-Type": "application/json",
+      // "Content-Type": "application/x-www-form-urlencoded",
+      Authorization: `Bearer ${access_token?.value}`,
+    },
+    body: JSON.stringify(jsonObject),
+  });
 
-      const res = await fetch(`${SERVER_API_URL}products/`, {
-        method: "POST", // *GET, POST, PUT, DELETE, etc.
-        // mode: "cors", // no-cors, *cors, same-origin
-        headers: {
-          "Content-Type": "application/json",
-          // "Content-Type": "application/x-www-form-urlencoded",
-          Authorization:`Bearer ${access_token?.value}`,
+  console.log(res.status);
 
-        },
-        body: JSON.stringify(jsonObject),
-      });
-
-      const resJson = await res.json();
-
-  
-
-    if(res.status===401) redirect('/signin');
-    if (res.status===201) redirect("/dashboard/products");
+  if (res.status === 401) redirect("/signin");
+  if (res.status === 201) redirect("/dashboard/products");
 }
 
+export async function updateProducts(id: string, formData: FormData) {
+  let jsonObject = Object.fromEntries(formData.entries());
 
-export async function updateProducts(id:string,formData: FormData) {
-  let jsonObject  = Object.fromEntries(formData.entries())
- 
+  const access_token = cookies().get("access_token");
 
+  const res = await fetch(`${SERVER_API_URL}products/${id}`, {
+    method: "PUT", // *GET, POST, PUT, DELETE, etc.
+    // mode: "cors", // no-cors, *cors, same-origin
+    headers: {
+      "Content-Type": "application/json",
+      // "Content-Type": "application/x-www-form-urlencoded",
+      Authorization: `Bearer ${access_token?.value}`,
+    },
+    body: JSON.stringify(jsonObject),
+  });
 
-  const access_token = cookies().get('access_token')
-
-      const res = await fetch(`${SERVER_API_URL}products/${id}`, {
-        method: "PUT", // *GET, POST, PUT, DELETE, etc.
-        // mode: "cors", // no-cors, *cors, same-origin
-        headers: {
-          "Content-Type": "application/json",
-          // "Content-Type": "application/x-www-form-urlencoded",
-          Authorization:`Bearer ${access_token?.value}`,
-
-        },
-        body: JSON.stringify(jsonObject),
-      });
-
-   
-    
-    if(res.status===401) redirect('/signin');
-    if (res.status===204) redirect("/dashboard/products");
+  if (res.status === 401) redirect("/signin");
+  if (res.status === 204) redirect("/dashboard/products");
 }

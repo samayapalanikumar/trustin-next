@@ -202,7 +202,7 @@ const NewTestParameterPage = async () => {
                   <input
                     type="text"
                     name="testing_parameters"
-                    placeholder="Select Test Parameters"
+                    placeholder="Test Parameters"
                     className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                   />
                 </div>
@@ -214,7 +214,7 @@ const NewTestParameterPage = async () => {
                   <input
                     type="number"
                     name="amount"
-                    placeholder="Select Test Parameters"
+                    placeholder="Amount"
                     className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                   />
                 </div>
@@ -225,7 +225,7 @@ const NewTestParameterPage = async () => {
                   <input
                     type="text"
                     name="method_or_spec"
-                    placeholder="Select Test Parameters"
+                    placeholder="  Method or Specification"
                     className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                   />
                 </div>
@@ -237,7 +237,6 @@ const NewTestParameterPage = async () => {
                   <textarea
                     rows={6}
                     name="group_of_test_parameters"
-                    placeholder="Type your message"
                     className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                   ></textarea>
                 </div>

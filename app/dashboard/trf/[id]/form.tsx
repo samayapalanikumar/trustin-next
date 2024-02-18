@@ -174,9 +174,9 @@ const TRFAdminForm = ({
     }
   }, [testTypes]);
 
-  const getTestTypeName = ()=>{
-    return ''
-  }
+  const getTestTypeName = () => {
+    return "";
+  };
 
   return (
     <>
@@ -867,7 +867,11 @@ const TRFAdminForm = ({
                                     className="relative z-20 w-full appearance-none rounded border border-stroke bg-transparent py-3 px-5 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                                   >
                                     {parameters?.map((parameter) => (
-                                      <option value={parameter.id} key={parameter.id}>
+                                      <option
+                                        value={parameter.id}
+                                        key={parameter.id}
+                                        defaultValue={parameter.id}
+                                      >
                                         {parameter.testing_parameters}
                                       </option>
                                     ))}
@@ -895,9 +899,7 @@ const TRFAdminForm = ({
                               </td>
                               <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
                                 <h5 className="font-medium text-black dark:text-white">
-                                  {
-                                    getTestTypeName()
-                                  }
+                                  {getTestTypeName()}
                                 </h5>
                               </td>
                               <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
@@ -921,7 +923,17 @@ const TRFAdminForm = ({
                           ))}
                         </tbody>
                       </table>
-                      <button type="button" onClick={() => append({ testing_details: { parameter_id: 1, priority_order: 0 } })}>
+                      <button
+                        type="button"
+                        onClick={() =>
+                          append({
+                            testing_details: {
+                              parameter_id: 1,
+                              priority_order: 0,
+                            },
+                          })
+                        }
+                      >
                         Add Test
                       </button>
                     </div>

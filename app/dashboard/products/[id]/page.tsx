@@ -10,8 +10,7 @@ export const metadata: Metadata = {
   // other metadata
 };
 
-
-async function getData(id:string) {
+async function getData(id: string) {
   const cookieStore = cookies();
   const access_token = cookieStore.get("access_token");
 
@@ -21,14 +20,13 @@ async function getData(id:string) {
       Authorization: `Bearer ${access_token?.value}`,
     },
   });
-  
+
   const res2 = await fetch(`${SERVER_API_URL}branch/`, {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${access_token?.value}`,
     },
   });
-
 
   // The return value is *not* serialized
   // You can return Date, Map, Set, etc.
@@ -43,32 +41,30 @@ async function getData(id:string) {
   const data = await res.json();
   const branches = await res2.json();
   return {
-    product:data,
-    branches
+    product: data,
+    branches,
   };
 }
 
 type Data = {
-  product:{
+  product: {
     branch_id: number;
-    product_name : string;
-    description : string;
-
-  }
+    product_name: string;
+    description: string;
+  };
   branches: {
-    id:number;
+    id: number;
     branch_name: string;
-  }[]
-}
+  }[];
+};
 
-const EditProductPage =  async ({
+const EditProductPage = async ({
   params: { id },
 }: {
   params: { id: string };
 }) => {
-
-  const data:Data = await getData(id)
-  const updateProductWithId = updateProducts.bind(null, id)
+  const data: Data = await getData(id);
+  const updateProductWithId = updateProducts.bind(null, id);
 
   return (
     <>
@@ -131,7 +127,6 @@ const EditProductPage =  async ({
                     type="Text"
                     name="product_name"
                     defaultValue={data.product.product_name}
-
                     className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                   />
                 </div>
@@ -144,13 +139,15 @@ const EditProductPage =  async ({
                     rows={6}
                     name="description"
                     defaultValue={data.product.description}
-
                     className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                   ></textarea>
                 </div>
 
-                <button type="submit" className="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray">
-                  Send Message
+                <button
+                  type="submit"
+                  className="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray"
+                >
+                  Submit
                 </button>
               </div>
             </form>

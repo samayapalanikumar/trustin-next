@@ -36,7 +36,8 @@ export default function SignIn() {
               </Link>
 
               <p className="2xl:px-20">
-                jenish
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit
+              suspendisse.
               </p>
 
               <span className="mt-15 inline-block">

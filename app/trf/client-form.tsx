@@ -223,6 +223,7 @@ const TRFForm = ({trf, updateAction}) => {
                 Contact Form
               </h3>
             </div> */}
+            
             <Form {...form}>
               <form
               
@@ -232,7 +233,48 @@ const TRFForm = ({trf, updateAction}) => {
                 } )}
                 // action={updateAction}
               >
+
                 <div className="p-6.5">
+
+                <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
+                <div  className="w-full xl:w-1/2">
+                    <label className="mb-2.5  text-black dark:text-white">
+                      Trf Code:
+                    </label>
+                    <div className="relative inline-block z-20 bg-transparent dark:bg-form-input">
+                     <p className='font-extrabold'>{trf.trf_code}</p>
+                    </div>
+                  </div>
+                  <div  className="w-full xl:w-1/2">
+                    <label className="mb-2.5  text-black dark:text-white">
+                      Company Name:
+                    </label>
+                    <div className="relative inline-block z-20 bg-transparent dark:bg-form-input">
+                     <p className='font-extrabold'>{trf.customer.company_name}</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
+                  <div  className="w-full xl:w-1/2">
+                    <label className="mb-2.5  text-black dark:text-white">
+                      Company Code:
+                    </label>
+                    <div className="relative inline-block z-20 bg-transparent dark:bg-form-input">
+                     <p className='font-extrabold'>{trf.customer.customer_code}</p>
+                    </div>
+                  </div>
+
+                  <div  className="w-full xl:w-1/2">
+                    <label className="mb-2.5  text-black dark:text-white">
+                      Company Email:
+                    </label>
+                    <div className="relative inline-block z-20 bg-transparent dark:bg-form-input">
+                     <p className='font-extrabold'>{trf.customer.email}</p>
+                    </div>
+                  </div>
+                </div>
+
                   <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
                     <div className="w-full xl:w-1/2">
                       <label className="mb-2.5 block text-black dark:text-white">

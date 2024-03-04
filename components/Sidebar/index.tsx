@@ -4,15 +4,16 @@ import { usePathname } from "next/navigation";
 import SidebarLinkGroup from "./SidebarLinkGroup";
 import Image from "next/image";
 import {
-  FlaskConical,
   Home,
   LibraryBig,
+  Microscope,
   Split,
-  TestTube2,
+  Syringe,
   TestTubes,
   UserCheck,
   UserRound,
   Users,
+  ClipboardPlus,
 } from "lucide-react";
 
 interface SidebarProps {
@@ -79,7 +80,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
           <Image
             width={176}
             height={32}
-            src={"/images/logo/logo.svg"}
+            src={"/images/logo/logo.png"}
             alt="Logo"
           />
         </Link>
@@ -190,7 +191,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                     "text-white"
                   } `}
                 >
-                  <TestTube2 />
+                   <Microscope />
                   Test Type
                 </Link>
               </li>
@@ -204,7 +205,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                     "text-white"
                   } `}
                 >
-                  <FlaskConical />
+                   <Syringe />
                   Products
                 </Link>
               </li>
@@ -221,7 +222,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                   <TestTubes />
                   Test Parameters
                 </Link>
-              </li>
+              </li>           
               <li>
                 <Link
                   href="/dashboard/trf"
@@ -233,6 +234,19 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 >
                   <LibraryBig />
                   TRF
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/dashboard/registrations"
+                  className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
+                    (pathname === "/dashboard/registrations" ||
+                      pathname.includes("registrations")) &&
+                    "text-white"
+                  } `}
+                >
+                  <ClipboardPlus />
+                  Registrations
                 </Link>
               </li>
               {/* <!-- Menu Item Dashboard --> */}

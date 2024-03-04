@@ -118,29 +118,29 @@ const TRFAdminForm = ({
   const form = useForm<z.infer<typeof trfSchema>>({
     resolver: zodResolver(trfSchema),
     defaultValues: {
-      sample_name: data.trf.sample_name,
-      sample_id: data.trf.sample_id,
-      description: data.trf.description,
-      no_of_samples: data.trf.no_of_samples,
-      manufactured_by: data.trf.manufactured_by,
-      manufactured_date: data.trf.manufactured_date,
-      expiry_date: data.trf.expiry_date,
-      batch_or_lot_no: data.trf.batch_or_lot_no,
-      batch_size: data.trf.batch_size,
-      format_name: data.trf.format_name,
-      sample_storage_condition: data.trf.sample_storage_condition,
-      sample_disposal_process: data.trf.sample_disposal_process,
-      sampling_by: data.trf.sampling_by,
-      binary_decision_rule: data.trf.binary_decision_rule,
-      fail_statement_sent: data.trf.fail_statement_sent,
-      specific_decision_rule: data.trf.specific_decision_rule,
-      test_types_ids: data.trf.test_types_ids,
+      sample_name: data.trf?.sample_name,
+      sample_id: data.trf?.sample_id,
+      description: data.trf?.description,
+      no_of_samples: data.trf?.no_of_samples,
+      manufactured_by: data.trf?.manufactured_by,
+      manufactured_date: data.trf?.manufactured_date,
+      expiry_date: data.trf?.expiry_date,
+      batch_or_lot_no: data.trf?.batch_or_lot_no,
+      batch_size: data.trf?.batch_size,
+      format_name: data.trf?.format_name,
+      sample_storage_condition: data.trf?.sample_storage_condition,
+      sample_disposal_process: data.trf?.sample_disposal_process,
+      sampling_by: data.trf?.sampling_by,
+      binary_decision_rule: data.trf?.binary_decision_rule,
+      fail_statement_sent: data.trf?.fail_statement_sent,
+      specific_decision_rule: data.trf?.specific_decision_rule,
+      test_types_ids: data.trf?.test_types_ids,
 
-      testing_process: data.trf.testing_process,
-      report_sent_by: data.trf.report_sent_by,
-      submission_of_documents: data.trf.submission_of_documents,
-      nabl_logo: data.trf.nabl_logo ? "1" : "0",
-      testing_details: data.trf.test_details,
+      testing_process: data.trf?.testing_process,
+      report_sent_by: data.trf?.report_sent_by,
+      submission_of_documents: data.trf?.submission_of_documents,
+      nabl_logo: data.trf?.nabl_logo ? "1" : "0",
+      testing_details: data.trf?.test_details,
     },
   });
   const { fields, append, remove, replace } = useFieldArray({
@@ -757,7 +757,7 @@ const TRFAdminForm = ({
                     </label>
                     <div className="relative z-20 bg-transparent dark:bg-form-input">
                       <p className="font-extrabold">
-                        {data.trf.product.product_name}
+                        {data.trf?.product?.product_name}
                       </p>
                     </div>
                   </div>
@@ -925,6 +925,7 @@ const TRFAdminForm = ({
                       </table>
                       <button
                         type="button"
+                        className="flex mt-2 justify-center rounded bg-primary p-3 font-medium text-gray"
                         onClick={() =>
                           append({
                             testing_details: {

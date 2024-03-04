@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-
-const DropdownUser = () => {
+import { logout } from "@/app/dashboard/actions";
+import { UserType } from "@/app/dashboard/layout";
+const DropdownUser = ({user}:{user:UserType}) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const trigger = useRef<any>(null);
@@ -34,6 +35,8 @@ const DropdownUser = () => {
     return () => document.removeEventListener("keydown", keyHandler);
   });
 
+ 
+
   return (
     <div className="relative">
       <Link
@@ -44,9 +47,9 @@ const DropdownUser = () => {
       >
         <span className="hidden text-right lg:block">
           <span className="block text-sm font-medium text-black dark:text-white">
-            Thomas Anree
+            {`${user?.first_name} ${user?.last_name}` }
           </span>
-          <span className="block text-xs">UX Designer</span>
+          <span className="block text-xs">{user?.role}</span>
         </span>
 
         <span className="h-12 w-12 rounded-full">
@@ -157,7 +160,8 @@ const DropdownUser = () => {
             </Link>
           </li>
         </ul>
-        <button className="flex items-center gap-3.5 py-4 px-6 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base">
+        <form action ={logout}>
+        <button type="submit" className="flex items-center gap-3.5 py-4 px-6 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base">
           <svg
             className="fill-current"
             width="22"
@@ -177,6 +181,7 @@ const DropdownUser = () => {
           </svg>
           Log Out
         </button>
+        </form>
       </div>
       {/* <!-- Dropdown End --> */}
     </div>

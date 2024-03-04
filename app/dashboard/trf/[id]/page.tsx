@@ -41,7 +41,10 @@ async function getData(id:string) {
     // console.log(res)
     // throw new Error("Failed to fetch data");
     console.log("error");
-    redirect("/signin");
+  }
+
+  if(!res.ok){
+    console.log(res)
   }
 
   const trf = await res.json();

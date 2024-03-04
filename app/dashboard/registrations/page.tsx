@@ -1,27 +1,29 @@
 import TableThree from "@/components/Tables/TableThree";
-import { cookies } from "next/headers";
 import Link from "next/link";
+import RegistrationTable, { RegisterType } from "./registrations-table";
 import { redirect } from "next/navigation";
-import FollowupTable, { FollowUP } from "./followup-table";
+import { cookies } from "next/headers";
 import { SERVER_API_URL } from "@/app/constant";
 
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Customer Followup | Trustin",
-  description: "This is Customer Followup page ",
+  title: "Users | Trustin",
+  description: "This is Users page ",
   // other metadata
 };
 
 async function getData() {
   const cookieStore = cookies();
   const access_token = cookieStore.get("access_token");
-  const res = await fetch(`${SERVER_API_URL}followups/`, {
+
+  const res = await fetch(`${SERVER_API_URL}registrations/`, {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${access_token?.value}`,
     },
   });
+
   // The return value is *not* serialized
   // You can return Date, Map, Set, etc.
 
@@ -33,32 +35,32 @@ async function getData() {
   }
 
   if (res.status === 401) redirect("/signin");
-  const resjson = await res.json();
-  console.log(resjson)
-  return resjson;
+
+  const users = await res.json();
+
+  return users;
 }
 
-const CustomerFollowupPage = async () => {
-  const data: FollowUP[] = await getData();
-
+const UserPage = async () => {
+  const data: RegisterType = await getData();
   return (
     <>
       <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <h2 className="text-title-md2 font-semibold text-black dark:text-white">
-          Customer Followup
+          Registraions
         </h2>
         <Link
-          href="followup/new"
+          href="registrations/new"
           className="inline-flex items-center justify-center rounded-md border border-black py-4 px-5 text-center font-medium text-black hover:bg-opacity-90 lg:px-8 xl:px-10"
         >
-          New Customer Followup
+          New Registration
         </Link>
       </div>
       <div className="flex flex-col gap-10">
-        <FollowupTable data={data} />
+        <RegistrationTable data={data} />
       </div>
     </>
   );
 };
 
-export default CustomerFollowupPage;
+export default UserPage;

@@ -40,6 +40,12 @@ async function getData() {
       Authorization: `Bearer ${access_token?.value}`,
     },
   });
+  const res5 = await fetch(`${SERVER_API_URL}parameters/`, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${access_token?.value}`,
+    },
+  });
 
   // The return value is *not* serialized
   // You can return Date, Map, Set, etc.
@@ -54,13 +60,17 @@ async function getData() {
   if (res.status === 401) redirect("/signin");
   if (res2.status === 401) redirect("/signin");
   if (res3.status === 401) redirect("/signin");
+  if (res4.status === 401) redirect("/signin");
+  if (res4.status === 401) redirect("/signin");
+  if (res5.status === 401) redirect("/signin");
 
   const trf = await res.json();
   const customers = await res2.json();
   const branches = await res3.json();
   const products = await res4.json();
+  const parameters = await res5.json();
 
-  return { trf, customers, branches, products };
+  return { trf, customers, branches, products, parameters };
 }
 
 const NewRegistrationPage = async () => {

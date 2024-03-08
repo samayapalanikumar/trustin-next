@@ -14,6 +14,7 @@ import {
   UserRound,
   Users,
   ClipboardPlus,
+  TestTube2,
 } from "lucide-react";
 
 interface SidebarProps {
@@ -247,6 +248,19 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 >
                   <ClipboardPlus />
                   Registrations
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/dashboard/sample"
+                  className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
+                    (pathname === "/dashboard/sample" ||
+                      pathname.includes("sample")) &&
+                    "text-white"
+                  } `}
+                >
+                  <TestTube2 />
+                 Samples
                 </Link>
               </li>
               {/* <!-- Menu Item Dashboard --> */}

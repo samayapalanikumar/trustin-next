@@ -6,8 +6,28 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Trash2 } from "lucide-react";
 import { createRegistration } from "../actions";
 
-const RegistrationForm = ({ data }: { data: any }) => {
-  const form = useForm();
+const RegistrationForm = ({ data, updateFn }: { data: any; updateFn:(data:any)=>void }) => {
+  const form = useForm({
+    defaultValues: {
+      trf_id: data?.registration?.trf_id,
+      branch_id: data?.registration?.branch_id,
+      product: data?.registration?.product,
+      company_id: data?.registration?.company_id,
+      company_name: data?.registration?.company_name,
+      customer_address_line1: data?.registration?.customer_address_line1,
+      customer_address_line2: data?.registration?.customer_address_line2,
+      city: data?.registration?.city,
+      state: data?.registration?.state,
+      pincode_no: data?.registration?.pincode_no,
+      gst: data?.registration?.gst,
+      test_type: data?.registration?.test_type,
+      date_of_received: new Date(data?.registration?.date_of_received)
+        .toISOString()
+        .split("T")[0],
+      batches: data?.registration?.batches,
+      test_params: data?.registration?.test_params,
+    },
+  });
   const { fields, append, remove, replace } = useFieldArray({
     control: form.control,
     name: "batches", // Name of the array in your schema
@@ -38,27 +58,26 @@ const RegistrationForm = ({ data }: { data: any }) => {
         const data = await response.json();
         console.log(data);
         // Update form value with the fetched data
-        form.setValue("branch_id", data.branch_id);
-        form.setValue("company_id", data.customer_id);
-        form.setValue("product", data.product_id);
-        form.setValue("company_name", data?.customer?.company_name);
-        form.setValue("city", data?.product?.city);
-        form.setValue("state", data?.product?.state);
-        form.setValue("pincode_no", data?.product?.pincode_no);
-        form.setValue(
-          "customer_address_line1",
-          data?.product?.customer_address_line1
-        );
-        form.setValue(
-          "customer_address_line2",
-          data?.product?.customer_address_line2
-        );
-        form.setValue("gst", data?.product?.gst);
-        
-        data?.test_details.forEach(para=>{
-          testAppend({'test_params_id':para?.parameter_id})
-        })
+        // form.setValue("branch_id", data.branch_id);
+        // form.setValue("company_id", data.customer_id);
+        // form.setValue("product", data.product_id);
+        // form.setValue("company_name", data?.customer?.company_name);
+        // form.setValue("city", data?.product?.city);
+        // form.setValue("state", data?.product?.state);
+        // form.setValue("pincode_no", data?.product?.pincode_no);
+        // form.setValue(
+        //   "customer_address_line1",
+        //   data?.product?.customer_address_line1
+        // );
+        // form.setValue(
+        //   "customer_address_line2",
+        //   data?.product?.customer_address_line2
+        // );
+        // form.setValue("gst", data?.product?.gst);
 
+        // data?.test_details.forEach(para=>{
+        //   testAppend({'test_params_id':para?.parameter_id})
+        // })
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -73,10 +92,10 @@ const RegistrationForm = ({ data }: { data: any }) => {
     }
   }, [watchedFieldValue, form.setValue]);
 
-  const handleSubmit = ({ formdata, data, formDataJson, }) => {
-    console.log(data)
-    createRegistration(data)
-  }
+  const handleSubmit = ({ formdata, data, formDataJson }) => {
+    console.log(data);
+    updateFn(data);
+  };
 
   return (
     <Form control={form.control} onSubmit={handleSubmit}>
@@ -284,7 +303,7 @@ const RegistrationForm = ({ data }: { data: any }) => {
         <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
           <div className="w-full ">
             <label className="mb-2.5 block text-black dark:text-white">
-              Date Of Recived
+              Date Of Received
             </label>
             <input
               type="date"
@@ -379,6 +398,10 @@ const RegistrationForm = ({ data }: { data: any }) => {
                         Batch No <span className="text-meta-1">*</span>
                       </label>
                       <input
+                        type="hidden"
+                        {...form.register(`batches.${index}.id`)}
+                      />
+                      <input
                         type="text"
                         {...form.register(`batches.${index}.batch_no`)}
                         className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
@@ -435,12 +458,12 @@ const RegistrationForm = ({ data }: { data: any }) => {
                 className="flex mt-2 justify-center rounded bg-primary p-3 font-medium text-gray"
                 onClick={() =>
                   append({
-                      batch_no: "",
-                      manufactured_date: "",
-                      expiry_date: "",
-                      batch_size: 0,
-                      received_quantity: 0,
-                    
+                    id: "",
+                    batch_no: "",
+                    manufactured_date: "",
+                    expiry_date: "",
+                    batch_size: 0,
+                    received_quantity: 0,
                   })
                 }
               >
@@ -474,6 +497,10 @@ const RegistrationForm = ({ data }: { data: any }) => {
                       </label>
 
                       <div className="relative z-20 bg-transparent dark:bg-form-input">
+                      <input
+                        type="hidden"
+                        {...form.register(`test_params.${index}.id`)}
+                      />
                         <select
                           {...form.register(
                             `test_params.${index}.test_params_id`
@@ -528,9 +555,8 @@ const RegistrationForm = ({ data }: { data: any }) => {
                 className="flex mt-2 justify-center rounded bg-primary p-3 font-medium text-gray"
                 onClick={() =>
                   testAppend({
-                
-                      test_params_id: "",
-                    
+                    id: "",
+                    test_params_id: "",
                   })
                 }
               >

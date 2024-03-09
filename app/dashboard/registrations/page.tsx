@@ -8,7 +8,7 @@ import { SERVER_API_URL } from "@/app/constant";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Users | Trustin",
+  title: "Registration | Trustin",
   description: "This is Users page ",
   // other metadata
 };
@@ -41,13 +41,13 @@ async function getData() {
   return users;
 }
 
-const UserPage = async () => {
+const RegistrationPage = async () => {
   const data: RegisterType = await getData();
   return (
     <>
       <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <h2 className="text-title-md2 font-semibold text-black dark:text-white">
-          Registraions
+          Registrations
         </h2>
         <Link
           href="registrations/new"
@@ -63,4 +63,4 @@ const UserPage = async () => {
   );
 };
 
-export default UserPage;
+export default RegistrationPage;

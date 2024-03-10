@@ -8,7 +8,7 @@ import { SERVER_API_URL } from "@/app/constant";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Users | Trustin",
+  title: "Samples | Trustin",
   description: "This is Users page ",
   // other metadata
 };
@@ -17,7 +17,7 @@ async function getData() {
   const cookieStore = cookies();
   const access_token = cookieStore.get("access_token");
 
-  const res = await fetch(`${SERVER_API_URL}registrations/`, {
+  const res = await fetch(`${SERVER_API_URL}samples/`, {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${access_token?.value}`,
@@ -36,9 +36,9 @@ async function getData() {
 
   if (res.status === 401) redirect("/signin");
 
-  const users = await res.json();
+  const samples = await res.json();
 
-  return users;
+  return samples;
 }
 
 const SamplePage = async () => {

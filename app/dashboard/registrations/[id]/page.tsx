@@ -6,6 +6,7 @@ import { SERVER_API_URL } from "@/app/constant";
 import { redirect } from "next/navigation";
 import { createRegistration, updateRegistration } from "../actions";
 import SampleDialog from "./sample-dialog";
+import Link from "next/link";
 // import { createBranch } from "../actions";
 
 export const metadata: Metadata = {
@@ -111,8 +112,14 @@ const EditRegistrationPage = async ({
             </div> */}
           </div>
           <RegistrationForm data={data} updateFn={updateRegistrationWithId}/>
+          
+        <Link
+          href={`/dashboard/registrations/${id}/samples`}
+          className="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray"
+        >
+          Create Samples
+        </Link>
         </div>
-        <SampleDialog/>
       </div>
     </>
   );

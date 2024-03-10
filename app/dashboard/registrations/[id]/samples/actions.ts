@@ -8,13 +8,14 @@ import { SERVER_API_URL } from "@/app/constant";
 
 
 
-export async function createRegistration(jsonObject) {
+export async function createSamples(id, data: any) {
+  let {samples}  = data
  
 
-  console.log(jsonObject)
+
   const access_token = cookies().get('access_token')
  
-      const res = await fetch(`${SERVER_API_URL}registrations/`, {
+      const res = await fetch(`${SERVER_API_URL}registrations/${id}/samples`, {
         method: "POST", // *GET, POST, PUT, DELETE, etc.
         // mode: "cors", // no-cors, *cors, same-origin
         headers: {
@@ -23,25 +24,24 @@ export async function createRegistration(jsonObject) {
           Authorization:`Bearer ${access_token?.value}`,
 
         },
-        body: JSON.stringify(jsonObject),
+        body: JSON.stringify(samples),
       });
 
-      const response = await res.json()
-      console.log(response)
-     
+    
 
       if(res.status===401) redirect('/signin');
-      if (res.status===201) redirect("/dashboard/registrations");
+      if (res.status===200) redirect("/dashboard/samples");
 }
 
 
-export async function updateRegistration(id:string, data) {
-  let jsonObject  = data
+export async function updateUser(id:string,formData: FormData) {
+  let jsonObject  = Object.fromEntries(formData.entries())
+ 
 
 
   const access_token = cookies().get('access_token')
 
-      const res = await fetch(`${SERVER_API_URL}registrations/${id}`, {
+      const res = await fetch(`${SERVER_API_URL}users/${id}`, {
         method: "PUT", // *GET, POST, PUT, DELETE, etc.
         // mode: "cors", // no-cors, *cors, same-origin
         headers: {
@@ -53,14 +53,7 @@ export async function updateRegistration(id:string, data) {
         body: JSON.stringify(jsonObject),
       });
 
-      if (res.status==422){
-        const resJson =  await res.json()
-
-        console.log(resJson)
-        console.log(resJson.detail[0].loc)
-        console.log(resJson.detail[0].input)
-      }
-
+    
       if(res.status===401) redirect('/signin');
-      if (res.status===204) redirect("/dashboard/registrations");
+      if (res.status===204) redirect("/dashboard/users");
 }

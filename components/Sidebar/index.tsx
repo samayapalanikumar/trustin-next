@@ -252,10 +252,10 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
               </li>
               <li>
                 <Link
-                  href="/dashboard/sample"
+                  href="/dashboard/samples"
                   className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
-                    (pathname === "/dashboard/sample" ||
-                      pathname.includes("sample")) &&
+                    (pathname === "/dashboard/samples" ||
+                      pathname.includes("samples")) &&
                     "text-white"
                   } `}
                 >

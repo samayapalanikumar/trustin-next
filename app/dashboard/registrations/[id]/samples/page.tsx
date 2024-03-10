@@ -1,10 +1,11 @@
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import { Metadata } from "next";
-import RegistrationForm from "./form";
+import SamplesForm from "./sample-form";
 import { cookies } from "next/headers";
 import { SERVER_API_URL } from "@/app/constant";
 import { redirect } from "next/navigation";
 import { createRegistration, updateRegistration } from "../../actions";
+import { createSamples } from "./actions";
 // import { createBranch } from "../actions";
 
 export const metadata: Metadata = {
@@ -17,42 +18,19 @@ async function getData(id: string) {
   const cookieStore = cookies();
   const access_token = cookieStore.get("access_token");
 
-  const res = await fetch(`${SERVER_API_URL}registrations/${id}`, {
+  const res = await fetch(`${SERVER_API_URL}registrations/${id}/batches/`, {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${access_token?.value}`,
     },
   });
-  const res1 = await fetch(`${SERVER_API_URL}trf/`, {
+  const res1 = await fetch(`${SERVER_API_URL}registrations/${id}/`, {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${access_token?.value}`,
     },
   });
-  const res2 = await fetch(`${SERVER_API_URL}customers/`, {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${access_token?.value}`,
-    },
-  });
-  const res3 = await fetch(`${SERVER_API_URL}branch/`, {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${access_token?.value}`,
-    },
-  });
-  const res4 = await fetch(`${SERVER_API_URL}products/`, {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${access_token?.value}`,
-    },
-  });
-  const res5 = await fetch(`${SERVER_API_URL}parameters/`, {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${access_token?.value}`,
-    },
-  });
+ 
 
   // The return value is *not* serialized
   // You can return Date, Map, Set, etc.
@@ -65,27 +43,11 @@ async function getData(id: string) {
   }
 
   if (res.status === 401) redirect("/signin");
-  if (res1.status === 401) redirect("/signin");
-  if (res2.status === 401) redirect("/signin");
-  if (res3.status === 401) redirect("/signin");
-  if (res4.status === 401) redirect("/signin");
-  if (res4.status === 401) redirect("/signin");
-  if (res5.status === 401) redirect("/signin");
 
-  const registration = await res.json();
-  const trf = await res1.json();
-  const customers = await res2.json();
-  const branches = await res3.json();
-  const products = await res4.json();
-  const parameters = await res5.json();
-
-  const batches = registration.batches.map((batch:any) => ({
-    ...batch,
-    expiry_date: new Date(batch.expiry_date).toISOString().split("T")[0],
-    manufactured_date: new Date(batch.manufactured_date).toISOString().split("T")[0],
-  }));
-  registration.batches = batches
-  return { registration, trf, customers, branches, products, parameters };
+  const batches = await res.json();
+  const reg = await res1.json();
+ 
+  return { batches, test_params: reg.test_params };
 }
 
 const EditRegistrationPage = async ({
@@ -94,10 +56,10 @@ const EditRegistrationPage = async ({
   params: { id: string };
 }) => {
   const data = await getData(id);
-  const updateRegistrationWithId = updateRegistration.bind(null, id)
+  const createSamplesWithRegId = createSamples.bind(null, id)
   return (
     <>
-      <Breadcrumb pageName="Registration Form" />
+      <Breadcrumb pageName="Samples Form" />
 
       <div className="grid grid-cols-1 gap-9 sm:grid-cols-1">
         <div className="flex flex-col gap-9">
@@ -109,9 +71,8 @@ const EditRegistrationPage = async ({
               </h3>
             </div> */}
           </div>
-          <RegistrationForm data={data} updateFn={updateRegistrationWithId}/>
+          <SamplesForm data={data} createFn={createSamplesWithRegId}/>
         </div>
-        <SampleDialog/>
       </div>
     </>
   );

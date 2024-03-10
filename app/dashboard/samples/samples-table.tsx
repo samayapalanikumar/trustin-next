@@ -11,10 +11,9 @@ export enum RoleType {
 
 export type RegisterType = {
   id: number;
-  first_name: string;
-  last_name: string;
-  email: string;
-  role: RoleType;
+  sample_id: string;
+  name: string;
+  department: string;
 } [];
 
 const SampleTable = ({ data }: { data: RegisterType  }) => {
@@ -25,16 +24,13 @@ const SampleTable = ({ data }: { data: RegisterType  }) => {
           <thead>
             <tr className="bg-gray-2 text-left dark:bg-meta-4">
               <th className="min-w-[220px] py-4 px-4 font-medium text-black dark:text-white xl:pl-11">
-                First Name
+                Sample Id
               </th>
               <th className="min-w-[220px] py-4 px-4 font-medium text-black dark:text-white xl:pl-11">
-                Last Name
+                Sample Name
               </th>
               <th className="min-w-[220px] py-4 px-4 font-medium text-black dark:text-white xl:pl-11">
-                E-mail
-              </th>
-              <th className="min-w-[220px] py-4 px-4 font-medium text-black dark:text-white xl:pl-11">
-                Role
+                department
               </th>
              
               <th className="py-4 px-4 font-medium text-black dark:text-white">
@@ -47,31 +43,26 @@ const SampleTable = ({ data }: { data: RegisterType  }) => {
               <tr key={packageItem.id}>
                 <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
                   <h5 className="font-medium text-black dark:text-white">
-                    {packageItem.first_name}
+                    {packageItem.sample_id}
                   </h5>
                 </td>
                 <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
                   <h5 className="font-medium text-black dark:text-white">
-                    {packageItem.last_name}
+                    {packageItem.name}
                   </h5>
                 </td>
                 <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
                   <h5 className="font-medium text-black dark:text-white">
-                    {packageItem.email}
+                    {packageItem.department}
                   </h5>
                 </td>
                 
-                <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
-                  <h5 className="font-medium text-black dark:text-white">
-                    {packageItem.role}
-                  </h5>
-                </td>
-                
+        
                 <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                   <div className="flex items-center space-x-3.5">
                     <Link
                       className="hover:text-primary"
-                      href={`sample/${packageItem.id}`}
+                      href={`samples/${packageItem.id}`}
                     >
                       <svg
                         className="fill-current"

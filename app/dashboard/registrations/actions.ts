@@ -10,7 +10,8 @@ import { SERVER_API_URL } from "@/app/constant";
 
 export async function createRegistration(jsonObject) {
  
-
+  // jsonObject =jsonObject[0]
+  console.log("CREATE")
   console.log(jsonObject)
   const access_token = cookies().get('access_token')
  
@@ -31,14 +32,14 @@ export async function createRegistration(jsonObject) {
      
 
       if(res.status===401) redirect('/signin');
-      if (res.status===201) redirect("/dashboard/registrations");
+      if (res.status===200) redirect("/dashboard/registrations");
 }
 
 
 export async function updateRegistration(id:string, data) {
-  let jsonObject  = data
+  let jsonObject  = data ? data[0] : {} 
 
-
+console.log("****",jsonObject);
   const access_token = cookies().get('access_token')
 
       const res = await fetch(`${SERVER_API_URL}registrations/${id}`, {

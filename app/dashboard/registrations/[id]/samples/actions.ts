@@ -10,9 +10,12 @@ import { SERVER_API_URL } from "@/app/constant";
 
 export async function createSamples(id, data: any) {
   let {samples}  = data
- 
 
+  
+  console.log("CCCC")
+  console.log(samples[0]["test_params"])
 console.log(samples)
+
   const access_token = cookies().get('access_token')
  
       const res = await fetch(`${SERVER_API_URL}registrations/${id}/samples`, {

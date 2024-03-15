@@ -10,9 +10,12 @@ import { SERVER_API_URL } from "@/app/constant";
 
 export async function createSamples(id, data: any) {
   let {samples}  = data
+
   
   console.log("CCCC")
   console.log(samples[0]["test_params"])
+console.log(samples)
+
   const access_token = cookies().get('access_token')
  
       const res = await fetch(`${SERVER_API_URL}registrations/${id}/samples`, {
@@ -27,7 +30,7 @@ export async function createSamples(id, data: any) {
         body: JSON.stringify(samples),
       });
 
-    
+    console.log(res.status)
 
       if(res.status===401) redirect('/signin');
       if (res.status===200) redirect("/dashboard/samples");

@@ -37,7 +37,7 @@ export async function createRegistration(jsonObject) {
 
 
 export async function updateRegistration(id:string, data) {
-  let jsonObject  = data ? data[0] : {} 
+  let jsonObject  = data 
 
 console.log("****",jsonObject);
   const access_token = cookies().get('access_token')
@@ -63,5 +63,5 @@ console.log("****",jsonObject);
       }
 
       if(res.status===401) redirect('/signin');
-      if (res.status===204) redirect("/dashboard/registrations");
+      if (res.status===200) redirect("/dashboard/registrations");
 }

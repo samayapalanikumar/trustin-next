@@ -6,7 +6,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Trash2 } from "lucide-react";
 import { createRegistration } from "../actions";
 
-const RegistrationForm = ({ data, updateFn }: { data: any; updateFn:(data:any)=>void }) => {
+const RegistrationForm = ({
+  data,
+  updateFn,
+}: {
+  data: any;
+  updateFn: (data: any) => void;
+}) => {
   const form = useForm({
     defaultValues: {
       trf_id: data?.registration?.trf_id,
@@ -24,8 +30,17 @@ const RegistrationForm = ({ data, updateFn }: { data: any; updateFn:(data:any)=>
       date_of_received: new Date(data?.registration?.date_of_received)
         .toISOString()
         .split("T")[0],
-      batches: data?.registration?.batches,
-      test_params: data?.registration?.test_params,
+      batches: data?.registration?.batches.map((batch: any) => ({
+        id: batch.id,
+        batch_no: batch.batch_no,
+        manufactured_date: batch.manufactured_date,
+        expiry_date: batch.expiry_date,
+        batch_size: batch.batch_size,
+        received_quantity: batch.received_quantity,
+      })),
+      test_params: data?.registration?.test_params.map((param: any) => ({
+        test_params_id: param.test_params_id,
+      })),
     },
   });
   const { fields, append, remove, replace } = useFieldArray({
@@ -53,7 +68,7 @@ const RegistrationForm = ({ data, updateFn }: { data: any; updateFn:(data:any)=>
             headers: {
               "Content-Type": "application/json",
             },
-          }
+          },
         );
         const data = await response.json();
         console.log(data);
@@ -86,7 +101,7 @@ const RegistrationForm = ({ data, updateFn }: { data: any; updateFn:(data:any)=>
     // Check if the field value is not empty before making the API call
     if (watchedFieldValue) {
       const { trf_code }: { trf_code: string } = data.trf?.find(
-        (t: any) => t.id == watchedFieldValue
+        (t: any) => t.id == watchedFieldValue,
       );
       if (trf_code) fetchData(trf_code);
     }
@@ -109,7 +124,7 @@ const RegistrationForm = ({ data, updateFn }: { data: any; updateFn:(data:any)=>
             <div className="relative z-20 bg-transparent dark:bg-form-input">
               <select
                 {...form.register("trf_id")}
-                className="relative z-20 w-full appearance-none rounded border border-stroke bg-transparent py-3 px-5 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                className="relative z-20 w-full appearance-none rounded border border-stroke bg-transparent px-5 py-3 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
               >
                 <option value="">------------</option>
                 {data.trf.map((t: any) => (
@@ -118,7 +133,7 @@ const RegistrationForm = ({ data, updateFn }: { data: any; updateFn:(data:any)=>
                   </option>
                 ))}
               </select>
-              <span className="absolute top-1/2 right-4 z-30 -translate-y-1/2">
+              <span className="absolute right-4 top-1/2 z-30 -translate-y-1/2">
                 <svg
                   className="fill-current"
                   width="24"
@@ -147,7 +162,7 @@ const RegistrationForm = ({ data, updateFn }: { data: any; updateFn:(data:any)=>
             <div className="relative z-20 bg-transparent dark:bg-form-input">
               <select
                 {...form.register("branch_id")}
-                className="relative z-20 w-full appearance-none rounded border border-stroke bg-transparent py-3 px-5 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                className="relative z-20 w-full appearance-none rounded border border-stroke bg-transparent px-5 py-3 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
               >
                 <option value="">------------</option>
                 {data.branches?.map((t: any) => (
@@ -156,7 +171,7 @@ const RegistrationForm = ({ data, updateFn }: { data: any; updateFn:(data:any)=>
                   </option>
                 ))}
               </select>
-              <span className="absolute top-1/2 right-4 z-30 -translate-y-1/2">
+              <span className="absolute right-4 top-1/2 z-30 -translate-y-1/2">
                 <svg
                   className="fill-current"
                   width="24"
@@ -188,7 +203,7 @@ const RegistrationForm = ({ data, updateFn }: { data: any; updateFn:(data:any)=>
             <div className="relative z-20 bg-transparent dark:bg-form-input">
               <select
                 {...form.register("company_id")}
-                className="relative z-20 w-full appearance-none rounded border border-stroke bg-transparent py-3 px-5 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                className="relative z-20 w-full appearance-none rounded border border-stroke bg-transparent px-5 py-3 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
               >
                 <option value="">------------</option>
                 {data.customers.map((t: any) => (
@@ -197,7 +212,7 @@ const RegistrationForm = ({ data, updateFn }: { data: any; updateFn:(data:any)=>
                   </option>
                 ))}
               </select>
-              <span className="absolute top-1/2 right-4 z-30 -translate-y-1/2">
+              <span className="absolute right-4 top-1/2 z-30 -translate-y-1/2">
                 <svg
                   className="fill-current"
                   width="24"
@@ -226,7 +241,7 @@ const RegistrationForm = ({ data, updateFn }: { data: any; updateFn:(data:any)=>
               type="text"
               {...form.register("company_name")}
               placeholder="Enter id"
-              className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+              className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
             />
           </div>
         </div>
@@ -239,7 +254,7 @@ const RegistrationForm = ({ data, updateFn }: { data: any; updateFn:(data:any)=>
             <input
               {...form.register("customer_address_line1")}
               placeholder="Enter Address Line 1"
-              className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+              className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
             />
           </div>
           <div className="w-full xl:w-1/2">
@@ -249,7 +264,7 @@ const RegistrationForm = ({ data, updateFn }: { data: any; updateFn:(data:any)=>
             <input
               {...form.register("customer_address_line2")}
               placeholder="Enter Address Line 2"
-              className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+              className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
             />
           </div>
         </div>
@@ -262,7 +277,7 @@ const RegistrationForm = ({ data, updateFn }: { data: any; updateFn:(data:any)=>
             <input
               {...form.register("city")}
               placeholder="Enter City"
-              className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+              className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
             />
           </div>
           <div className="w-full xl:w-1/2">
@@ -272,7 +287,7 @@ const RegistrationForm = ({ data, updateFn }: { data: any; updateFn:(data:any)=>
             <input
               {...form.register("state")}
               placeholder="Enter State"
-              className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+              className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
             />
           </div>
         </div>
@@ -285,7 +300,7 @@ const RegistrationForm = ({ data, updateFn }: { data: any; updateFn:(data:any)=>
             <input
               {...form.register("pincode_no")}
               placeholder="Enter Pin"
-              className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+              className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
             />
           </div>
           <div className="w-full xl:w-1/2">
@@ -295,7 +310,7 @@ const RegistrationForm = ({ data, updateFn }: { data: any; updateFn:(data:any)=>
             <input
               {...form.register("gst")}
               placeholder="Enter Gst No"
-              className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+              className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
             />
           </div>
         </div>
@@ -309,7 +324,7 @@ const RegistrationForm = ({ data, updateFn }: { data: any; updateFn:(data:any)=>
               type="date"
               {...form.register("date_of_received")}
               placeholder="Enter Date Of Recived"
-              className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+              className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
             />
           </div>
         </div>
@@ -323,7 +338,7 @@ const RegistrationForm = ({ data, updateFn }: { data: any; updateFn:(data:any)=>
             <div className="relative z-20 bg-transparent dark:bg-form-input">
               <select
                 {...form.register("product")}
-                className="relative z-20 w-full appearance-none rounded border border-stroke bg-transparent py-3 px-5 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                className="relative z-20 w-full appearance-none rounded border border-stroke bg-transparent px-5 py-3 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
               >
                 <option value="">------------</option>
                 {data.products.map((t: any) => (
@@ -332,7 +347,7 @@ const RegistrationForm = ({ data, updateFn }: { data: any; updateFn:(data:any)=>
                   </option>
                 ))}
               </select>
-              <span className="absolute top-1/2 right-4 z-30 -translate-y-1/2">
+              <span className="absolute right-4 top-1/2 z-30 -translate-y-1/2">
                 <svg
                   className="fill-current"
                   width="24"
@@ -364,7 +379,7 @@ const RegistrationForm = ({ data, updateFn }: { data: any; updateFn:(data:any)=>
               type="text"
               {...form.register("test_type")}
               placeholder="Enter Test Type"
-              className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+              className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
             />
           </div>
         </div>
@@ -378,7 +393,7 @@ const RegistrationForm = ({ data, updateFn }: { data: any; updateFn:(data:any)=>
             <div className="mb-4">
               {fields.map((item, index) => (
                 <div key={item.id} className="mb-4 mt-2">
-                  <div className="mb-2 border-b-2  flex justify-between">
+                  <div className="mb-2 flex  justify-between border-b-2">
                     <p>
                       Batch <strong>#{index + 1}:</strong>
                     </p>
@@ -404,7 +419,7 @@ const RegistrationForm = ({ data, updateFn }: { data: any; updateFn:(data:any)=>
                       <input
                         type="text"
                         {...form.register(`batches.${index}.batch_no`)}
-                        className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                        className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                       />
                     </div>
                     <div className="w-full xl:w-1/5">
@@ -414,7 +429,7 @@ const RegistrationForm = ({ data, updateFn }: { data: any; updateFn:(data:any)=>
                       <input
                         type="date"
                         {...form.register(`batches.${index}.manufactured_date`)}
-                        className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                        className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                       />
                     </div>
 
@@ -425,7 +440,7 @@ const RegistrationForm = ({ data, updateFn }: { data: any; updateFn:(data:any)=>
                       <input
                         type="date"
                         {...form.register(`batches.${index}.expiry_date`)}
-                        className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                        className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                       />
                     </div>
 
@@ -436,7 +451,7 @@ const RegistrationForm = ({ data, updateFn }: { data: any; updateFn:(data:any)=>
                       <input
                         type="number"
                         {...form.register(`batches.${index}.batch_size`)}
-                        className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                        className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                       />
                     </div>
 
@@ -447,7 +462,7 @@ const RegistrationForm = ({ data, updateFn }: { data: any; updateFn:(data:any)=>
                       <input
                         type="number"
                         {...form.register(`batches.${index}.received_quantity`)}
-                        className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                        className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                       />
                     </div>
                   </div>
@@ -455,10 +470,10 @@ const RegistrationForm = ({ data, updateFn }: { data: any; updateFn:(data:any)=>
               ))}
               <button
                 type="button"
-                className="flex mt-2 justify-center rounded bg-primary p-3 font-medium text-gray"
+                className="mt-2 flex justify-center rounded bg-primary p-3 font-medium text-gray"
                 onClick={() =>
                   append({
-                    id: "",
+                    id: null,
                     batch_no: "",
                     manufactured_date: "",
                     expiry_date: "",
@@ -476,7 +491,7 @@ const RegistrationForm = ({ data, updateFn }: { data: any; updateFn:(data:any)=>
             <div className="mb-4">
               {testFields.map((item, index) => (
                 <div key={item.id} className="mb-4 mt-2">
-                  <div className="mb-2 border-b-2  flex justify-between">
+                  <div className="mb-2 flex  justify-between border-b-2">
                     <p>
                       Test Parameter <strong>#{index + 1}:</strong>
                     </p>
@@ -497,15 +512,15 @@ const RegistrationForm = ({ data, updateFn }: { data: any; updateFn:(data:any)=>
                       </label>
 
                       <div className="relative z-20 bg-transparent dark:bg-form-input">
-                      <input
-                        type="hidden"
-                        {...form.register(`test_params.${index}.id`)}
-                      />
+                        {/* <input
+                          type="hidden"
+                          {...form.register(`test_params.${index}.id`)}
+                        /> */}
                         <select
                           {...form.register(
-                            `test_params.${index}.test_params_id`
+                            `test_params.${index}.test_params_id`,
                           )}
-                          className="relative z-20 w-full appearance-none rounded border border-stroke bg-transparent py-3 px-5 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                          className="relative z-20 w-full appearance-none rounded border border-stroke bg-transparent px-5 py-3 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                         >
                           <option value="">------------</option>
                           {data.parameters?.map((t: any) => (
@@ -514,7 +529,7 @@ const RegistrationForm = ({ data, updateFn }: { data: any; updateFn:(data:any)=>
                             </option>
                           ))}
                         </select>
-                        <span className="absolute top-1/2 right-4 z-30 -translate-y-1/2">
+                        <span className="absolute right-4 top-1/2 z-30 -translate-y-1/2">
                           <svg
                             className="fill-current"
                             width="24"
@@ -552,10 +567,10 @@ const RegistrationForm = ({ data, updateFn }: { data: any; updateFn:(data:any)=>
               ))}
               <button
                 type="button"
-                className="flex mt-2 justify-center rounded bg-primary p-3 font-medium text-gray"
+                className="mt-2 flex justify-center rounded bg-primary p-3 font-medium text-gray"
                 onClick={() =>
                   testAppend({
-                    id: "",
+                    // id: "",
                     test_params_id: "",
                   })
                 }

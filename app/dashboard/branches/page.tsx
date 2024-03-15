@@ -50,7 +50,7 @@ const BranchesPage = async () => {
         </h2>
         <Link
           href="branches/new"
-          className="inline-flex items-center justify-center rounded-md border border-black py-4 px-5 text-center font-medium text-black hover:bg-opacity-90 lg:px-8 xl:px-10"
+          className="inline-flex items-center justify-center rounded-md border border-black px-5 py-4 text-center font-medium text-black hover:bg-opacity-90 dark:border-white dark:text-white lg:px-8 xl:px-10"
         >
           New Branch
         </Link>

@@ -45,7 +45,7 @@ const TestParameterPage = async () => {
         </h2>
         <Link
           href="parameters/new"
-          className="inline-flex items-center justify-center rounded-md border border-black py-4 px-5 text-center font-medium text-black hover:bg-opacity-90 lg:px-8 xl:px-10"
+          className="inline-flex items-center justify-center rounded-md border border-black py-4 px-5 text-center font-medium text-black hover:bg-opacity-90 lg:px-8 xl:px-10 dark:text-white dark:border-white"
         >
           New Test Parameter
         </Link>

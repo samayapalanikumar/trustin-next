@@ -4,6 +4,20 @@ import { redirect } from "next/navigation";
 import { URLSearchParams } from "url";
 import { SERVER_API_URL } from "@/app/constant";
 
+import { z } from "zod";
+
+const schema = z
+  .object({
+    username: z
+      .string()
+      .email({
+        message: "Invalid Email",
+      })
+      .trim(),
+    password: z.string().trim().min(1, "Password Required"),
+  })
+  .required({ username: true, password: true });
+
 export async function signin(formData: any) {
   console.log("HI");
   const username = formData.get("username");
@@ -29,10 +43,27 @@ export async function signin(formData: any) {
   redirect("/");
 }
 
-export async function signinJwt(formData: any) {
-
+export async function signinJwt(prevState: any, formData: any) {
   const username = formData.get("username");
   const password = formData.get("password");
+
+  const validatedFields = schema.safeParse({
+    username: username,
+    password: password,
+  });
+
+  // Return early if the form data is invalid
+  if (!validatedFields.success) {
+    console.log(validatedFields.error.flatten().fieldErrors);
+    return {
+      message: null,
+      fieldErrors: {
+        username: validatedFields.error.flatten().fieldErrors.username,
+        password: validatedFields.error.flatten().fieldErrors.password,
+      },
+    };
+  }
+
   const params = new URLSearchParams();
   params.append("username", username);
   params.append("password", password);
@@ -51,10 +82,25 @@ export async function signinJwt(formData: any) {
       body: params.toString(),
     });
 
-    const resJson = await res.json();
+    if( res.status===401){
+      const error = await res.json();
+      console.log(error);
 
+      return{
+        ...prevState,
+        message: error?.detail,
+        fieldErrors: {
+          username: null,
+          password: null,
+        },
+      }
+    }
+
+    if(res.status ===200){
+    const resJson = await res.json();
     console.log(resJson);
     cookies().set("access_token", resJson.access_token);
+    }
   } catch (e) {
     console.log(e);
   }

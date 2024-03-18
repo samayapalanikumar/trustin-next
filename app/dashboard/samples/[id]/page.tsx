@@ -6,6 +6,7 @@ import { SERVER_API_URL } from "@/app/constant";
 import StatusStepper from "./status-stepper1";
 import { patchSampleWorkflow, patchSampleWorkflowTestResult } from "../actions";
 import UnderTestingForm from "./under-testing-form";
+import WorkFlowForm,{Assignee} from "@/components/WorkFlowForms/workflowform";
 export const metadata: Metadata = {
   title: "Edit  Product | Trustin",
   description: "This is Form Layout page for TailAdmin Next.js",
@@ -159,6 +160,33 @@ const EditSamplePage = async ({
     id,
   );
 
+  const workFlowFormData = [
+    {
+      value:"1",
+      buttonName:" Submit for Review",
+      status:"status",
+      submit:"Submitted"
+    },
+    {
+      value:"2",
+      buttonName:"Reject",
+      status:"status",
+      submit:""
+    },
+    {
+      value:"3",
+      buttonName:"Approve",
+      status:"status",
+      submit:""
+    },
+    {
+      value:"4",
+      buttonName:"Sample Received",
+      status:"status",
+      submit:""
+    }
+  ]
+
   return (
     <>
       <Breadcrumb pageName="Sample WorkFlow" />
@@ -175,140 +203,25 @@ const EditSamplePage = async ({
 
               <div className="mt-2 w-full ">
                 {data.sample.status_id === 1 && (
-                  <form action={patchSampleWorkflowWithId}>
-                    <input type="hidden" value="Submitted" name="status" />
-                    <input type="hidden" value="2" name="status_id" />
-                    <input
-                      type="hidden"
-                      value={data.sample.assigned_to}
-                      name="assigned_to"
-                    />
-                    <input type="hidden" value="test" name="comments" />
-
-                    <button
-                      type="submit"
-                      className="flex w-1/2 justify-center rounded bg-primary p-3 font-medium text-gray"
-                    >
-                      Submit for Review
-                    </button>
-                  </form>
+                  <WorkFlowForm actiondata={patchSampleWorkflowWithId} assign={data.sample.assigned_to} formdata={workFlowFormData[0]}/>
                 )}
                 {data.sample.status_id === 2 && (
                   <>
-                    <form action={patchSampleWorkflowWithId}>
-                      <input type="hidden" value="" name="status" />
-                      <input type="hidden" value="1" name="status_id" />
-                      <input
-                        type="hidden"
-                        value={data.sample.assigned_to}
-                        name="assigned_to"
-                      />
-                      <input type="hidden" value="" name="comments" />
-
-                      <button
-                        type="submit"
-                        className="mb-4  flex w-full justify-center rounded bg-danger p-3 font-medium text-gray"
-                      >
-                        Reject
-                      </button>
-                    </form>
-                    <form action={patchSampleWorkflowWithId}>
-                      <input type="hidden" value="" name="status" />
-                      <input type="hidden" value="3" name="status_id" />
-                      <input
-                        type="hidden"
-                        value={data.sample.assigned_to}
-                        name="assigned_to"
-                      />
-                      <input type="hidden" value="" name="comments" />
-
-                      <button
-                        type="submit"
-                        className="flex  w-full justify-center rounded bg-primary p-3 font-medium text-gray"
-                      >
-                        Approve
-                      </button>
-                    </form>
+                    <WorkFlowForm actiondata={patchSampleWorkflowWithId} assign={data.sample.assigned_to} formdata={workFlowFormData[1]}/>
+                    <WorkFlowForm actiondata={patchSampleWorkflowWithId} assign={data.sample.assigned_to} formdata={workFlowFormData[2]}/>
                   </>
                 )}
 
                 {data.sample.status_id === 3 && (
-                  <form
-                    action={patchSampleWorkflowWithId}
-                    className="flex items-center justify-center"
-                  >
-                    <input type="hidden" value="" name="status" />
-                    <input type="hidden" value="4" name="status_id" />
-                    <input
-                      type="hidden"
-                      value={data.sample.assigned_to}
-                      name="assigned_to"
-                    />
-                    <input type="hidden" value="" name="comments" />
-
-                    <button
-                      type="submit"
-                      className="flex w-1/2 justify-center rounded bg-primary p-3 font-medium text-gray"
-                    >
-                      Sample Received
-                    </button>
-                  </form>
+                  <WorkFlowForm actiondata={patchSampleWorkflowWithId} assign={data.sample.assigned_to} formdata={workFlowFormData[3]}/>
                 )}
 
                 {data.sample.status_id === 4 && (
-                  <form
-                    action={patchSampleWorkflowWithId}
-                    className="flex flex-col justify-center"
-                  >
-                    <input type="hidden" value="" name="status" />
-                    <input type="hidden" value="5" name="status_id" />
-
-                    <div className="mb-4.5">
-                      <label className="mb-2.5 block text-black dark:text-white">
-                        Assignee
-                      </label>
-                      <div className="relative z-20 bg-transparent dark:bg-form-input">
-                        <select
-                          name="assigned_to"
-                          className="relative z-20 w-full appearance-none rounded border border-stroke bg-transparent px-5 py-3 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-                        >
-                          {data?.users.map((user) => (
-                            <option value={user.id} key={user.id}>
-                              {user.first_name + user.last_name}
-                            </option>
-                          ))}
-                        </select>
-                        <span className="absolute right-4 top-1/2 z-30 -translate-y-1/2">
-                          <svg
-                            className="fill-current"
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <g opacity="0.8">
-                              <path
-                                fillRule="evenodd"
-                                clipRule="evenodd"
-                                d="M5.29289 8.29289C5.68342 7.90237 6.31658 7.90237 6.70711 8.29289L12 13.5858L17.2929 8.29289C17.6834 7.90237 18.3166 7.90237 18.7071 8.29289C19.0976 8.68342 19.0976 9.31658 18.7071 9.70711L12.7071 15.7071C12.3166 16.0976 11.6834 16.0976 11.2929 15.7071L5.29289 9.70711C4.90237 9.31658 4.90237 8.68342 5.29289 8.29289Z"
-                                fill=""
-                              ></path>
-                            </g>
-                          </svg>
-                        </span>
-                      </div>
-                    </div>
-
-                    <input type="hidden" value="" name="comments" />
-
-                    <button
-                      type="submit"
-                      className="flex w-1/2 justify-center rounded bg-primary p-3 font-medium text-gray"
-                    >
-                      Assign
-                    </button>
-                  </form>
+                  <Assignee actiondata={patchSampleWorkflowWithId} assign={data.sample.assigned_to} formdata={workFlowFormData[3]} users={data?.users.map((user) => (
+                    <option value={user.id} key={user.id}>
+                      {user.first_name + user.last_name}
+                    </option>
+                  ))}/>
                 )}
 
                 {data.sample.status_id === 5 && (

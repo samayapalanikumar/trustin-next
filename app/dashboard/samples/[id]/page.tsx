@@ -163,19 +163,27 @@ const EditSamplePage = async ({
   const workFlowFormData = [
     {
       value:"1",
-      buttonName:" Submit for Review"
+      buttonName:" Submit for Review",
+      status:"status",
+      submit:"Submitted"
     },
     {
       value:"2",
-      buttonName:"Reject"
+      buttonName:"Reject",
+      status:"status",
+      submit:""
     },
     {
       value:"3",
-      buttonName:"Approve"
+      buttonName:"Approve",
+      status:"status",
+      submit:""
     },
     {
       value:"4",
-      buttonName:"Sample Received"
+      buttonName:"Sample Received",
+      status:"status",
+      submit:""
     }
   ]
 
@@ -195,21 +203,21 @@ const EditSamplePage = async ({
 
               <div className="mt-2 w-full ">
                 {data.sample.status_id === 1 && (
-                  <WorkFlowForm actiondata={patchSampleWorkflowWithId} assign={data.sample.assigned_to} buttonName={workFlowFormData[0]}/>
+                  <WorkFlowForm actiondata={patchSampleWorkflowWithId} assign={data.sample.assigned_to} formdata={workFlowFormData[0]}/>
                 )}
                 {data.sample.status_id === 2 && (
                   <>
-                    <WorkFlowForm actiondata={patchSampleWorkflowWithId} assign={data.sample.assigned_to} buttonName={workFlowFormData[1]}/>
-                    <WorkFlowForm actiondata={patchSampleWorkflowWithId} assign={data.sample.assigned_to} buttonName={workFlowFormData[2]}/>
+                    <WorkFlowForm actiondata={patchSampleWorkflowWithId} assign={data.sample.assigned_to} formdata={workFlowFormData[1]}/>
+                    <WorkFlowForm actiondata={patchSampleWorkflowWithId} assign={data.sample.assigned_to} formdata={workFlowFormData[2]}/>
                   </>
                 )}
 
                 {data.sample.status_id === 3 && (
-                  <WorkFlowForm actiondata={patchSampleWorkflowWithId} assign={data.sample.assigned_to} buttonName={workFlowFormData[3]}/>
+                  <WorkFlowForm actiondata={patchSampleWorkflowWithId} assign={data.sample.assigned_to} formdata={workFlowFormData[3]}/>
                 )}
 
                 {data.sample.status_id === 4 && (
-                  <Assignee actiondata={patchSampleWorkflowWithId} assign={data.sample.assigned_to} buttonName={workFlowFormData[3]} users={data?.users.map((user) => (
+                  <Assignee actiondata={patchSampleWorkflowWithId} assign={data.sample.assigned_to} formdata={workFlowFormData[3]} users={data?.users.map((user) => (
                     <option value={user.id} key={user.id}>
                       {user.first_name + user.last_name}
                     </option>

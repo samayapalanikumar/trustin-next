@@ -1,13 +1,13 @@
 import React from "react"
 
-function WorkFlowForm({actiondata,assign,buttonName}){
+function WorkFlowForm({actiondata,assign,formdata}){
  return <>
      <form
                     action={actiondata}
                     className="flex items-center justify-center"
                   >
-                    <input type="hidden" value="" name="status" />
-                    <input type="hidden" value={buttonName.value} name="status_id" />
+                    <input type="hidden" value={formdata.submit} name={formdata.status} />
+                    <input type="hidden" value={formdata.value} name="status_id" />
                     <input
                       type="hidden"
                       value={assign}
@@ -19,7 +19,7 @@ function WorkFlowForm({actiondata,assign,buttonName}){
                       type="submit"
                       className="flex w-1/2 justify-center rounded bg-primary p-3 font-medium text-gray"
                     >
-                     {buttonName.buttonName}
+                     {formdata.formdata}
                     </button>
                   </form>
     </>
@@ -27,14 +27,14 @@ function WorkFlowForm({actiondata,assign,buttonName}){
 
 export default WorkFlowForm;
 
-export function Assignee({actiondata,assign,buttonName,users}){
+export function Assignee({actiondata,assign,formdata,users}){
     return<>
      <form
                     action={actiondata}
                     className="flex items-center justify-center"
                   >
-                    <input type="hidden" value="" name="status" />
-                    <input type="hidden" value={buttonName.value} name="status_id" />
+                    <input type="hidden" value={formdata.submit} name={formdata.status} />
+                    <input type="hidden" value={formdata.value} name="status_id" />
                     <input
                       type="hidden"
                       value={assign}
@@ -78,7 +78,7 @@ export function Assignee({actiondata,assign,buttonName,users}){
                       type="submit"
                       className="flex w-1/2 justify-center rounded bg-primary p-3 font-medium text-gray"
                     >
-                     {buttonName.buttonName}
+                     {formdata.formdata}
                     </button>
                   </form>
     

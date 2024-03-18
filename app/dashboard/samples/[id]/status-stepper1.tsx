@@ -3,7 +3,7 @@ import { Stepper, Step } from "react-form-stepper";
 
 const StatusStepper = ({ step }: { step: number }) => {
   return (
-    <Stepper activeStep={step - 1}>
+    <Stepper activeStep={step - 1} styleConfig={{activeBgColor:"#fffffe", }}>
       <Step label="Draft" />
       <Step label="Review Pending" />
       <Step label="Requested" />

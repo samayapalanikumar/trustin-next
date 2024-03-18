@@ -156,7 +156,7 @@ const TRFAdminForm = ({
 
   async function fetchTestParameters(query: string, product: string) {
     let res = await fetch(
-      `${SERVER_API_URL}parameters/trf/${data.trf.product_id}/?${query}`
+      `${SERVER_API_URL}/parameters/trf/${data.trf.product_id}/?${query}`
     );
     const response: ParametersType = await res.json();
     setParameters(response);

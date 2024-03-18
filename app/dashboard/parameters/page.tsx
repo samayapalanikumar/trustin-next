@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 async function getData() {
   const cookieStore = cookies();
   const access_token = cookieStore.get("access_token");
-  const res = await fetch(`${SERVER_API_URL}parameters/`, {
+  const res = await fetch(`${SERVER_API_URL}/parameters/`, {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${access_token?.value}`,

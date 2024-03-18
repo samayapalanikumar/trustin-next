@@ -14,7 +14,7 @@ async function getData(id: string) {
   const access_token = cookieStore.get("access_token");
   console.log(access_token);
   try {
-    const res = await fetch(`${SERVER_API_URL}customers/${id}`, {
+    const res = await fetch(`${SERVER_API_URL}/customers/${id}`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${access_token?.value}`,

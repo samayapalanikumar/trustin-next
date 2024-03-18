@@ -15,7 +15,7 @@ export async function createRegistration(jsonObject) {
   console.log(jsonObject)
   const access_token = cookies().get('access_token')
  
-      const res = await fetch(`${SERVER_API_URL}registrations/`, {
+      const res = await fetch(`${SERVER_API_URL}/registrations/`, {
         method: "POST", // *GET, POST, PUT, DELETE, etc.
         // mode: "cors", // no-cors, *cors, same-origin
         headers: {
@@ -42,7 +42,7 @@ export async function updateRegistration(id:string, data) {
 console.log("****",jsonObject);
   const access_token = cookies().get('access_token')
 
-      const res = await fetch(`${SERVER_API_URL}registrations/${id}`, {
+      const res = await fetch(`${SERVER_API_URL}/registrations/${id}`, {
         method: "PUT", // *GET, POST, PUT, DELETE, etc.
         // mode: "cors", // no-cors, *cors, same-origin
         headers: {

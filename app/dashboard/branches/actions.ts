@@ -16,7 +16,7 @@ export async function createBranch(formData: FormData) {
 
   const access_token = cookies().get("access_token");
 
-  const res = await fetch(`${SERVER_API_URL}branch/`, {
+  const res = await fetch(`${SERVER_API_URL}/branch/`, {
     method: "POST", // *GET, POST, PUT, DELETE, etc.
     // mode: "cors", // no-cors, *cors, same-origin
     headers: {
@@ -46,7 +46,7 @@ export async function updateBranch(id: string, formData: FormData) {
 
   const access_token = cookies().get("access_token");
 
-  const res = await fetch(`${SERVER_API_URL}branch/${id}`, {
+  const res = await fetch(`${SERVER_API_URL}/branch/${id}`, {
     method: "PUT", // *GET, POST, PUT, DELETE, etc.
     // mode: "cors", // no-cors, *cors, same-origin
     headers: {

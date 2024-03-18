@@ -19,37 +19,37 @@ async function getData(id: string) {
   const cookieStore = cookies();
   const access_token = cookieStore.get("access_token");
 
-  const res = await fetch(`${SERVER_API_URL}registrations/${id}`, {
+  const res = await fetch(`${SERVER_API_URL}/registrations/${id}`, {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${access_token?.value}`,
     },
   });
-  const res1 = await fetch(`${SERVER_API_URL}trf/`, {
+  const res1 = await fetch(`${SERVER_API_URL}/trf/`, {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${access_token?.value}`,
     },
   });
-  const res2 = await fetch(`${SERVER_API_URL}customers/`, {
+  const res2 = await fetch(`${SERVER_API_URL}/customers/`, {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${access_token?.value}`,
     },
   });
-  const res3 = await fetch(`${SERVER_API_URL}branch/`, {
+  const res3 = await fetch(`${SERVER_API_URL}/branch/`, {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${access_token?.value}`,
     },
   });
-  const res4 = await fetch(`${SERVER_API_URL}products/`, {
+  const res4 = await fetch(`${SERVER_API_URL}/products/`, {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${access_token?.value}`,
     },
   });
-  const res5 = await fetch(`${SERVER_API_URL}parameters/`, {
+  const res5 = await fetch(`${SERVER_API_URL}/parameters/`, {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${access_token?.value}`,

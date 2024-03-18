@@ -61,7 +61,7 @@ export async function createCustomers(formData: FormData) {
   console.log(jsonObject);
   const access_token = cookies().get('access_token')
 
-      const res = await fetch(`${SERVER_API_URL}customers/`, {
+      const res = await fetch(`${SERVER_API_URL}/customers/`, {
         method: "POST", // *GET, POST, PUT, DELETE, etc.
         // mode: "cors", // no-cors, *cors, same-origin
         headers: {
@@ -98,7 +98,7 @@ export async function updateCustomers(id, formData: FormData) {
   jsonObject["contact_persons"] = contact_persons;
   console.log(jsonObject);
   const access_token = cookies().get('access_token')
-      const res = await fetch(`${SERVER_API_URL}customers/${id}`, {
+      const res = await fetch(`${SERVER_API_URL}/customers/${id}`, {
         method: "PUT", // *GET, POST, PUT, DELETE, etc.
         // mode: "cors", // no-cors, *cors, same-origin
         headers: {

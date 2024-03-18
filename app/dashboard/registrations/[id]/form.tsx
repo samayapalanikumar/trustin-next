@@ -63,7 +63,7 @@ const RegistrationForm = ({
     const fetchData = async (trf_id: any) => {
       try {
         const response = await fetch(
-          `${SERVER_API_URL}trf/customer/${trf_id}`,
+          `${SERVER_API_URL}/trf/customer/${trf_id}`,
           {
             headers: {
               "Content-Type": "application/json",

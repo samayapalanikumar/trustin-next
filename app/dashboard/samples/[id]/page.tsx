@@ -6,7 +6,7 @@ import { SERVER_API_URL } from "@/app/constant";
 import StatusStepper from "./status-stepper1";
 import { patchSampleWorkflow, patchSampleWorkflowTestResult } from "../actions";
 import UnderTestingForm from "./under-testing-form";
-import WorkFlowForm,{Assignee} from "@/components/WorkFlowForms/workflowform";
+import WorkFlowForm from "@/components/WorkFlowForms/workflowform";
 export const metadata: Metadata = {
   title: "Edit  Product | Trustin",
   description: "This is Form Layout page for TailAdmin Next.js",
@@ -17,20 +17,20 @@ async function getData(id: string) {
   const cookieStore = cookies();
   const access_token = cookieStore.get("access_token");
 
-  const res = await fetch(`${SERVER_API_URL}samples/${id}`, {
+  const res = await fetch(`${SERVER_API_URL}/samples/${id}`, {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${access_token?.value}`,
     },
   });
 
-  const res2 = await fetch(`${SERVER_API_URL}branch/`, {
+  const res2 = await fetch(`${SERVER_API_URL}/branch/`, {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${access_token?.value}`,
     },
   });
-  const res3 = await fetch(`${SERVER_API_URL}users/`, {
+  const res3 = await fetch(`${SERVER_API_URL}/users/`, {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${access_token?.value}`,
@@ -162,30 +162,30 @@ const EditSamplePage = async ({
 
   const workFlowFormData = [
     {
-      value:"1",
-      buttonName:" Submit for Review",
-      status:"status",
-      submit:"Submitted"
+      value: "1",
+      buttonName: " Submit for Review",
+      status: "status",
+      submit: "Submitted",
     },
     {
-      value:"2",
-      buttonName:"Reject",
-      status:"status",
-      submit:""
+      value: "2",
+      buttonName: "Reject",
+      status: "status",
+      submit: "",
     },
     {
-      value:"3",
-      buttonName:"Approve",
-      status:"status",
-      submit:""
+      value: "3",
+      buttonName: "Approve",
+      status: "status",
+      submit: "",
     },
     {
-      value:"4",
-      buttonName:"Sample Received",
-      status:"status",
-      submit:""
-    }
-  ]
+      value: "4",
+      buttonName: "Sample Received",
+      status: "status",
+      submit: "",
+    },
+  ];
 
   return (
     <>
@@ -203,25 +203,50 @@ const EditSamplePage = async ({
 
               <div className="mt-2 w-full ">
                 {data.sample.status_id === 1 && (
-                  <WorkFlowForm actiondata={patchSampleWorkflowWithId} assign={data.sample.assigned_to} formdata={workFlowFormData[0]}/>
+                  <WorkFlowForm
+                    actionData={patchSampleWorkflowWithId}
+                    assign={data.sample.assigned_to}
+                    status="Submitted"
+                    status_id={2}
+                    buttonName="Submit for Review"
+                  />
                 )}
                 {data.sample.status_id === 2 && (
                   <>
-                    <WorkFlowForm actiondata={patchSampleWorkflowWithId} assign={data.sample.assigned_to} formdata={workFlowFormData[1]}/>
-                    <WorkFlowForm actiondata={patchSampleWorkflowWithId} assign={data.sample.assigned_to} formdata={workFlowFormData[2]}/>
+                   
+                        <WorkFlowForm
+                    actionData={patchSampleWorkflowWithId}
+                    assign={data.sample.assigned_to}
+                    status_id={1}
+                    buttonName="Reject"
+                  />
+                        <WorkFlowForm
+                    actionData={patchSampleWorkflowWithId}
+                    assign={data.sample.assigned_to}
+                    status_id={3}
+                    buttonName="Approve"
+                  />
+                   
                   </>
                 )}
 
                 {data.sample.status_id === 3 && (
-                  <WorkFlowForm actiondata={patchSampleWorkflowWithId} assign={data.sample.assigned_to} formdata={workFlowFormData[3]}/>
+                   <WorkFlowForm
+                   actionData={patchSampleWorkflowWithId}
+                   assign={data.sample.assigned_to}
+                   status_id={4}
+                   buttonName="Sample Received"
+                 />
                 )}
 
                 {data.sample.status_id === 4 && (
-                  <Assignee actiondata={patchSampleWorkflowWithId} assign={data.sample.assigned_to} formdata={workFlowFormData[3]} users={data?.users.map((user) => (
-                    <option value={user.id} key={user.id}>
-                      {user.first_name + user.last_name}
-                    </option>
-                  ))}/>
+                 <WorkFlowForm
+                 actionData={patchSampleWorkflowWithId}
+                 assign={data.sample.assigned_to}
+                 status_id={5}
+                 buttonName="Assign"
+                 assigneeData={data.users}
+               />
                 )}
 
                 {data.sample.status_id === 5 && (

@@ -1,11 +1,15 @@
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import { Metadata } from "next";
-import { object } from "zod";
-import { createUser } from "../actions";
 import NewUserForm from "./new-user-form";
 import { cookies } from "next/headers";
 import { SERVER_API_URL } from "@/app/constant";
 import { redirect } from "next/navigation";
+
+import type { Role } from "@/types/role";
+import type { Department } from "@/types/department";
+import type { TestType } from "@/types/test-type";
+
+
 export const metadata: Metadata = {
   title: "Add New User | Trustin",
   description: "This is Form Layout page for TailAdmin Next.js",
@@ -16,7 +20,19 @@ async function getData() {
   const cookieStore = cookies();
   const access_token = cookieStore.get("access_token");
 
-  const res = await fetch(`${SERVER_API_URL}/users/`, {
+  const res = await fetch(`${SERVER_API_URL}/roles/`, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${access_token?.value}`,
+    },
+  });
+  const res1 = await fetch(`${SERVER_API_URL}/departments/`, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${access_token?.value}`,
+    },
+  });
+  const res2 = await fetch(`${SERVER_API_URL}/testtypes/`, {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${access_token?.value}`,
@@ -32,17 +48,37 @@ async function getData() {
     // throw new Error("Failed to fetch data");
     console.log("error");
   }
+  if (!res1.ok) {
+    // This will activate the closest `error.js` Error Boundary
+    // console.log(res)
+    // throw new Error("Failed to fetch data");
+    console.log("error");
+  }
+  if (!res2.ok) {
+    // This will activate the closest `error.js` Error Boundary
+    // console.log(res)
+    // throw new Error("Failed to fetch data");
+    console.log("error");
+  }
 
   if (res.status === 401) redirect("/signin");
+  if (res1.status === 401) redirect("/signin");
+  if (res2.status === 401) redirect("/signin");
 
-  const users = await res.json();
+  const roles = await res.json();
+  const departments = await res1.json();
+  const test_types = await res2.json();
 
-  return users;
+  return {roles, departments, test_types};
 }
-
-
+type Data = {
+  roles: Role[];
+  departments: Department[];
+  test_types: TestType[];
+};
 
 const NewUserPage = async () => {
+  const {roles, departments, test_types}:Data = await getData();
   return (
     <>
       <Breadcrumb pageName="Add New User" />
@@ -56,7 +92,7 @@ const NewUserPage = async () => {
                 Contact Form
               </h3>
             </div> */}
-           <NewUserForm  roles={[]} deparments={[]} test_types={[]}/>
+           <NewUserForm  roles={roles} departments={departments} test_types={test_types}/>
           </div>
         </div>
       </div>

@@ -3,16 +3,20 @@ type Props = {
   label: string;
   fieldName: string;
   width?: string;
-};
+ 
 
-const Select = ({ children, label, fieldName, width = "w-full" }: Props) => {
+} & React.SelectHTMLAttributes<HTMLSelectElement>;
+
+const Select = ({ children, label, fieldName, width = "w-full", ...rest }: Props) => {
   return (
     <div className="mb-4.5">
       <label className="mb-2.5 block text-black dark:text-white">{label}</label>
       <div className="relative z-20 bg-transparent dark:bg-form-input">
         <select
+         {...rest}
           name={fieldName}
           className={`relative z-20 ${width} appearance-none rounded border border-stroke bg-transparent px-5 py-3 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary`}
+         
         >
           {children}
         </select>

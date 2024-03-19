@@ -6,18 +6,27 @@ import Select from "@/components/select-input";
 import { Department } from "@/types/department";
 import { TestType } from "@/types/test-type";
 import { Role } from "@/types/role";
+import { User } from "@/types/user";
 
 type Props = {
+  user: User;
   roles: Role[];
   departments: Department[];
   test_types: TestType[];
+  action: (data: FormData) => Promise<void>;
 };
 const initalState = {
   fieldErrors: null,
   message: "",
 };
-const NewUserForm = ({ roles, departments, test_types }: Props) => {
-  const [state, formAction] = useFormState(createUser, initalState);
+const EditUserForm = ({
+  roles,
+  departments,
+  test_types,
+  user,
+  action,
+}: Props) => {
+  const [state, formAction] = useFormState(action, initalState);
   return (
     <form action={formAction}>
       <div className="p-6.5">
@@ -30,6 +39,7 @@ const NewUserForm = ({ roles, departments, test_types }: Props) => {
               type="text"
               name="first_name"
               placeholder="Enter your first name"
+              defaultValue={user.first_name}
               className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
             />
           </div>
@@ -42,6 +52,7 @@ const NewUserForm = ({ roles, departments, test_types }: Props) => {
               type="text"
               name="last_name"
               placeholder="Enter your last name"
+              defaultValue={user.last_name}
               className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
             />
           </div>
@@ -55,6 +66,7 @@ const NewUserForm = ({ roles, departments, test_types }: Props) => {
             type="email"
             name="email"
             placeholder="Enter your email address"
+            defaultValue={user.email}
             className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
           />
         </div>
@@ -65,35 +77,13 @@ const NewUserForm = ({ roles, departments, test_types }: Props) => {
           <input
             type="text"
             name="phone"
-            placeholder="Enter your email address"
+            placeholder="Enter your Phone Number"
+            defaultValue={user.phone}
             className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
           />
         </div>
 
-        <div className="mb-4.5">
-          <label className="mb-2.5 block text-black dark:text-white">
-            Password
-          </label>
-          <input
-            type="password"
-            name="password"
-            placeholder="New Password"
-            className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-          />
-        </div>
-        <div className="mb-4.5">
-          <label className="mb-2.5 block text-black dark:text-white">
-            Confrim Password
-          </label>
-          <input
-            type="password"
-            name="password2"
-            placeholder="Confrim Password"
-            className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-          />
-        </div>
-
-        <Select label="Role" fieldName="role_id">
+        <Select label="Role" fieldName="role_id" defaultValue={user.role_id}>
           {roles.map((role) => (
             <option value={role.id} key={role.id}>
               {role.name}
@@ -101,7 +91,11 @@ const NewUserForm = ({ roles, departments, test_types }: Props) => {
           ))}
         </Select>
 
-        <Select label="Deparment" fieldName="department_id">
+        <Select
+          label="Deparment"
+          fieldName="department_id"
+          defaultValue={user.department_id}
+        >
           {departments.map((department) => (
             <option value={department.id} key={department.id}>
               {department.name}
@@ -109,7 +103,11 @@ const NewUserForm = ({ roles, departments, test_types }: Props) => {
           ))}
         </Select>
 
-        <Select label="QA Type" fieldName="qa_type_id">
+        <Select
+          label="QA Type"
+          fieldName="qa_type_id"
+          defaultValue={user.qa_type_id}
+        >
           {test_types.map((test_type) => (
             <option value={test_type.id} key={test_type.id}>
               {test_type.name}
@@ -123,4 +121,4 @@ const NewUserForm = ({ roles, departments, test_types }: Props) => {
   );
 };
 
-export default NewUserForm;
+export default EditUserForm;

@@ -32,7 +32,7 @@ export async function createUser(prevState, formData: FormData) {
   if (res.status === 201) redirect("/dashboard/users");
 }
 
-export async function updateUser(id: string, formData: FormData) {
+export async function updateUser(prevState, id: string, formData: FormData) {
   let jsonObject = Object.fromEntries(formData.entries());
 
   const access_token = cookies().get("access_token");

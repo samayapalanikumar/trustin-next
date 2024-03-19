@@ -6,23 +6,47 @@ import { cookies } from "next/headers";
 import { RoleType } from "../user-table";
 import { redirect } from "next/navigation";
 import { SERVER_API_URL } from "@/app/constant";
+import { User } from "@/types/user";
+import { Department } from "@/types/department";
+import { TestType } from "@/types/test-type";
+import { Role } from "@/types/role";
+import EditUserForm from "./edit-user-form";
+
 export const metadata: Metadata = {
   title: "Edit  User | Trustin",
   description: "This is Form Layout page for TailAdmin Next.js",
   // other metadata
 };
 
-async function getData(id:string) {
+async function getData(id: string) {
   const cookieStore = cookies();
   const access_token = cookieStore.get("access_token");
 
-  const res = await fetch(`${SERVER_API_URL}users/${id}`, {
+  const res = await fetch(`${SERVER_API_URL}/users/${id}`, {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${access_token?.value}`,
     },
   });
-  
+  const res1 = await fetch(`${SERVER_API_URL}/roles/`, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${access_token?.value}`,
+    },
+  });
+  const res2 = await fetch(`${SERVER_API_URL}/departments/`, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${access_token?.value}`,
+    },
+  });
+  const res3 = await fetch(`${SERVER_API_URL}/testtypes/`, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${access_token?.value}`,
+    },
+  });
+
   // The return value is *not* serialized
   // You can return Date, Map, Set, etc.
 
@@ -34,36 +58,22 @@ async function getData(id:string) {
     redirect("/signin");
   }
   const user = await res.json();
-  return user;
+  const roles = await res1.json();
+  const departments = await res2.json();
+  const test_types = await res3.json();
+  return { user, roles, departments, test_types };
 }
 
 type Data = {
-  id: number;
-  first_name: string;
-  last_name: string;
-  email: string;
-  phone:string;
-  role: RoleType;
-}
+  user: User;
+  roles: Role[];
+  departments: Department[];
+  test_types: TestType[];
+};
 
-
-
-
-const roleTypeObject = {
-  HOD: 'HOD',
-  MARKETING: 'MARKETING',
-  ADMIN: 'ADMIN',
-  MANAGEMENT: 'MANAGEMENT',
-  ANALYST: 'ANALYST',
-} as const;
-
-const EditUserPage =  async ({
-  params: { id },
-}: {
-  params: { id: string };
-}) => {
-  const data:Data = await getData(id)
-  const updateUserWithId = updateUser.bind(null, id)
+const EditUserPage = async ({ params: { id } }: { params: { id: string } }) => {
+  const { user, roles, departments, test_types }: Data = await getData(id);
+  const updateUserWithId = updateUser.bind(null, null, id);
   return (
     <>
       <Breadcrumb pageName="Add New User" />
@@ -77,105 +87,13 @@ const EditUserPage =  async ({
                 Contact Form
               </h3>
             </div> */}
-            <form action={updateUserWithId}>
-              <div className="p-6.5">
-                <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
-                  <div className="w-full xl:w-1/2">
-                    <label className="mb-2.5 block text-black dark:text-white">
-                      First name
-                    </label>
-                    <input
-                      type="text"
-                      name='first_name'
-                      defaultValue={data.first_name}
-                      placeholder="Enter your first name"
-                      className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-                    />
-                  </div>
-
-                  <div className="w-full xl:w-1/2">
-                    <label className="mb-2.5 block text-black dark:text-white">
-                      Last name
-                    </label>
-                    <input
-                      type="text"
-                      name='last_name'
-                      defaultValue={data.last_name}
-
-                      placeholder="Enter your last name"
-                      className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-                    />
-                  </div>
-                </div>
-
-                <div className="mb-4.5">
-                  <label className="mb-2.5 block text-black dark:text-white">
-                    Email <span className="text-meta-1">*</span>
-                  </label>
-                  <input
-                    type="email"
-                    name='email'
-                    defaultValue={data.email}
-
-                    placeholder="Enter your email address"
-                    className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-                  />
-                </div>
-                <div className="mb-4.5">
-                  <label className="mb-2.5 block text-black dark:text-white">
-                    Phone <span className="text-meta-1">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    name='phone'
-                    defaultValue={data.phone}
-
-                    placeholder="Enter your email address"
-                    className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-                  />
-                </div>
-
-                
-
-                <div className="mb-4.5">
-                  <label className="mb-2.5 block text-black dark:text-white">
-                    Role
-                  </label>
-                  <div className="relative z-20 bg-transparent dark:bg-form-input">
-                    <select name='role' defaultValue={data.role} className="relative z-20 w-full appearance-none rounded border border-stroke bg-transparent py-3 px-5 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary">
-                      {Object.entries(roleTypeObject).map(([key, values])=>(
-                      <option value={key} key={key}>{values}</option>
-                      ))}
-                    </select>
-                    <span className="absolute top-1/2 right-4 z-30 -translate-y-1/2">
-                      <svg
-                        className="fill-current"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <g opacity="0.8">
-                          <path
-                            fillRule="evenodd"
-                            clipRule="evenodd"
-                            d="M5.29289 8.29289C5.68342 7.90237 6.31658 7.90237 6.70711 8.29289L12 13.5858L17.2929 8.29289C17.6834 7.90237 18.3166 7.90237 18.7071 8.29289C19.0976 8.68342 19.0976 9.31658 18.7071 9.70711L12.7071 15.7071C12.3166 16.0976 11.6834 16.0976 11.2929 15.7071L5.29289 9.70711C4.90237 9.31658 4.90237 8.68342 5.29289 8.29289Z"
-                            fill=""
-                          ></path>
-                        </g>
-                      </svg>
-                    </span>
-                  </div>
-                </div>
-
-          
-
-                <button className="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray">
-                  Submit
-                </button>
-              </div>
-            </form>
+            <EditUserForm
+              roles={roles}
+              departments={departments}
+              test_types={test_types}
+              user={user}
+              action={updateUserWithId}
+            />
           </div>
         </div>
       </div>

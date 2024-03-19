@@ -14,14 +14,14 @@ async function getData(id: string) {
   const cookieStore = cookies();
   const access_token = cookieStore.get("access_token");
 
-  const res = await fetch(`${SERVER_API_URL}products/${id}`, {
+  const res = await fetch(`${SERVER_API_URL}/products/${id}`, {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${access_token?.value}`,
     },
   });
 
-  const res2 = await fetch(`${SERVER_API_URL}branch/`, {
+  const res2 = await fetch(`${SERVER_API_URL}/branch/`, {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${access_token?.value}`,

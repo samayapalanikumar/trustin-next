@@ -19,7 +19,7 @@ export const metadata: Metadata = {
 async function getData() {
   const cookieStore = cookies();
   const access_token = cookieStore.get("access_token");
-    const res = await fetch(`${SERVER_API_URL}products/`, {
+    const res = await fetch(`${SERVER_API_URL}/products/`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${access_token?.value}`,
@@ -50,7 +50,7 @@ const ProductPage = async () => {
         </h2>
         <Link
           href="products/new"
-          className="inline-flex items-center justify-center rounded-md border border-black py-4 px-5 text-center font-medium text-black hover:bg-opacity-90 lg:px-8 xl:px-10"
+          className="inline-flex items-center justify-center rounded-md border border-black py-4 px-5 text-center font-medium text-black hover:bg-opacity-90 lg:px-8 xl:px-10 dark:text-white dark:border-white"
         >
           New Product
         </Link>

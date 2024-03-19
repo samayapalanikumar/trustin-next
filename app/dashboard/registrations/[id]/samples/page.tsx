@@ -18,13 +18,13 @@ async function getData(id: string) {
   const cookieStore = cookies();
   const access_token = cookieStore.get("access_token");
 
-  const res = await fetch(`${SERVER_API_URL}registrations/${id}/batches/`, {
+  const res = await fetch(`${SERVER_API_URL}/registrations/${id}/batches/`, {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${access_token?.value}`,
     },
   });
-  const res1 = await fetch(`${SERVER_API_URL}registrations/${id}/`, {
+  const res1 = await fetch(`${SERVER_API_URL}/registrations/${id}/`, {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${access_token?.value}`,

@@ -17,7 +17,7 @@ async function getData() {
   const cookieStore = cookies();
   const access_token = cookieStore.get("access_token");
   console.log(access_token);
-    const res = await fetch(`${SERVER_API_URL}customers/`, {
+    const res = await fetch(`${SERVER_API_URL}/customers/`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${access_token?.value}`,
@@ -48,7 +48,7 @@ const CustomerPage = async () => {
         </h2>
         <Link
           href="customers/new"
-          className="inline-flex items-center justify-center rounded-md border border-black py-4 px-5 text-center font-medium text-black hover:bg-opacity-90 lg:px-8 xl:px-10 dark:text-white border-white"
+          className="inline-flex items-center justify-center rounded-md border border-black py-4 px-5 text-center font-medium text-black hover:bg-opacity-90 lg:px-8 xl:px-10 dark:text-white dark:border-white"
         >
           New Customers
         </Link>

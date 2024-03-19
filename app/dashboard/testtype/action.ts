@@ -15,7 +15,7 @@ export async function createTestType(formData: FormData) {
 
   const access_token = cookies().get('access_token')
   
-      const res = await fetch(`${SERVER_API_URL}testtypes/`, {
+      const res = await fetch(`${SERVER_API_URL}/testtypes/`, {
         method: "POST", // *GET, POST, PUT, DELETE, etc.
         // mode: "cors", // no-cors, *cors, same-origin
         headers: {
@@ -40,7 +40,7 @@ export async function updateTestType(id:string,formData: FormData) {
 
 
   const access_token = cookies().get('access_token')
-      const res = await fetch(`${SERVER_API_URL}testtypes/${id}`, {
+      const res = await fetch(`${SERVER_API_URL}/testtypes/${id}`, {
         method: "PUT", // *GET, POST, PUT, DELETE, etc.
         // mode: "cors", // no-cors, *cors, same-origin
         headers: {

@@ -17,7 +17,7 @@ export async function patchSampleWorkflow(id:string,formData: FormData) {
 
   const access_token = cookies().get('access_token')
  
-      const res = await fetch(`${SERVER_API_URL}samples/${id}`, {
+      const res = await fetch(`${SERVER_API_URL}/samples/${id}`, {
         method: "PATCH", // *GET, POST, PUT, DELETE, etc.
         // mode: "cors", // no-cors, *cors, same-origin
         headers: {
@@ -48,7 +48,7 @@ export async function patchSampleWorkflowTestResult(id:string,data:any) {
   console.log(data)
   const access_token = cookies().get('access_token')
  
-      const res = await fetch(`${SERVER_API_URL}samples/${id}`, {
+      const res = await fetch(`${SERVER_API_URL}/samples/${id}`, {
         method: "PATCH", // *GET, POST, PUT, DELETE, etc.
         // mode: "cors", // no-cors, *cors, same-origin
         headers: {
@@ -79,7 +79,7 @@ export async function updateUser(id:string,formData: FormData) {
 
   const access_token = cookies().get('access_token')
 
-      const res = await fetch(`${SERVER_API_URL}users/${id}`, {
+      const res = await fetch(`${SERVER_API_URL}/users/${id}`, {
         method: "PUT", // *GET, POST, PUT, DELETE, etc.
         // mode: "cors", // no-cors, *cors, same-origin
         headers: {

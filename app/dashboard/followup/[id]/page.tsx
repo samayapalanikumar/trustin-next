@@ -16,25 +16,25 @@ async function getData(id:string) {
   const cookieStore = cookies();
   const access_token = cookieStore.get("access_token");
 
-  const res = await fetch(`${SERVER_API_URL}customers/`, {
+  const res = await fetch(`${SERVER_API_URL}/customers/`, {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${access_token?.value}`,
     },
   });
-  const res2 = await fetch(`${SERVER_API_URL}products/`, {
+  const res2 = await fetch(`${SERVER_API_URL}/products/`, {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${access_token?.value}`,
     },
   });
-  const res3 = await fetch(`${SERVER_API_URL}users/`, {
+  const res3 = await fetch(`${SERVER_API_URL}/users/`, {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${access_token?.value}`,
     },
   });
-  const res4 = await fetch(`${SERVER_API_URL}followups/${id}`, {
+  const res4 = await fetch(`${SERVER_API_URL}/followups/${id}`, {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${access_token?.value}`,

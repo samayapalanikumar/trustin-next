@@ -14,7 +14,7 @@ async function getData(id:string) {
   const cookieStore = cookies();
   const access_token = cookieStore.get("access_token");
 
-  const res = await fetch(`${SERVER_API_URL}testtypes/${id}`, {
+  const res = await fetch(`${SERVER_API_URL}/testtypes/${id}`, {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${access_token?.value}`,

@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 async function getData(id:string) {
 
 
-  const res = await fetch(`${SERVER_API_URL}trf/customer/${id}`, {
+  const res = await fetch(`${SERVER_API_URL}/trf/customer/${id}`, {
     headers: {
       "Content-Type": "application/json",
     },

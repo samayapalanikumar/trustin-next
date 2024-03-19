@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 async function getData() {
   const cookieStore = cookies();
   const access_token = cookieStore.get("access_token");
-  const res = await fetch(`${SERVER_API_URL}testtypes/`, {
+  const res = await fetch(`${SERVER_API_URL}/testtypes/`, {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${access_token?.value}`,
@@ -45,7 +45,7 @@ const TestTypePage = async () => {
         </h2>
         <Link
           href="testtype/new"
-          className="inline-flex items-center justify-center rounded-md border border-black py-4 px-5 text-center font-medium text-black hover:bg-opacity-90 lg:px-8 xl:px-10"
+          className="inline-flex items-center justify-center rounded-md border border-black py-4 px-5 text-center font-medium text-black hover:bg-opacity-90 lg:px-8 xl:px-10 dark:text-white dark:border-white"
         >
           New Test Type
         </Link>

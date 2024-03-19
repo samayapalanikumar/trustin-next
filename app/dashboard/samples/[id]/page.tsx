@@ -6,6 +6,7 @@ import { SERVER_API_URL } from "@/app/constant";
 import StatusStepper from "./status-stepper1";
 import { patchSampleWorkflow, patchSampleWorkflowTestResult } from "../actions";
 import UnderTestingForm from "./under-testing-form";
+import WorkFlowForm from "@/components/WorkFlowForms/workflowform";
 export const metadata: Metadata = {
   title: "Edit  Product | Trustin",
   description: "This is Form Layout page for TailAdmin Next.js",
@@ -16,20 +17,20 @@ async function getData(id: string) {
   const cookieStore = cookies();
   const access_token = cookieStore.get("access_token");
 
-  const res = await fetch(`${SERVER_API_URL}samples/${id}`, {
+  const res = await fetch(`${SERVER_API_URL}/samples/${id}`, {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${access_token?.value}`,
     },
   });
 
-  const res2 = await fetch(`${SERVER_API_URL}branch/`, {
+  const res2 = await fetch(`${SERVER_API_URL}/branch/`, {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${access_token?.value}`,
     },
   });
-  const res3 = await fetch(`${SERVER_API_URL}users/`, {
+  const res3 = await fetch(`${SERVER_API_URL}/users/`, {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${access_token?.value}`,
@@ -94,7 +95,7 @@ type Data = {
           method_or_spec: string;
           group_of_test_parameters: "string";
         };
-      }
+      },
     ];
     sample_workflows: [
       {
@@ -102,7 +103,7 @@ type Data = {
         sample_status_id: number;
         assigned_to: number;
         status: string;
-      }
+      },
     ];
     sample_history: [
       {
@@ -112,7 +113,7 @@ type Data = {
         comments: string;
         created_at: string;
         created_by: number;
-      }
+      },
     ];
     status_data: {
       id: number;
@@ -156,8 +157,35 @@ const EditSamplePage = async ({
   const patchSampleWorkflowWithId = patchSampleWorkflow.bind(null, id);
   const patchSampleWorkflowResultWithId = patchSampleWorkflowTestResult.bind(
     null,
-    id
+    id,
   );
+
+  const workFlowFormData = [
+    {
+      value: "1",
+      buttonName: " Submit for Review",
+      status: "status",
+      submit: "Submitted",
+    },
+    {
+      value: "2",
+      buttonName: "Reject",
+      status: "status",
+      submit: "",
+    },
+    {
+      value: "3",
+      buttonName: "Approve",
+      status: "status",
+      submit: "",
+    },
+    {
+      value: "4",
+      buttonName: "Sample Received",
+      status: "status",
+      submit: "",
+    },
+  ];
 
   return (
     <>
@@ -167,36 +195,114 @@ const EditSamplePage = async ({
         <div className="flex flex-col gap-9">
           {/* <!-- Contact Form --> */}
           <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-            <div className="mb-4.5 flex flex-col gap-6 xl:flex-row ml-2 p-2">
+            <div className="border-b border-stroke px-2 py-4 dark:border-strokedark">
+              <h3 className="font-bold text-black dark:text-white">Status</h3>
+            </div>
+            <div className="mb-5  flex   w-full flex-col">
+              <StatusStepper step={data.sample.status_id} />
+
+              <div className="mt-2 w-full ">
+                {data.sample.status_id === 1 && (
+                  <WorkFlowForm
+                    actionData={patchSampleWorkflowWithId}
+                    assign={data.sample.assigned_to}
+                    status="Submitted"
+                    status_id={2}
+                    buttonName="Submit for Review"
+                  />
+                )}
+                {data.sample.status_id === 2 && (
+                  <>
+                   
+                        <WorkFlowForm
+                    actionData={patchSampleWorkflowWithId}
+                    assign={data.sample.assigned_to}
+                    status_id={1}
+                    buttonName="Reject"
+                  />
+                        <WorkFlowForm
+                    actionData={patchSampleWorkflowWithId}
+                    assign={data.sample.assigned_to}
+                    status_id={3}
+                    buttonName="Approve"
+                  />
+                   
+                  </>
+                )}
+
+                {data.sample.status_id === 3 && (
+                   <WorkFlowForm
+                   actionData={patchSampleWorkflowWithId}
+                   assign={data.sample.assigned_to}
+                   status_id={4}
+                   buttonName="Sample Received"
+                 />
+                )}
+
+                {data.sample.status_id === 4 && (
+                 <WorkFlowForm
+                 actionData={patchSampleWorkflowWithId}
+                 assign={data.sample.assigned_to}
+                 status_id={5}
+                 buttonName="Assign"
+                 assigneeData={data.users}
+               />
+                )}
+
+                {data.sample.status_id === 5 && (
+                  <UnderTestingForm
+                    assigned_to={data.sample.assigned_to}
+                    parameters={data.sample.sample_test_parameters}
+                    patchFn={patchSampleWorkflowResultWithId}
+                    step={6}
+                  />
+                )}
+                {data.sample.status_id === 6 && (
+                  <UnderTestingForm
+                    assigned_to={data.sample.assigned_to}
+                    parameters={data.sample.sample_test_parameters}
+                    patchFn={patchSampleWorkflowResultWithId}
+                    step={7}
+                  />
+                )}
+                {data.sample.status_id === 7 && (
+                  <div className="text-center text-title-xl2 font-bold">
+                    <h4>Sample WorkFlow Completed</h4>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className="mb-4.5 ml-2 flex flex-col gap-6 p-2 xl:flex-row">
               <div className="w-full xl:w-1/5">
-                <p className="mb-2.5 block text-black dark:text-white font-semibold">
+                <p className="mb-2.5 block font-semibold text-black dark:text-white">
                   Sample ID:
                 </p>
                 <p>{data.sample.sample_id}</p>
               </div>
               <div className="w-full xl:w-1/5">
-                <p className="mb-2.5 block text-black dark:text-white font-semibold">
+                <p className="mb-2.5 block font-semibold text-black dark:text-white">
                   Sample Name:
                 </p>
                 <p>{data.sample.name}</p>
               </div>
 
               <div className="w-full xl:w-1/5">
-                <p className="mb-2.5 block text-black dark:text-white font-semibold">
+                <p className="mb-2.5 block font-semibold text-black dark:text-white">
                   Registration ID:
                 </p>
                 <p>REG{data.sample.registration_id}</p>
               </div>
 
               <div className="w-full xl:w-1/5">
-                <p className="mb-2.5 block text-black dark:text-white font-semibold">
+                <p className="mb-2.5 block font-semibold text-black dark:text-white">
                   Department:
                 </p>
                 <p>{data.sample.department}</p>
               </div>
 
               <div className="w-full xl:w-1/5">
-                <p className="mb-2.5 block text-black dark:text-white font-semibold">
+                <p className="mb-2.5 block font-semibold text-black dark:text-white">
                   Status
                 </p>
                 <p>
@@ -205,15 +311,15 @@ const EditSamplePage = async ({
               </div>
             </div>
 
-            <div className="mb-4.5 flex flex-col gap-6 xl:flex-row ml-2 p-2">
+            <div className="mb-4.5 ml-2 flex flex-col gap-6 p-2 xl:flex-row">
               <div className="w-full xl:w-1/5">
-                <p className="mb-2.5 block text-black dark:text-white font-semibold">
+                <p className="mb-2.5 block font-semibold text-black dark:text-white">
                   Batch No:
                 </p>
                 <p>{data.sample.batch.batch_no}</p>
               </div>
               <div className="w-full xl:w-1/5">
-                <p className="mb-2.5 block text-black dark:text-white font-semibold">
+                <p className="mb-2.5 block font-semibold text-black dark:text-white">
                   Manufactured Date:
                 </p>
                 <p>
@@ -226,7 +332,7 @@ const EditSamplePage = async ({
               </div>
 
               <div className="w-full xl:w-1/5">
-                <p className="mb-2.5 block text-black dark:text-white font-semibold">
+                <p className="mb-2.5 block font-semibold text-black dark:text-white">
                   Expiry Date:
                 </p>
                 <p>
@@ -238,22 +344,22 @@ const EditSamplePage = async ({
                 </p>
               </div>
               <div className="w-full xl:w-1/5">
-                <p className="mb-2.5 block text-black dark:text-white font-semibold">
+                <p className="mb-2.5 block font-semibold text-black dark:text-white">
                   Batch Size:
                 </p>
                 <p>{data.sample.batch.batch_size}</p>
               </div>
               <div className="w-full xl:w-1/5">
-                <p className="mb-2.5 block text-black dark:text-white font-semibold">
+                <p className="mb-2.5 block font-semibold text-black dark:text-white">
                   Receiverd Quantity:
                 </p>
                 <p>{data.sample.batch.received_quantity}</p>
               </div>
             </div>
 
-            <div className="mb-4.5 flex flex-col gap-6 xl:flex-row ml-2 p-2">
+            <div className="mb-4.5 ml-2 flex flex-col gap-6 p-2 xl:flex-row">
               <div className="w-full xl:w-1/5">
-                <p className="mb-2.5 block text-black dark:text-white font-semibold">
+                <p className="mb-2.5 block font-semibold text-black dark:text-white">
                   Assignee:
                 </p>
                 <p>
@@ -264,14 +370,14 @@ const EditSamplePage = async ({
               </div>
 
               <div className="w-full xl:w-1/5">
-                <p className="mb-2.5 block text-black dark:text-white font-semibold">
+                <p className="mb-2.5 block font-semibold text-black dark:text-white">
                   Department:
                 </p>
                 <p>{data.sample.assignee.department}</p>
               </div>
             </div>
 
-            <div className="border-b border-stroke py-4 px-2 dark:border-strokedark">
+            <div className="border-b border-stroke px-2 py-4 dark:border-strokedark">
               <h3 className="font-bold text-black dark:text-white">
                 Test Parameters
               </h3>
@@ -279,24 +385,24 @@ const EditSamplePage = async ({
 
             {data.sample.sample_test_parameters.map((testParameter) => (
               <div
-                className="mb-4.5 flex flex-col gap-6 xl:flex-row ml-2 p-2"
+                className="mb-4.5 ml-2 flex flex-col gap-6 p-2 xl:flex-row"
                 key={testParameter.id}
               >
                 <div className="w-full xl:w-1/5">
-                  <p className="mb-2.5 block text-black dark:text-white font-semibold">
+                  <p className="mb-2.5 block font-semibold text-black dark:text-white">
                     Test Paramenter Code:
                   </p>
                   <p>{testParameter.test_parameter.parameter_code}</p>
                 </div>
 
                 <div className="w-full xl:w-1/5">
-                  <p className="mb-2.5 block text-black dark:text-white font-semibold">
+                  <p className="mb-2.5 block font-semibold text-black dark:text-white">
                     Test Paramenter Name:
                   </p>
                   <p>{testParameter.test_parameter.testing_parameters}</p>
                 </div>
                 <div className="w-full xl:w-1/5">
-                  <p className="mb-2.5 block text-black dark:text-white font-semibold">
+                  <p className="mb-2.5 block font-semibold text-black dark:text-white">
                     Test Method:
                   </p>
                   <p>{testParameter.test_type}</p>
@@ -305,13 +411,13 @@ const EditSamplePage = async ({
                   <>
                     {" "}
                     <div className="w-full xl:w-1/5">
-                      <p className="mb-2.5 block text-black dark:text-white font-semibold">
+                      <p className="mb-2.5 block font-semibold text-black dark:text-white">
                         Value
                       </p>
                       <p>{testParameter?.value ?? ""}</p>
                     </div>
                     <div className="w-full xl:w-1/5">
-                      <p className="mb-2.5 block text-black dark:text-white font-semibold">
+                      <p className="mb-2.5 block font-semibold text-black dark:text-white">
                         Result
                       </p>
                       <p>{testParameter?.result ? "true" : "false"}</p>
@@ -320,170 +426,6 @@ const EditSamplePage = async ({
                 )}
               </div>
             ))}
-          </div>
-          <div className="border-b border-stroke py-4 px-2 dark:border-strokedark">
-            <h3 className="font-bold text-black dark:text-white">Status</h3>
-          </div>
-          <div className="w-full min-h-150 flex   flex-col">
-            <StatusStepper step={data.sample.status_id} />
-
-            <div className="mt-2 w-full ">
-              {data.sample.status_id === 1 && (
-                <form action={patchSampleWorkflowWithId} >
-                  <input type="hidden" value="Submitted" name="status" />
-                  <input type="hidden" value="2" name="status_id" />
-                  <input
-                    type="hidden"
-                    value={data.sample.assigned_to}
-                    name="assigned_to"
-                  />
-                  <input type="hidden" value="test" name="comments" />
-
-                  <button
-                    type="submit"
-                    className="flex w-1/2 justify-center rounded bg-primary p-3 font-medium text-gray"
-                  >
-                    Submit for Review
-                  </button>
-                </form>
-              )}
-              {data.sample.status_id === 2 && (
-                <>
-                  <form action={patchSampleWorkflowWithId}>
-                    <input type="hidden" value="" name="status" />
-                    <input type="hidden" value="1" name="status_id" />
-                    <input
-                      type="hidden"
-                      value={data.sample.assigned_to}
-                      name="assigned_to"
-                    />
-                    <input type="hidden" value="" name="comments" />
-
-                    <button
-                      type="submit"
-                      className="flex  w-full justify-center rounded bg-danger p-3 font-medium text-gray mb-4"
-                    >
-                      Reject
-                    </button>
-                  </form>
-                  <form action={patchSampleWorkflowWithId}>
-                    <input type="hidden" value="" name="status" />
-                    <input type="hidden" value="3" name="status_id" />
-                    <input
-                      type="hidden"
-                      value={data.sample.assigned_to}
-                      name="assigned_to"
-                    />
-                    <input type="hidden" value="" name="comments" />
-
-                    <button
-                      type="submit"
-                      className="flex  w-full justify-center rounded bg-primary p-3 font-medium text-gray"
-                    >
-                      Approve
-                    </button>
-                  </form>
-                </>
-              )}
-
-              {data.sample.status_id === 3 && (
-                <form
-                  action={patchSampleWorkflowWithId}
-                  className="flex justify-center items-center"
-                >
-                  <input type="hidden" value="" name="status" />
-                  <input type="hidden" value="4" name="status_id" />
-                  <input
-                    type="hidden"
-                    value={data.sample.assigned_to}
-                    name="assigned_to"
-                  />
-                  <input type="hidden" value="" name="comments" />
-
-                  <button
-                    type="submit"
-                    className="flex w-1/2 justify-center rounded bg-primary p-3 font-medium text-gray"
-                  >
-                    Sample Received
-                  </button>
-                </form>
-              )}
-
-              {data.sample.status_id === 4 && (
-                <form action={patchSampleWorkflowWithId} className="flex flex-col justify-center">
-                  <input type="hidden" value="" name="status" />
-                  <input type="hidden" value="5" name="status_id" />
-
-                  <div className="mb-4.5">
-                    <label className="mb-2.5 block text-black dark:text-white">
-                      Assignee
-                    </label>
-                    <div className="relative z-20 bg-transparent dark:bg-form-input">
-                      <select
-                        name="assigned_to"
-                        className="relative z-20 w-full appearance-none rounded border border-stroke bg-transparent py-3 px-5 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-                      >
-                        {data?.users.map((user) => (
-                          <option value={user.id} key={user.id}>
-                            {user.first_name + user.last_name}
-                          </option>
-                        ))}
-                      </select>
-                      <span className="absolute top-1/2 right-4 z-30 -translate-y-1/2">
-                        <svg
-                          className="fill-current"
-                          width="24"
-                          height="24"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <g opacity="0.8">
-                            <path
-                              fillRule="evenodd"
-                              clipRule="evenodd"
-                              d="M5.29289 8.29289C5.68342 7.90237 6.31658 7.90237 6.70711 8.29289L12 13.5858L17.2929 8.29289C17.6834 7.90237 18.3166 7.90237 18.7071 8.29289C19.0976 8.68342 19.0976 9.31658 18.7071 9.70711L12.7071 15.7071C12.3166 16.0976 11.6834 16.0976 11.2929 15.7071L5.29289 9.70711C4.90237 9.31658 4.90237 8.68342 5.29289 8.29289Z"
-                              fill=""
-                            ></path>
-                          </g>
-                        </svg>
-                      </span>
-                    </div>
-                  </div>
-
-                  <input type="hidden" value="" name="comments" />
-
-                  <button
-                    type="submit"
-                    className="flex w-1/2 justify-center rounded bg-primary p-3 font-medium text-gray"
-                  >
-                    Assign
-                  </button>
-                </form>
-              )}
-
-              {data.sample.status_id === 5 && (
-                <UnderTestingForm
-                  assigned_to={data.sample.assigned_to}
-                  parameters={data.sample.sample_test_parameters}
-                  patchFn={patchSampleWorkflowResultWithId}
-                  step={6}
-                />
-              )}
-              {data.sample.status_id === 6 && (
-                <UnderTestingForm
-                  assigned_to={data.sample.assigned_to}
-                  parameters={data.sample.sample_test_parameters}
-                  patchFn={patchSampleWorkflowResultWithId}
-                  step={7}
-                />
-              )}
-              {data.sample.status_id === 7 && (
-                <div className="font-bold text-title-xl2 text-center">
-                  <h4>Sample WorkFlow Completed</h4>
-                </div>
-              )}
-            </div>
           </div>
         </div>
       </div>

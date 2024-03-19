@@ -209,7 +209,7 @@ const TestParamsForm = ({ nestIndex, control, register, data }) => {
                 >
                   <option value="">------------</option>
                   {data.test_params?.map((t: any) => (
-                    <option value={t.id} key={t.id}>
+                    <option value={t.test_parameter.id} key={t.id}>
                       {t.test_parameter.testing_parameters}
                     </option>
                   ))}

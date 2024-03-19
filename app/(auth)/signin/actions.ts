@@ -72,7 +72,7 @@ export async function signinJwt(prevState: any, formData: any) {
   params.append("client_secret", "");
 
   try {
-    const res = await fetch(`${SERVER_API_URL}auth/`, {
+    const res = await fetch(`${SERVER_API_URL}/auth/`, {
       method: "POST", // *GET, POST, PUT, DELETE, etc.
       // mode: "cors", // no-cors, *cors, same-origin
       headers: {

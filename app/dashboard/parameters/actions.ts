@@ -14,7 +14,7 @@ export async function createParameters(formData: FormData) {
 
 
   const access_token = cookies().get('access_token')
-      const res = await fetch(`${SERVER_API_URL}parameters/`, {
+      const res = await fetch(`${SERVER_API_URL}/parameters/`, {
         method: "POST", // *GET, POST, PUT, DELETE, etc.
         // mode: "cors", // no-cors, *cors, same-origin
         headers: {
@@ -39,7 +39,7 @@ export async function updateParameter(id:string,formData: FormData) {
 
 
   const access_token = cookies().get('access_token')
-      const res = await fetch(`${SERVER_API_URL}parameters/${id}`, {
+      const res = await fetch(`${SERVER_API_URL}/parameters/${id}`, {
         method: "PUT", // *GET, POST, PUT, DELETE, etc.
         // mode: "cors", // no-cors, *cors, same-origin
         headers: {

@@ -41,7 +41,7 @@ export async function updateTRF(trf_code: string, formData) {
 
   const access_token = cookies().get("access_token");
 
-  const res = await fetch(`${SERVER_API_URL}trf/${trf_code}`, {
+  const res = await fetch(`${SERVER_API_URL}/trf/${trf_code}`, {
     method: "PUT", // *GET, POST, PUT, DELETE, etc.
     // mode: "cors", // no-cors, *cors, same-origin
     headers: {

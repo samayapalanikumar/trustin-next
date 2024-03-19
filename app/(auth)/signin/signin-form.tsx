@@ -62,7 +62,7 @@ const SigninForm = () => {
             <EmailSvg />
           </span>
         </div>
-        {state?.fieldErrors?.username && <p>{state?.fieldErrors?.username}</p>}
+        {state?.fieldErrors?.username && <p className="text-red-500">{state?.fieldErrors?.username}</p>}
       </div>
 
       <div className="mb-6">
@@ -82,7 +82,7 @@ const SigninForm = () => {
             <PasswordSvg />
           </span>
         </div>
-        {state?.fieldErrors?.password && <p>{state?.fieldErrors?.password}</p>}
+        {state?.fieldErrors?.password && <p className="text-red-500">{state?.fieldErrors?.password}</p>}
       </div>
 
       <div className="mb-5">

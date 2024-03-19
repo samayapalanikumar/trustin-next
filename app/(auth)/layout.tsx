@@ -19,7 +19,7 @@ export default function AuthLayout({
       {loading ? (
         <Loader />
       ) : (
-        <div className="grid items-center justify-items-center h-screen overflow-hidden">
+        <div className="h-screen overflow-hidden grid items-center justify-items-center">
           <main>
             <div className="mx-auto max-w-screen-2xl">{children}</div>
           </main>

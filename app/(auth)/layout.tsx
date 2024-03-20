@@ -20,8 +20,8 @@ export default function AuthLayout({
         <Loader />
       ) : (
         <div className="h-screen overflow-hidden grid items-center justify-items-center">
-          <main>
-            <div className="mx-auto max-w-screen-2xl">{children}</div>
+          <main className="lg:w-full lg:h-full">
+            <div className="mx-auto lg:w-full lg:h-full">{children}</div>
           </main>
           <Toaster position="top-right" richColors  />
         </div>

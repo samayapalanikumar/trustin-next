@@ -5,6 +5,27 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { SERVER_API_URL } from "@/app/constant";
 
+import { z } from "zod";
+
+const schema = z
+  .object({
+    firstname: z
+      .string()
+      .min(1, 'First Name Required')
+      .trim(),
+    firstname: z
+      .string()
+      .min(1, 'Last Name Required')
+      .trim(),
+    email: z
+      .string()
+      .email('Invalid Required')
+      .trim(),
+    
+    phone: z.string().trim().min(1, "Password Required").max(10, "Enter valid 10 digit phone number"),
+  })
+
+
 export async function createUser(prevState, formData: FormData) {
   let jsonObject = Object.fromEntries(formData.entries());
 
@@ -32,7 +53,8 @@ export async function createUser(prevState, formData: FormData) {
   if (res.status === 201) redirect("/dashboard/users");
 }
 
-export async function updateUser(prevState, id: string, formData: FormData) {
+export async function updateUser(id: string, formData: FormData, ) {
+  console.log(formata)
   let jsonObject = Object.fromEntries(formData.entries());
 
   const access_token = cookies().get("access_token");

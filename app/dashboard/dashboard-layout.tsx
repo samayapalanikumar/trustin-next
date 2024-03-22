@@ -4,14 +4,16 @@ import Loader from "@/components/common/Loader";
 
 import Sidebar from "@/components/Sidebar";
 import Header from "@/components/Header";
-import type { UserType } from "./layout";
+import type { MenuType, UserType } from "./layout";
 
 export default function DashboardLayout({
   children,
-  user
+  user, 
+  menus
 }: {
   children: React.ReactNode;
   user: UserType;
+  menus: MenuType;
 }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
@@ -32,6 +34,7 @@ export default function DashboardLayout({
               <Sidebar
                 sidebarOpen={sidebarOpen}
                 setSidebarOpen={setSidebarOpen}
+                menus={menus}
               />
               {/* <!-- ===== Sidebar End ===== --> */}
 

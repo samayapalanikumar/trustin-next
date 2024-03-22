@@ -73,7 +73,7 @@ type Data = {
 
 const EditUserPage = async ({ params: { id } }: { params: { id: string } }) => {
   const { user, roles, departments, test_types }: Data = await getData(id);
-  const updateUserWithId = updateUser.bind(null, null, id);
+  const updateUserWithId = updateUser.bind(null, id );
   return (
     <>
       <Breadcrumb pageName="Add New User" />

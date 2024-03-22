@@ -24,6 +24,7 @@ export default function SignIn() {
                   alt="Logo"
                   width={176}
                   height={32}
+                  priority
                 />
                 <Image
                   className="dark:hidden"
@@ -31,6 +32,7 @@ export default function SignIn() {
                   alt="Logo"
                   width={176}
                   height={32}
+                  priority
                 />
               </Link>
 

@@ -93,7 +93,7 @@ const NewUserForm = ({ roles, departments, test_types }: Props) => {
           />
         </div>
 
-        <Select label="Role" fieldName="role_id">
+        <Select label="Role" name="role_id">
           {roles.map((role) => (
             <option value={role.id} key={role.id}>
               {role.name}
@@ -101,7 +101,7 @@ const NewUserForm = ({ roles, departments, test_types }: Props) => {
           ))}
         </Select>
 
-        <Select label="Deparment" fieldName="department_id">
+        <Select label="Deparment" name="department_id">
           {departments.map((department) => (
             <option value={department.id} key={department.id}>
               {department.name}
@@ -109,7 +109,8 @@ const NewUserForm = ({ roles, departments, test_types }: Props) => {
           ))}
         </Select>
 
-        <Select label="QA Type" fieldName="qa_type_id">
+        <Select label="QA Type" name="qa_type_id">
+          <option value="null">-----</option>
           {test_types.map((test_type) => (
             <option value={test_type.id} key={test_type.id}>
               {test_type.name}

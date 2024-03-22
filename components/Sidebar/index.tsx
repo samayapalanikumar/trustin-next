@@ -16,13 +16,73 @@ import {
   ClipboardPlus,
   TestTube2,
 } from "lucide-react";
+import { MenuType } from "@/app/dashboard/layout";
 
 interface SidebarProps {
   sidebarOpen: boolean;
   setSidebarOpen: (arg: boolean) => void;
+  menus: MenuType;
 }
 
-const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
+const menulist = [
+  // {
+  //   name: "Home",
+  //   pathname: "dashboard",
+  //   icon: <Home />,
+  // },
+  {
+    name: "Branches",
+    pathname: "branches",
+    icon: <Split />,
+  },
+  {
+    name: "Users",
+    pathname: "users",
+    icon: <UserRound />,
+  },
+  {
+    name: "Customers",
+    pathname: "customers",
+    icon: <Users />,
+  },
+  {
+    name: "Customer Followup",
+    pathname: "followup",
+    icon: <UserCheck />,
+  },
+  {
+    name: "Test Type",
+    pathname: "testtype",
+    icon: <Microscope />,
+  },
+  {
+    name: "Products",
+    pathname: "products",
+    icon: <Syringe />,
+  },
+  {
+    name: "Test Parameters",
+    pathname: "parameters",
+    icon: <TestTubes />,
+  },
+  {
+    name: "TRF",
+    pathname: "trf",
+    icon: <LibraryBig />,
+  },
+  {
+    name: "Registrations",
+    pathname: "registrations",
+    icon: <ClipboardPlus />,
+  },
+  {
+    name: "Samples",
+    pathname: "samples",
+    icon: <TestTube2 />,
+  },
+];
+
+const Sidebar = ({ sidebarOpen, setSidebarOpen, menus }: SidebarProps) => {
   const pathname = usePathname();
 
   const trigger = useRef<any>(null);
@@ -30,7 +90,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
 
   let storedSidebarExpanded = "true";
   const [sidebarExpanded, setSidebarExpanded] = useState(
-    storedSidebarExpanded === null ? false : storedSidebarExpanded === "true"
+    storedSidebarExpanded === null ? false : storedSidebarExpanded === "true",
   );
 
   // close on click outside
@@ -83,6 +143,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
             height={32}
             src={"/images/logo/logo.png"}
             alt="Logo"
+            priority
           />
         </Link>
 
@@ -112,7 +173,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
 
       <div className="no-scrollbar flex flex-col overflow-y-auto duration-300 ease-linear">
         {/* <!-- Sidebar Menu --> */}
-        <nav className="mt-5 py-4 px-4 lg:mt-9 lg:px-6">
+        <nav className="mt-5 px-4 py-4 lg:mt-9 lg:px-6">
           {/* <!-- Menu Group --> */}
           <div>
             <h3 className="mb-4 ml-4 text-sm font-semibold text-bodydark2">
@@ -120,6 +181,36 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
             </h3>
 
             <ul className="mb-6 flex flex-col gap-2.5 gap-y-8">
+              <li>
+                <Link
+                  href="/dashboard"
+                  className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
+                    pathname === "/dashboard" && "text-white"
+                  } `}
+                >
+                  <Home />
+                  Home
+                </Link>
+              </li>
+              {menulist.map(
+                (menu) =>
+                  menus.includes(menu.pathname) && (
+                    <li key={menu.pathname}>
+                      <Link
+                        href={`/dashboard/${menu.pathname}`}
+                        className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
+                          (pathname === `/dashboard/${menu.pathname}` ||
+                            pathname.includes(menu.pathname)) &&
+                          "text-white"
+                        } `}
+                      >
+                        {menu.icon}
+                        {menu.name}
+                      </Link>
+                    </li>
+                  ),
+              )}
+
               <li>
                 <Link
                   href="/dashboard"
@@ -192,7 +283,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                     "text-white"
                   } `}
                 >
-                   <Microscope />
+                  <Microscope />
                   Test Type
                 </Link>
               </li>
@@ -206,7 +297,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                     "text-white"
                   } `}
                 >
-                   <Syringe />
+                  <Syringe />
                   Products
                 </Link>
               </li>
@@ -223,7 +314,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                   <TestTubes />
                   Test Parameters
                 </Link>
-              </li>           
+              </li>
               <li>
                 <Link
                   href="/dashboard/trf"
@@ -260,7 +351,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                   } `}
                 >
                   <TestTube2 />
-                 Samples
+                  Samples
                 </Link>
               </li>
               {/* <!-- Menu Item Dashboard --> */}
@@ -344,10 +435,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
               </SidebarLinkGroup> */}
               {/* <!-- Menu Item Dashboard --> */}
 
-
-
               {/* <!-- Menu Item Forms --> */}
-
 
               {/* <!-- Menu Item Tables --> */}
 
@@ -358,7 +446,6 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
           </div>
 
           {/* <!-- Others Group --> */}
-
         </nav>
         {/* <!-- Sidebar Menu --> */}
       </div>

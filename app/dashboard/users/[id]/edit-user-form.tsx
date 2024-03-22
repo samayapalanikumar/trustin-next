@@ -26,9 +26,8 @@ const EditUserForm = ({
   user,
   action,
 }: Props) => {
-  const [state, formAction] = useFormState(action, initalState);
   return (
-    <form action={formAction}>
+    <form action={action}>
       <div className="p-6.5">
         <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
           <div className="w-full xl:w-1/2">
@@ -83,7 +82,7 @@ const EditUserForm = ({
           />
         </div>
 
-        <Select label="Role" fieldName="role_id" defaultValue={user.role_id}>
+        <Select label="Role" name="role_id" defaultValue={user.role_id}>
           {roles.map((role) => (
             <option value={role.id} key={role.id}>
               {role.name}
@@ -93,7 +92,7 @@ const EditUserForm = ({
 
         <Select
           label="Deparment"
-          fieldName="department_id"
+          name="department_id"
           defaultValue={user.department_id}
         >
           {departments.map((department) => (
@@ -105,7 +104,7 @@ const EditUserForm = ({
 
         <Select
           label="QA Type"
-          fieldName="qa_type_id"
+          name="qa_type_id"
           defaultValue={user.qa_type_id}
         >
           {test_types.map((test_type) => (

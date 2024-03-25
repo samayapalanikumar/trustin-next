@@ -204,7 +204,7 @@ const TRFForm = ({trf, updateAction}) => {
     <>
       {/* <Breadcrumb pageName="Add New Test Parameter" /> */}
 
-      <div>
+      <div className="bg-boxdark-2 text-bodydark">
         {Object.keys(form.formState.errors).length > 0 && (
           <ul>
             {Object.entries(form.formState.errors).map(([fieldName, fieldError]) => (
@@ -214,12 +214,12 @@ const TRFForm = ({trf, updateAction}) => {
         )}
       </div>
 
-      <div className="grid grid-cols-1 gap-9 sm:grid-cols-1">
+      <div className="grid grid-cols-1 gap-9 sm:grid-cols-1 bg-boxdark-2 text-bodydark">
         <div className="flex flex-col gap-9">
           {/* <!-- Contact Form --> */}
-          <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-            {/* <div className="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
-              <h3 className="font-medium text-black dark:text-white">
+          <div className="rounded-sm border   shadow-default border-strokedark bg-boxdark text-bodydark">
+            {/* <div className="border-b  py-4 px-6.5 dark:border-strokedark">
+              <h3 className="font-medium text-white">
                 Contact Form
               </h3>
             </div> */}
@@ -238,7 +238,7 @@ const TRFForm = ({trf, updateAction}) => {
 
                 <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
                 <div  className="w-full xl:w-1/2">
-                    <label className="mb-2.5  text-black dark:text-white">
+                    <label className="mb-2.5  text-white">
                       Trf Code:
                     </label>
                     <div className="relative inline-block z-20 bg-transparent dark:bg-form-input">
@@ -246,7 +246,7 @@ const TRFForm = ({trf, updateAction}) => {
                     </div>
                   </div>
                   <div  className="w-full xl:w-1/2">
-                    <label className="mb-2.5  text-black dark:text-white">
+                    <label className="mb-2.5  text-white">
                       Company Name:
                     </label>
                     <div className="relative inline-block z-20 bg-transparent dark:bg-form-input">
@@ -257,7 +257,7 @@ const TRFForm = ({trf, updateAction}) => {
 
                 <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
                   <div  className="w-full xl:w-1/2">
-                    <label className="mb-2.5  text-black dark:text-white">
+                    <label className="mb-2.5  text-white">
                       Company Code:
                     </label>
                     <div className="relative inline-block z-20 bg-transparent dark:bg-form-input">
@@ -266,7 +266,7 @@ const TRFForm = ({trf, updateAction}) => {
                   </div>
 
                   <div  className="w-full xl:w-1/2">
-                    <label className="mb-2.5  text-black dark:text-white">
+                    <label className="mb-2.5  text-white">
                       Company Email:
                     </label>
                     <div className="relative inline-block z-20 bg-transparent dark:bg-form-input">
@@ -277,141 +277,141 @@ const TRFForm = ({trf, updateAction}) => {
 
                   <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
                     <div className="w-full xl:w-1/2">
-                      <label className="mb-2.5 block text-black dark:text-white">
+                      <label className="mb-2.5 block text-white">
                         Sample Id
                       </label>
                       <input
                         type="text"
                         {...form.register("sample_id")}
-                        className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                        className="w-full rounded border-[1.5px]  bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter border-form-strokedark bg-form-input dark:focus:border-primary"
                       />
                     </div>
 
                     <div className="w-full xl:w-1/2">
-                      <label className="mb-2.5 block text-black dark:text-white">
+                      <label className="mb-2.5 block text-white">
                         Sample Name
                       </label>
                       <input
                         type="text"
                         {...form.register("sample_name")}
                         name="sample_name"
-                        className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                        className="w-full rounded border-[1.5px]  bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter border-form-strokedark bg-form-input dark:focus:border-primary"
                       />
                     </div>
                   </div>
 
                   <div className="mb-6">
-                    <label className="mb-2.5 block text-black dark:text-white">
+                    <label className="mb-2.5 block text-white">
                       Description
                     </label>
                     <textarea
                       rows={6}
                       {...form.register("description")}
-                      className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                      className="w-full rounded border-[1.5px]  bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter border-form-strokedark bg-form-input dark:focus:border-primary"
                     ></textarea>
                   </div>
 
                   <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
                     <div className="w-full xl:w-1/2">
-                      <label className="mb-2.5 block text-black dark:text-white">
+                      <label className="mb-2.5 block text-white">
                         No of Samples
                       </label>
                       <input
                         type="number"
                         {...form.register("no_of_samples")}
-                        className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                        className="w-full rounded border-[1.5px]  bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter border-form-strokedark bg-form-input dark:focus:border-primary"
                       />
                     </div>
 
                     <div className="w-full xl:w-1/2">
-                      <label className="mb-2.5 block text-black dark:text-white">
+                      <label className="mb-2.5 block text-white">
                         Manufactured by
                       </label>
                       <input
                         type="text"
                         {...form.register("manufactured_by")}
-                        className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                        className="w-full rounded border-[1.5px]  bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter border-form-strokedark bg-form-input dark:focus:border-primary"
                       />
                     </div>
                   </div>
                   <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
                     <div className="w-full xl:w-1/2">
-                      <label className="mb-2.5 block text-black dark:text-white">
+                      <label className="mb-2.5 block text-white">
                         Manufactured Date
                       </label>
                       <input
                         type="date"
                         {...form.register("manufactured_date")}
-                        className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                        className="w-full rounded border-[1.5px]  bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter border-form-strokedark bg-form-input dark:focus:border-primary"
                       />
                     </div>
 
                     <div className="w-full xl:w-1/2">
-                      <label className="mb-2.5 block text-black dark:text-white">
+                      <label className="mb-2.5 block text-white">
                         Expiry Date
                       </label>
                       <input
                         type="date"
                         {...form.register("expiry_date")}
-                        className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                        className="w-full rounded border-[1.5px]  bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter border-form-strokedark bg-form-input dark:focus:border-primary"
                       />
                     </div>
                   </div>
 
                   <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
                     <div className="w-full xl:w-1/2">
-                      <label className="mb-2.5 block text-black dark:text-white">
+                      <label className="mb-2.5 block text-white">
                         Batch or Lot No
                       </label>
                       <input
                         type="text"
                         {...form.register("batch_or_lot_no")}
-                        className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                        className="w-full rounded border-[1.5px]  bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter border-form-strokedark bg-form-input dark:focus:border-primary"
                       />
                     </div>
 
                     <div className="w-full xl:w-1/2">
-                      <label className="mb-2.5 block text-black dark:text-white">
+                      <label className="mb-2.5 block text-white">
                         Batch Size
                       </label>
                       <input
                         type="number"
                         {...form.register("batch_size")}
-                        className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                        className="w-full rounded border-[1.5px]  bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter border-form-strokedark bg-form-input dark:focus:border-primary"
                       />
                     </div>
                   </div>
 
                   <div className="mb-4.5">
-                    <label className="mb-2.5 block text-black dark:text-white">
+                    <label className="mb-2.5 block text-white">
                       Format Name
                     </label>
                     <input
                       type="text"
                       {...form.register("format_name")}
-                      className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                      className="w-full rounded border-[1.5px]  bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter border-form-strokedark bg-form-input dark:focus:border-primary"
                     />
                   </div>
 
                   <div className="mb-6">
-                    <label className="mb-2.5 block text-black dark:text-white">
+                    <label className="mb-2.5 block text-white">
                       Sample storage condition (if any)
                     </label>
                     <textarea
                       rows={6}
                       {...form.register("sample_storage_condition")}
-                      className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                      className="w-full rounded border-[1.5px]  bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter border-form-strokedark bg-form-input dark:focus:border-primary"
                     ></textarea>
                   </div>
 
                   <div className="mb-4.5">
-                    <label className="mb-2.5 block text-black dark:text-white">
+                    <label className="mb-2.5 block text-white">
                       SAMPILING BY
                     </label>
-                    <div className="relative z-20 bg-transparent dark:bg-form-input">
+                    <div className="relative z-20 bg-transparent bg-form-input">
                       <select
                         {...form.register("sampling_by")}
-                        className="relative z-20 w-full appearance-none rounded border border-stroke bg-transparent py-3 px-5 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                        className="relative z-20 w-full appearance-none rounded border  bg-transparent py-3 px-5 outline-none transition focus:border-primary active:border-primary border-form-strokedark bg-form-input dark:focus:border-primary"
                       >
                         {Object.entries(SAMPILINGBY).map(([key, value]) => (
                           <option value={key} key={key}>
@@ -448,7 +448,7 @@ const TRFForm = ({trf, updateAction}) => {
                       render={() => (
                         <FormItem>
                           <div className="mb-4">
-                            <label className="mb-2.5 block text-black dark:text-white">
+                            <label className="mb-2.5 block text-white">
                               Testing Process
                             </label>
                           </div>
@@ -506,7 +506,7 @@ const TRFForm = ({trf, updateAction}) => {
                       render={() => (
                         <FormItem>
                           <div className="mb-4">
-                            <label className="mb-2.5 block text-black dark:text-white">
+                            <label className="mb-2.5 block text-white">
                               Report Sent
                             </label>
                           </div>
@@ -561,13 +561,13 @@ const TRFForm = ({trf, updateAction}) => {
                   </div>
 
                   <div className="mb-4.5">
-                    <label className="mb-2.5 block text-black dark:text-white">
+                    <label className="mb-2.5 block text-white">
                       Sample Disposal Process
                     </label>
-                    <div className="relative z-20 bg-transparent dark:bg-form-input">
+                    <div className="relative z-20 bg-transparent bg-form-input">
                       <select
                         {...form.register("sample_disposal_process")}
-                        className="relative z-20 w-full appearance-none rounded border border-stroke bg-transparent py-3 px-5 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                        className="relative z-20 w-full appearance-none rounded border  bg-transparent py-3 px-5 outline-none transition focus:border-primary active:border-primary border-form-strokedark bg-form-input dark:focus:border-primary"
                       >
                         {Object.entries(DISPOSALPROCESS).map(([key, value]) => (
                           <option value={key} key={key}>
@@ -598,13 +598,13 @@ const TRFForm = ({trf, updateAction}) => {
                   </div>
 
                   <div className="mb-4.5">
-                    <label className="mb-2.5 block text-black dark:text-white">
+                    <label className="mb-2.5 block text-white">
                       Fail Statement Sent{" "}
                     </label>
-                    <div className="relative z-20 bg-transparent dark:bg-form-input">
+                    <div className="relative z-20 bg-transparent bg-form-input">
                       <select
                         {...form.register("fail_statement_sent")}
-                        className="relative z-20 w-full appearance-none rounded border border-stroke bg-transparent py-3 px-5 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                        className="relative z-20 w-full appearance-none rounded border  bg-transparent py-3 px-5 outline-none transition focus:border-primary active:border-primary border-form-strokedark bg-form-input dark:focus:border-primary"
                       >
                         {Object.entries(YESORNO).map(([key, value]) => (
                           <option value={key} key={key}>
@@ -634,13 +634,13 @@ const TRFForm = ({trf, updateAction}) => {
                     </div>
                   </div>
                   <div className="mb-4.5">
-                    <label className="mb-2.5 block text-black dark:text-white">
+                    <label className="mb-2.5 block text-white">
                       Specific Decision Rule{" "}
                     </label>
-                    <div className="relative z-20 bg-transparent dark:bg-form-input">
+                    <div className="relative z-20 bg-transparent bg-form-input">
                       <select
                         {...form.register("specific_decision_rule")}
-                        className="relative z-20 w-full appearance-none rounded border border-stroke bg-transparent py-3 px-5 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                        className="relative z-20 w-full appearance-none rounded border bg-transparent py-3 px-5 outline-none transition focus:border-primary active:border-primary border-form-strokedark bg-form-input dark:focus:border-primary"
                       >
                         {Object.entries(YESORNO).map(([key, value]) => (
                           <option value={key} key={key}>
@@ -671,13 +671,13 @@ const TRFForm = ({trf, updateAction}) => {
                   </div>
 
                   <div className="mb-4.5">
-                    <label className="mb-2.5 block text-black dark:text-white">
+                    <label className="mb-2.5 block text-white">
                       Binary Decision Rule{" "}
                     </label>
                     <div className="relative z-20 bg-transparent dark:bg-form-input">
                       <select
                         {...form.register("binary_decision_rule")}
-                        className="relative z-20 w-full appearance-none rounded border border-stroke bg-transparent py-3 px-5 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                        className="relative z-20 w-full appearance-none rounded border  bg-transparent py-3 px-5 outline-none transition focus:border-primary active:border-primary border-form-strokedark bg-form-input dark:focus:border-primary"
                       >
                         {Object.entries(YESORNO).map(([key, value]) => (
                           <option value={key} key={key}>
@@ -714,7 +714,7 @@ const TRFForm = ({trf, updateAction}) => {
                       render={() => (
                         <FormItem>
                           <div className="mb-4">
-                            <label className="mb-2.5 block text-black dark:text-white">
+                            <label className="mb-2.5 block text-white">
                               Submission of Documents
                             </label>
                           </div>
@@ -775,7 +775,7 @@ const TRFForm = ({trf, updateAction}) => {
                       name="nabl_logo"
                       render={({ field }) => (
                         <FormItem className="space-y-3">
-                          <label className="mb-2.5 block text-black dark:text-white">
+                          <label className="mb-2.5 block text-white">
                             NABL Logo
                           </label>
                           <FormControl>
@@ -808,14 +808,14 @@ const TRFForm = ({trf, updateAction}) => {
                     />
                   </div>
 
-                  <div className="border-b border-stroke py-4 px-2 dark:border-strokedark">
-                    <h3 className="font-medium text-black dark:text-white">
+                  <div className="border-b  py-4 px-2 ">
+                    <h3 className="font-medium text-white">
                       Test Parameters
                     </h3>
                   </div>
 
                   <div className="mb-4.5 mt-2">
-                    <label className="mb-2.5 block text-black dark:text-white">
+                    <label className="mb-2.5 block text-white">
                       Product Name:
                     </label>
                     <div className="relative z-20 bg-transparent dark:bg-form-input">
@@ -830,7 +830,7 @@ const TRFForm = ({trf, updateAction}) => {
                       render={() => (
                         <FormItem>
                           <div className="mb-4">
-                            <label className="mb-2.5 block text-black dark:text-white">
+                            <label className="mb-2.5 block text-white">
                               Test Type
                             </label>
                           </div>
@@ -876,24 +876,24 @@ const TRFForm = ({trf, updateAction}) => {
                     />
                   </div>
 
-                  <div className="rounded-sm border border-stroke bg-white px-2 pt-2 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-3.5 xl:pb-1">
+                  <div className="rounded-sm border px-2 pt-2 pb-2.5 shadow-default border-strokedark bg-boxdark sm:px-3.5 xl:pb-1">
                     <div className="max-w-full overflow-x-auto">
                       <table className="w-full table-auto">
                         <thead>
-                          <tr className="bg-gray-2 text-left dark:bg-meta-4">
-                            <th className="min-w-[220px] py-4 px-4 font-medium text-black dark:text-white xl:pl-11">
+                          <tr className=" text-left bg-meta-4">
+                            <th className="min-w-[220px] py-4 px-4 font-medium text-white xl:pl-11">
                               S.NO
                             </th>
-                            <th className="min-w-[220px] py-4 px-4 font-medium text-black dark:text-white xl:pl-11">
+                            <th className="min-w-[220px] py-4 px-4 font-medium text-white xl:pl-11">
                               Test Parameter Name
                             </th>
-                            <th className="min-w-[220px] py-4 px-4 font-medium text-black dark:text-white xl:pl-11">
+                            <th className="min-w-[220px] py-4 px-4 font-medium text-white xl:pl-11">
                               Test Type
                             </th>
-                            <th className="min-w-[220px] py-4 px-4 font-medium text-black dark:text-white xl:pl-11">
+                            <th className="min-w-[220px] py-4 px-4 font-medium text-white xl:pl-11">
                               Priority Order
                             </th>
-                            <th className="min-w-[220px] py-4 px-4 font-medium text-black dark:text-white xl:pl-11">
+                            <th className="min-w-[220px] py-4 px-4 font-medium text-white xl:pl-11">
                               Remove?
                             </th>
                           </tr>
@@ -902,12 +902,12 @@ const TRFForm = ({trf, updateAction}) => {
                           {fields.map((item, index) => (
                             <tr key={item.id}>
                               <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
-                                <h5 className="font-medium text-black dark:text-white">
+                                <h5 className="font-medium text-white">
                                   {index + 1}
                                 </h5>
                               </td>
                               <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
-                                <h5 className="font-medium text-black dark:text-white">
+                                <h5 className="font-medium text-white">
                                   { parameters?.[index]?.testing_parameters}
                                 </h5>
                                 <input
@@ -916,11 +916,11 @@ const TRFForm = ({trf, updateAction}) => {
                                     `testing_details.${index}.parameter_id`
                                   )}
                                   defaultValue={parameters && parameters[index]?.id}
-                                  className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                                  className="w-full rounded border-[1.5px]  bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                                 />
                               </td>
                               <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
-                                <h5 className="font-medium text-black dark:text-white">
+                                <h5 className="font-medium text-white">
                                 { parameters?.[index]?.test_type?.name}
                                 </h5>
                               </td>
@@ -931,7 +931,7 @@ const TRFForm = ({trf, updateAction}) => {
                                     `testing_details.${index}.priority_order`
                                   )}
                                   defaultValue={index+1}
-                                  className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                                  className="w-full rounded border-[1.5px]  bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                                 />
                               </td>
                               <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">

@@ -37,7 +37,7 @@ const CustomerTRFPage = async ({
   const data = await getData(id)
   const updateTRFWithId = updateTRF.bind(null, id)
   return(
-    <div className='flex items-center flex-col justify-center mx-auto'>
+    <div className='flex items-center flex-col justify-center mx-auto bg-boxdark-2 text-bodydark'>
         <div>
         <h2 className="text-xl font-bold">Test Request Form</h2>
         <h5>{data.trf_code}</h5>

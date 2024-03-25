@@ -39,16 +39,29 @@ const languages = [
   { label: "Chinese", value: "zh" },
 ] as const;
 
+type Data = {
+  label: string;
+  value: string;
+}[]
+
 type Props = {
   name: string;
   label: string;
   form: UseFormReturn;
+  data: Data;
+  emptyMessage?:string; 
 };
 
-const Combobox = ({ name, label, form, ...rest }: Props) => {
+const Combobox = ({ name, label, form, data, emptyMessage='Not Found', ...rest }: Props) => {
+
+  const d1 = [...data ]as const;
+  console.log("Form:", form);
+  console.log("Data item:", d1);
+
   return (
+    <Form {...form}>
     <FormField
-      {...rest}
+     
       name={name}
       control={form.control}
       render={({ field }) => (
@@ -61,41 +74,41 @@ const Combobox = ({ name, label, form, ...rest }: Props) => {
                   variant="outline"
                   role="combobox"
                   className={cn(
-                    "w-[200px] justify-between",
+                    "w-full justify-between",
                     !field.value && "text-muted-foreground",
                   )}
                 >
                   {field.value
-                    ? languages.find(
-                        (language) => language.value === field.value,
+                    ? d1.find(
+                        (d) => d?.value === field.value,
                       )?.label
-                    : "Select language"}
+                    : "---Select---"}
                   <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
               </FormControl>
             </PopoverTrigger>
-            <PopoverContent className="w-[200px] p-0">
+            <PopoverContent className="w-full p-0">
               <Command>
                 <CommandInput placeholder="Search language..." />
-                <CommandEmpty>No language found.</CommandEmpty>
+                <CommandEmpty>{emptyMessage}</CommandEmpty>
                 <CommandGroup>
-                  {languages.map((language) => (
+                  {d1.map((d) => (
                     <CommandItem
-                      value={language.label}
-                      key={language.value}
+                      value={d?.value}
+                      key={d?.value}
                       onSelect={() => {
-                        form.setValue("language", language.value);
+                        form.setValue("trf_id", d?.value ?? "");
                       }}
                     >
                       <Check
                         className={cn(
                           "mr-2 h-4 w-4",
-                          language.value === field.value
+                          d?.value === field.value
                             ? "opacity-100"
                             : "opacity-0",
                         )}
                       />
-                      {language.label}
+                      {d?.label}
                     </CommandItem>
                   ))}
                 </CommandGroup>
@@ -106,6 +119,7 @@ const Combobox = ({ name, label, form, ...rest }: Props) => {
         </FormItem>
       )}
     />
+    </Form>
   );
 };
 

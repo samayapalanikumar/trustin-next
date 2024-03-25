@@ -65,13 +65,15 @@ async function getData() {
   if (res4.status === 401) redirect("/signin");
   if (res5.status === 401) redirect("/signin");
 
-  const trf = await res.json();
+  const trfRes = await res.json();
   const customers = await res2.json();
   const branches = await res3.json();
   const products = await res4.json();
   const parameters = await res5.json();
 
-  return { trf, customers, branches, products, parameters };
+  const trf = trfRes.map((t:any) => ({ label: t.trf_code, value: t.id })) ;
+  console.log(trf)
+  return { trf: trf, customers, branches, products, parameters };
 }
 
 const NewRegistrationPage = async () => {
@@ -90,7 +92,7 @@ const NewRegistrationPage = async () => {
               </h3>
             </div> */}
           </div>
-          <RegistrationForm data={data}  />
+          <RegistrationForm data={data} />
         </div>
       </div>
     </>

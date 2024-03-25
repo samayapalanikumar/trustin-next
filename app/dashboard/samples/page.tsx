@@ -29,9 +29,10 @@ async function getData() {
 
   if (!res.ok) {
     // This will activate the closest `error.js` Error Boundary
-    // console.log(res)
-    // throw new Error("Failed to fetch data");
+    console.log(res)
     console.log("error");
+    throw new Error("Failed to fetch data");
+ 
   }
 
   if (res.status === 401) redirect("/signin");

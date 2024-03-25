@@ -35,7 +35,11 @@ export async function createUser(prevState, formData: FormData) {
       message: "",
     };
   }
-
+  console.log(jsonObject)
+  if(jsonObject['qa_type_id'] == 'null')
+    jsonObject['qa_type_id'] = null
+    // delete jsonObject["qa_type_id"]
+  console.log(jsonObject)
   const access_token = cookies().get("access_token");
 
   const res = await fetch(`${SERVER_API_URL}/users/`, {

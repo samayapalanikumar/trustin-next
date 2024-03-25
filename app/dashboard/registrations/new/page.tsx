@@ -65,15 +65,17 @@ async function getData() {
   if (res4.status === 401) redirect("/signin");
   if (res5.status === 401) redirect("/signin");
 
-  const trfRes = await res.json();
+  const trf = await res.json();
   const customers = await res2.json();
   const branches = await res3.json();
   const products = await res4.json();
   const parameters = await res5.json();
 
-  const trf = trfRes.map((t:any) => ({ label: t.trf_code, value: t.id })) ;
-  console.log(trf)
-  return { trf: trf, customers, branches, products, parameters };
+  const microParameters = parameters.filter(para=>para.test_type_id ==1)
+  const mechParameters = parameters.filter(para=>para.test_type_id ==2)
+
+  const trflist = trf.map((t:any) => ({ label: t.trf_code, value: t.id })) ;
+  return { trf: trf, trflist, customers, branches, products, parameters, microParameters, mechParameters };
 }
 
 const NewRegistrationPage = async () => {

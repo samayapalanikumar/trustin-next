@@ -38,8 +38,6 @@ async function getData() {
 
   const menus = menusRes.map((menu: { id: number; name: string }) => menu.name);
 
-  console.log(menus)
-
   return { user, menus };
 }
 

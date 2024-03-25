@@ -55,18 +55,15 @@ type Props = {
 const Combobox = ({ name, label, form, data, emptyMessage='Not Found', ...rest }: Props) => {
 
   const d1 = [...data ]as const;
-  console.log("Form:", form);
-  console.log("Data item:", d1);
 
   return (
     <Form {...form}>
     <FormField
-     
       name={name}
       control={form.control}
       render={({ field }) => (
-        <FormItem className="flex flex-col">
-          <FormLabel>{label}</FormLabel>
+        <FormItem className="flex flex-col w-full">
+          {/* <FormLabel>{label}</FormLabel> */}
           <Popover>
             <PopoverTrigger asChild>
               <FormControl>
@@ -74,7 +71,7 @@ const Combobox = ({ name, label, form, data, emptyMessage='Not Found', ...rest }
                   variant="outline"
                   role="combobox"
                   className={cn(
-                    "w-full justify-between",
+                    "w-full justify-between  appearance-none rounded border border-stroke bg-transparent px-5 py-3 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary",
                     !field.value && "text-muted-foreground",
                   )}
                 >
@@ -87,9 +84,9 @@ const Combobox = ({ name, label, form, data, emptyMessage='Not Found', ...rest }
                 </Button>
               </FormControl>
             </PopoverTrigger>
-            <PopoverContent className="w-full p-0">
-              <Command>
-                <CommandInput placeholder="Search language..." />
+            <PopoverContent className="w-[470px] p-0">
+              <Command className="w-full">
+                <CommandInput placeholder="Search Trf..." />
                 <CommandEmpty>{emptyMessage}</CommandEmpty>
                 <CommandGroup>
                   {d1.map((d) => (

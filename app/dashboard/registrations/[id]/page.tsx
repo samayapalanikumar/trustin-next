@@ -81,13 +81,39 @@ async function getData(id: string) {
   const products = await res4.json();
   const parameters = await res5.json();
 
-  const batches = registration.batches.map((batch:any) => ({
+  const batches = registration.batches.map((batch: any) => ({
     ...batch,
     expiry_date: new Date(batch.expiry_date).toISOString().split("T")[0],
-    manufactured_date: new Date(batch.manufactured_date).toISOString().split("T")[0],
+    manufactured_date: new Date(batch.manufactured_date)
+      .toISOString()
+      .split("T")[0],
   }));
-  registration.batches = batches
-  return { registration, trf, customers, branches, products, parameters };
+  registration.batches = batches;
+  const microParameters = parameters.filter((para) => para.test_type_id == 1);
+  const mechParameters = parameters.filter((para) => para.test_type_id == 2);
+  const trflist = trf.map((t: any) => ({ label: t.trf_code, value: t.id }));
+
+  registration.test_params_micro = registration.test_params.filter(
+    (para) => para.test_parameter.test_type_id == 1,
+  );
+  registration.test_params_mech = registration.test_params.filter(
+    (para) => para.test_parameter.test_type_id == 2,
+  );
+  registration.test_types = registration.test_types.map(
+    (type) => ""+type.test_type_id,
+  );
+  console.log( registration.test_types)
+  return {
+    registration,
+    trf,
+    trflist,
+    customers,
+    branches,
+    products,
+    parameters,
+    microParameters,
+    mechParameters,
+  };
 }
 
 const EditRegistrationPage = async ({
@@ -96,7 +122,7 @@ const EditRegistrationPage = async ({
   params: { id: string };
 }) => {
   const data = await getData(id);
-  const updateRegistrationWithId = updateRegistration.bind(null, id)
+  const updateRegistrationWithId = updateRegistration.bind(null, id);
   return (
     <>
       <Breadcrumb pageName="Registration Form" />
@@ -111,14 +137,14 @@ const EditRegistrationPage = async ({
               </h3>
             </div> */}
           </div>
-          <RegistrationForm data={data} updateFn={updateRegistrationWithId}/>
-          
-        <Link
-          href={`/dashboard/registrations/${id}/samples`}
-          className="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray"
-        >
-          Create Samples
-        </Link>
+          <RegistrationForm data={data} updateFn={updateRegistrationWithId} />
+
+          <Link
+            href={`/dashboard/registrations/${id}/samples`}
+            className="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray"
+          >
+            Create Samples
+          </Link>
         </div>
       </div>
     </>

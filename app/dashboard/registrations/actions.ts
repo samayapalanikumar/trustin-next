@@ -47,8 +47,15 @@ export async function createRegistration(jsonObject) {
 
 export async function updateRegistration(id:string, data) {
   let jsonObject  = data 
+  console.log(jsonObject)
 
-console.log("****",jsonObject);
+  jsonObject.test_types = jsonObject.test_types.map(type=>({test_type_id:type}))
+  jsonObject.test_params=[...jsonObject.test_params_mech, ...jsonObject.test_params_micro, ]
+
+  delete jsonObject.test_params_mech;
+  delete jsonObject.test_params_micro;
+
+  console.log(jsonObject)
   const access_token = cookies().get('access_token')
 
       const res = await fetch(`${SERVER_API_URL}/registrations/${id}`, {

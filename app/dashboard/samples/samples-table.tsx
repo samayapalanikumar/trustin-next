@@ -14,6 +14,9 @@ export type RegisterType = {
   sample_id: string;
   name: string;
   department: string;
+  registration:{
+    code:string | null;
+  }
 } [];
 
 const SampleTable = ({ data }: { data: RegisterType  }) => {
@@ -24,13 +27,13 @@ const SampleTable = ({ data }: { data: RegisterType  }) => {
           <thead>
             <tr className="bg-gray-2 text-left dark:bg-meta-4">
               <th className="min-w-[220px] py-4 px-4 font-medium text-black dark:text-white xl:pl-11">
-                Sample Id
+                Sample ID
               </th>
               <th className="min-w-[220px] py-4 px-4 font-medium text-black dark:text-white xl:pl-11">
                 Sample Name
               </th>
               <th className="min-w-[220px] py-4 px-4 font-medium text-black dark:text-white xl:pl-11">
-                department
+                Registration Code
               </th>
              
               <th className="py-4 px-4 font-medium text-black dark:text-white">
@@ -53,7 +56,7 @@ const SampleTable = ({ data }: { data: RegisterType  }) => {
                 </td>
                 <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
                   <h5 className="font-medium text-black dark:text-white">
-                    {packageItem.department}
+                    {packageItem.registration.code ?? "---"}
                   </h5>
                 </td>
                 

@@ -122,6 +122,8 @@ const TRFForm = ({trf, updateAction}) => {
   const form = useForm<z.infer<typeof trfSchema>>({
     resolver: zodResolver(trfSchema),
     defaultValues: {
+      sample_id: "22",
+      sample_name: "22",
       testing_process: [],
       report_sent_by: [],
       submission_of_documents: [],
@@ -242,7 +244,7 @@ const TRFForm = ({trf, updateAction}) => {
                       Trf Code:
                     </label>
                     <div className="relative inline-block z-20 bg-transparent dark:bg-form-input">
-                     <p className='font-extrabold'>{trf.trf_code}</p>
+                     <p className='font-extrabold'> {" "}{trf.trf_code}</p>
                     </div>
                   </div>
                   <div  className="w-full xl:w-1/2">
@@ -250,7 +252,7 @@ const TRFForm = ({trf, updateAction}) => {
                       Company Name:
                     </label>
                     <div className="relative inline-block z-20 bg-transparent dark:bg-form-input">
-                     <p className='font-extrabold'>{trf.customer.company_name}</p>
+                     <p className='font-extrabold'>{" "}{trf.customer.company_name}</p>
                     </div>
                   </div>
                 </div>
@@ -261,38 +263,38 @@ const TRFForm = ({trf, updateAction}) => {
                       Company Code:
                     </label>
                     <div className="relative inline-block z-20 bg-transparent dark:bg-form-input">
-                     <p className='font-extrabold'>{trf.customer.customer_code}</p>
+                     <p className='font-extrabold'>{" "}{trf.customer.customer_code}</p>
                     </div>
                   </div>
 
                   <div  className="w-full xl:w-1/2">
                     <label className="mb-2.5  text-white">
-                      Company Email:
+                      Company Email: 
                     </label>
                     <div className="relative inline-block z-20 bg-transparent dark:bg-form-input">
-                     <p className='font-extrabold'>{trf.customer.email}</p>
+                     <p className='font-extrabold'> {trf.customer.email}</p>
                     </div>
                   </div>
                 </div>
 
                   <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
                     <div className="w-full xl:w-1/2">
-                      <label className="mb-2.5 block text-white">
-                        Sample Id
-                      </label>
+                      {/* <label className="mb-2.5 block text-white">
+                        Sample ID
+                      </label> */}
                       <input
-                        type="text"
+                        type="hidden"
                         {...form.register("sample_id")}
                         className="w-full rounded border-[1.5px]  bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter border-form-strokedark bg-form-input dark:focus:border-primary"
                       />
                     </div>
 
                     <div className="w-full xl:w-1/2">
-                      <label className="mb-2.5 block text-white">
+                      {/* <label className="mb-2.5 block text-white">
                         Sample Name
-                      </label>
+                      </label> */}
                       <input
-                        type="text"
+                        type="hidden"
                         {...form.register("sample_name")}
                         name="sample_name"
                         className="w-full rounded border-[1.5px]  bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter border-form-strokedark bg-form-input dark:focus:border-primary"

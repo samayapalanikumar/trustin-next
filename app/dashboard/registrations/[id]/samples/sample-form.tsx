@@ -98,7 +98,7 @@ const SamplesForm = ({
               </div>
               <div className="w-full xl:w-1/5">
                 <label className="mb-2.5 block text-black dark:text-white">
-                  Sample Id
+                  Sample ID
                 </label>
                 <input
                   type="text"

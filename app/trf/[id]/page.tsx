@@ -39,8 +39,8 @@ const CustomerTRFPage = async ({
   return(
     <div className='flex items-center flex-col justify-center mx-auto bg-boxdark-2 text-bodydark'>
         <div>
-        <h2 className="text-xl font-bold">Test Request Form</h2>
-        <h5>{data.trf_code}</h5>
+        <h2 className="text-xl font-bold p-1">Test Request Form</h2>
+        <h5 className="text-center p-1">{data.trf_code}</h5>
         </div>
         <TRFForm trf={data} updateAction={updateTRFWithId}/>
     </div>

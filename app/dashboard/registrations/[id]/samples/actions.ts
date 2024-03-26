@@ -31,6 +31,14 @@ console.log(samples)
       });
 
     console.log(res.status)
+    
+    if (res.status==422){
+      const resJson =  await res.json()
+
+      console.log(resJson)
+      console.log(resJson.detail[0].loc)
+      console.log(resJson.detail[0].input)
+    }
 
       if(res.status===401) redirect('/signin');
       if (res.status===200) redirect("/dashboard/samples");

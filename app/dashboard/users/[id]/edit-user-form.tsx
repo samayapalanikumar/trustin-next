@@ -107,6 +107,8 @@ const EditUserForm = ({
           name="qa_type_id"
           defaultValue={user.qa_type_id}
         >
+          <option value="null">-----</option>
+
           {test_types.map((test_type) => (
             <option value={test_type.id} key={test_type.id}>
               {test_type.name}
@@ -114,8 +116,8 @@ const EditUserForm = ({
           ))}
         </Select>
 
-        <SubmitButton />
       </div>
+        <SubmitButton />
     </form>
   );
 };

@@ -21,12 +21,10 @@ const ParameterNewForm = ({ data }: Props) => {
 
   useEffect(() => {
     if (watchTestType) {
-      if (watchTestType === "1") {
-        console.log("comes here");
+      if (watchTestType === "2") {
         setShowProductSelect(true);
       
       } else {
-        console.log("HI");
         setShowProductSelect(false);
         setValue("product_id", "null");
       }

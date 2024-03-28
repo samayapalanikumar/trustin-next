@@ -34,7 +34,7 @@ const ParameterEditForm = ({ data, actionFn }: Props) => {
 
   useEffect(() => {
     if (watchTestType) {
-      if (watchTestType === "1") {
+      if (watchTestType === "2") {
         setShowProductSelect(true);
       } else {
         setShowProductSelect(false);

@@ -11,7 +11,7 @@ export async function createParameters(formData: FormData) {
   if (jsonObject.customer_id === "null") jsonObject.customer_id = null;
   if (jsonObject.product_id === "null") jsonObject.product_id = null;
 
-  if (jsonObject.test_type_id !== "1" && jsonObject.product_id !== "null")
+  if (jsonObject.test_type_id !== "2" && jsonObject.product_id !== "null")
     jsonObject.product_id = null;
 
   
@@ -39,7 +39,7 @@ export async function updateParameter(id: string, formData: FormData) {
   if (jsonObject.customer_id === "null") jsonObject.customer_id = null;
   if (jsonObject.product_id === "null") jsonObject.product_id = null;
 
-  if (jsonObject.test_type_id !== "1" && jsonObject.product_id !== "null")
+  if (jsonObject.test_type_id !== "2" && jsonObject.product_id !== "null")
     jsonObject.product_id = null;
 
  

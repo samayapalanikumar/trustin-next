@@ -58,7 +58,7 @@ export async function createUser(prevState, formData: FormData) {
 }
 
 export async function updateUser(id: string, formData: FormData, ) {
-  console.log(formata)
+  console.log(formData)
   let jsonObject = Object.fromEntries(formData.entries());
 
   if(jsonObject['qa_type_id'] == 'null')

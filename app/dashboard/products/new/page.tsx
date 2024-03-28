@@ -58,7 +58,7 @@ const NewProductPage = async () => {
               </h3>
             </div> */}
             <form action={createProduct}>
-              <div className="p-6.5">
+              <div className="p-6.5 pt-4">
                 <div className="mb-4.5">
                   <label className="mb-2.5 block text-black dark:text-white">
                     Branch

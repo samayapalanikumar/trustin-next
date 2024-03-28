@@ -61,6 +61,9 @@ export async function updateUser(id: string, formData: FormData, ) {
   console.log(formata)
   let jsonObject = Object.fromEntries(formData.entries());
 
+  if(jsonObject['qa_type_id'] == 'null')
+  jsonObject['qa_type_id'] = null
+
   const access_token = cookies().get("access_token");
 
   const res = await fetch(`${SERVER_API_URL}/users/${id}`, {

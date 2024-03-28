@@ -4,8 +4,8 @@ import Link from "next/link";
 export type ParametersType = {
   id: number;
   branch: { branch_name: string };
-  test_type: { name: string };
-  product: { product_name: string };
+  test_type: { name: string } ;
+  product: { product_name: string } | null;
   parameter_code: string;
   testing_parameters: string;
   amount: number;
@@ -55,12 +55,12 @@ const ParametersTable = ({ data }: { data: ParametersType }) => {
                 </td>
                 <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                   <p className="text-black dark:text-white">
-                    {packageItem?.product?.product_name}
+                    {packageItem?.product?.product_name ?? '---'}
                   </p>
                 </td>
                 <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                   <p className="text-black dark:text-white">
-                    {packageItem?.test_type?.name}
+                    {packageItem?.test_type?.name ?? '---'}
                   </p>
                 </td>
 

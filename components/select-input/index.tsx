@@ -1,24 +1,35 @@
+import { FieldValues, UseFormRegister } from "react-hook-form";
+type RegisterFunction = UseFormRegister<FieldValues>;
+
 type Props = {
   children: React.ReactNode;
   label: string;
   width?: string;
- 
-
+  name: string;
+  register?: RegisterFunction | undefined;
 } & React.SelectHTMLAttributes<HTMLSelectElement>;
 
-const Select = ({ children, label,  width = "w-full", ...rest }: Props) => {
+const Select = ({
+  children,
+  label,
+  register,
+  name,
+  width = "w-full",
+  ...rest
+}: Props) => {
   return (
     <div className={`mb-4.5 ${width}`}>
       <label className="mb-2.5 block text-black dark:text-white">{label}</label>
       <div className="relative z-20 bg-transparent dark:bg-form-input">
         <select
-         {...rest}
-          className={`relative z-20 w-full appearance-none rounded border border-stroke bg-transparent px-5 py-3 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary`}
-         
-        >
+          {...rest}
+          name={name}
+          {...register?.(name)}
+          className="relative z-20 w-full appearance-none rounded border border-stroke bg-transparent px-5 py-3 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+          >
           {children}
         </select>
-        <span className="absolute right-4 top-1/2  -translate-y-1/2">
+        <span className="absolute right-4 top-1/2 z-20 -translate-y-1/2">
           <DownArrowSvg />
         </span>
       </div>

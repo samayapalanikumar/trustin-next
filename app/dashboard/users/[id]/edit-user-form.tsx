@@ -1,12 +1,13 @@
 "use client";
 import { useFormState } from "react-dom";
 import SubmitButton from "@/components/submit-button/submit-button";
-import { createUser } from "../actions";
 import Select from "@/components/select-input";
 import { Department } from "@/types/department";
 import { TestType } from "@/types/test-type";
 import { Role } from "@/types/role";
 import { User } from "@/types/user";
+
+
 
 type Props = {
   user: User;
@@ -17,6 +18,7 @@ type Props = {
 };
 const initalState = {
   fieldErrors: null,
+  type: null, 
   message: "",
 };
 const EditUserForm = ({
@@ -26,6 +28,8 @@ const EditUserForm = ({
   user,
   action,
 }: Props) => {
+
+
   return (
     <form action={action}>
       <div className="p-6.5">

@@ -24,3 +24,4 @@ const StatusStepper = ({ step }: { step: number }) => {
 };
 
 export default StatusStepper;
+

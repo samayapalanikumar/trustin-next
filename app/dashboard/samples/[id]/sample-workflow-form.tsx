@@ -32,9 +32,16 @@ type History = {
   assignee: { first_name: string; last_name: string } | null;
   created_by_user: { first_name: string; last_name: string } | null;
 }[];
-
+const status = [
+  "Draft",
+  "Review Pending",
+  "Requested",
+  "Received",
+  "Under Testing",
+  "Verification Pending",
+  "Done",
+];
 const SampleWorkflowForm = ({ data, actionFn, actionFnResult }: Props) => {
- 
   return (
     <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
       <Tabs defaultValue="status" className="mt-1 w-full p-4">
@@ -318,7 +325,7 @@ const WorkflowTable = ({ workflow }: { workflow: Workflow }) => {
           <thead>
             <tr className="bg-gray-2 text-left dark:bg-meta-4">
               <th className="w-[100px] px-4 py-4 font-medium text-black dark:text-white xl:pl-11">
-                S NO
+                Status
               </th>
               <th className="min-w-[220px] px-4 py-4 font-medium text-black dark:text-white xl:pl-11">
                 Assignee
@@ -339,14 +346,14 @@ const WorkflowTable = ({ workflow }: { workflow: Workflow }) => {
               <tr key={flow.id}>
                 <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-11">
                   <h5 className="font-medium text-black dark:text-white">
-                    {idx + 1}
+                  {status[idx]}
                   </h5>
                 </td>
                 <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-11">
                   <h5 className="font-medium text-black dark:text-white">
                     {flow.assignee
                       ? `${flow.assignee.first_name} ${flow.assignee.first_name}`
-                      : "No Name"}
+                      : "---"}
                   </h5>
                 </td>
                 <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-11">

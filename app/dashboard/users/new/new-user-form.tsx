@@ -6,6 +6,10 @@ import Select from "@/components/select-input";
 import { Department } from "@/types/department";
 import { TestType } from "@/types/test-type";
 import { Role } from "@/types/role";
+import { useEffect } from "react";
+import { toast } from "sonner";
+import { useRouter } from 'next/navigation'
+
 
 type Props = {
   roles: Role[];
@@ -14,10 +18,23 @@ type Props = {
 };
 const initalState = {
   fieldErrors: null,
+  type: null,
   message: "",
 };
 const NewUserForm = ({ roles, departments, test_types }: Props) => {
   const [state, formAction] = useFormState(createUser, initalState);
+
+  useEffect(() => {
+    if (state?.type === null) return;
+
+    if (state?.type === "Error") {
+      toast.error(state?.message, {
+        duration: 10000,
+        closeButton: true,
+      });
+    }
+    
+  }, [ state]);
   return (
     <form action={formAction}>
       <div className="p-6.5">
@@ -65,7 +82,7 @@ const NewUserForm = ({ roles, departments, test_types }: Props) => {
           <input
             type="text"
             name="phone"
-            placeholder="Enter your email address"
+            placeholder="Enter your phone number"
             className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
           />
         </div>
@@ -125,3 +142,6 @@ const NewUserForm = ({ roles, departments, test_types }: Props) => {
 };
 
 export default NewUserForm;
+function Enum(arg0: string, arg1: string) {
+  throw new Error("Function not implemented.");
+}

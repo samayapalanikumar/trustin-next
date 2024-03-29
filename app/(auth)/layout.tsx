@@ -1,7 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
 import Loader from "@/components/common/Loader";
-import { Toaster } from "@/components/ui/sonner";
 
 export default function AuthLayout({
   children,
@@ -23,7 +22,6 @@ export default function AuthLayout({
           <main className="lg:w-full lg:h-full">
             <div className="mx-auto lg:w-full lg:h-full">{children}</div>
           </main>
-          <Toaster position="top-right" richColors  />
         </div>
       )}
     </div>

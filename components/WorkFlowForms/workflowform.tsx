@@ -27,7 +27,7 @@ function WorkFlowForm({
   return (
     <>
       <form action={actionData}>
-        <div className="p-6.5">
+        <div className="p-2.5">
           <input type="hidden" value={status} name="status" />
           <input type="hidden" value={status_id} name="status_id" />
           {currentStep === 4 ? (
@@ -65,6 +65,8 @@ function WorkFlowForm({
           </button>
         </div>
       </form>
+     
+
     </>
   );
 }

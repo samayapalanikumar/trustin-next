@@ -9,20 +9,45 @@ import { z } from "zod";
 
 import { toast } from "sonner";
 
-const schema = z.object({
-  firstname: z.string().min(1, "First Name Required").trim(),
-  firstname: z.string().min(1, "Last Name Required").trim(),
-  email: z.string().email("Invalid Required").trim(),
+const schema = z
+  .object({
+    first_name: z.string().min(1, "First Name Required").trim(),
+    last_name: z.string().min(1, "Last Name Required").trim(),
+    email: z.string().email("Invalid E-mail").trim(),
 
-  phone: z
-    .string()
-    .trim()
-    .min(1, "Password Required")
-    .max(10, "Enter valid 10 digit phone number"),
-});
+    phone: z
+      .string()
+      .trim()
+      .min(1, "Phone Required")
+      .max(10, "Enter valid 10 digit phone number"),
+    password: z
+      .string()
+      .min(8, { message: "Password is min 8 digit long" }),
+    password2: z.string(),
+
+    role_id: z.string().min(1, "Role Required"),
+    department_id: z.string().min(1, "Department Required"),
+    qa_type_id: z.string(),
+  })
+  .refine((data) => data.password === data.password2, {
+    message: "Passwords do not match",
+    path: ["password2"], // path of error
+  });
 
 export async function createUser(prevState, formData: FormData) {
   let jsonObject = Object.fromEntries(formData.entries());
+
+  const validatedFields = schema.safeParse(jsonObject);
+
+  // Return early if the form data is invalid
+  if (!validatedFields.success) {
+    console.log(validatedFields.error.flatten().fieldErrors);
+    return {
+      message: null,
+      type: null,
+      fieldErrors: validatedFields.error.flatten().fieldErrors,
+    };
+  }
 
   if (jsonObject["qa_type_id"] == "null") jsonObject["qa_type_id"] = null;
   // delete jsonObject["qa_type_id"]

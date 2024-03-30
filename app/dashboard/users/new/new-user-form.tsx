@@ -8,8 +8,7 @@ import { TestType } from "@/types/test-type";
 import { Role } from "@/types/role";
 import { useEffect } from "react";
 import { toast } from "sonner";
-import { useRouter } from 'next/navigation'
-
+import { useRouter } from "next/navigation";
 
 type Props = {
   roles: Role[];
@@ -17,9 +16,19 @@ type Props = {
   test_types: TestType[];
 };
 const initalState = {
-  fieldErrors: null,
+  fieldErrors: {
+    first_name: undefined,
+    last_name: undefined,
+    email: undefined,
+    phone: undefined,
+    password: undefined,
+    password2: undefined,
+    role_id: undefined,
+    department_id: undefined,
+    qa_type_id: undefined,
+  },
   type: null,
-  message: "",
+  message: null,
 };
 const NewUserForm = ({ roles, departments, test_types }: Props) => {
   const [state, formAction] = useFormState(createUser, initalState);
@@ -33,8 +42,7 @@ const NewUserForm = ({ roles, departments, test_types }: Props) => {
         closeButton: true,
       });
     }
-    
-  }, [ state]);
+  }, [state]);
   return (
     <form action={formAction}>
       <div className="p-6.5">
@@ -49,6 +57,9 @@ const NewUserForm = ({ roles, departments, test_types }: Props) => {
               placeholder="Enter your first name"
               className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
             />
+            {state?.fieldErrors?.first_name && (
+              <p className="text-red-500">{state?.fieldErrors?.first_name}</p>
+            )}
           </div>
 
           <div className="w-full xl:w-1/2">
@@ -61,6 +72,9 @@ const NewUserForm = ({ roles, departments, test_types }: Props) => {
               placeholder="Enter your last name"
               className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
             />
+            {state?.fieldErrors?.last_name && (
+              <p className="text-red-500">{state?.fieldErrors?.last_name}</p>
+            )}
           </div>
         </div>
 
@@ -74,6 +88,9 @@ const NewUserForm = ({ roles, departments, test_types }: Props) => {
             placeholder="Enter your email address"
             className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
           />
+          {state?.fieldErrors?.email && (
+            <p className="text-red-500">{state?.fieldErrors?.email}</p>
+          )}
         </div>
         <div className="mb-4.5">
           <label className="mb-2.5 block text-black dark:text-white">
@@ -85,6 +102,9 @@ const NewUserForm = ({ roles, departments, test_types }: Props) => {
             placeholder="Enter your phone number"
             className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
           />
+          {state?.fieldErrors?.phone && (
+            <p className="text-red-500">{state?.fieldErrors?.phone}</p>
+          )}
         </div>
 
         <div className="mb-4.5">
@@ -97,6 +117,9 @@ const NewUserForm = ({ roles, departments, test_types }: Props) => {
             placeholder="New Password"
             className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
           />
+          {state?.fieldErrors?.password && (
+            <p className="text-red-500">{state?.fieldErrors?.password}</p>
+          )}
         </div>
         <div className="mb-4.5">
           <label className="mb-2.5 block text-black dark:text-white">
@@ -108,9 +131,12 @@ const NewUserForm = ({ roles, departments, test_types }: Props) => {
             placeholder="Confrim Password"
             className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
           />
+          {state?.fieldErrors?.password2 && (
+            <p className="text-red-500">{state?.fieldErrors?.password2}</p>
+          )}
         </div>
 
-        <Select label="Role" name="role_id">
+        <Select label="Role" name="role_id" error={state?.fieldErrors?.role_id}>
           {roles.map((role) => (
             <option value={role.id} key={role.id}>
               {role.name}
@@ -118,7 +144,11 @@ const NewUserForm = ({ roles, departments, test_types }: Props) => {
           ))}
         </Select>
 
-        <Select label="Deparment" name="department_id">
+        <Select
+          label="Department"
+          name="department_id"
+          error={state?.fieldErrors?.department_id}
+        >
           {departments.map((department) => (
             <option value={department.id} key={department.id}>
               {department.name}
@@ -126,7 +156,11 @@ const NewUserForm = ({ roles, departments, test_types }: Props) => {
           ))}
         </Select>
 
-        <Select label="QA Type" name="qa_type_id">
+        <Select
+          label="QA Type"
+          name="qa_type_id"
+          error={state?.fieldErrors?.qa_type_id}
+        >
           <option value="null">-----</option>
           {test_types.map((test_type) => (
             <option value={test_type.id} key={test_type.id}>
@@ -142,6 +176,3 @@ const NewUserForm = ({ roles, departments, test_types }: Props) => {
 };
 
 export default NewUserForm;
-function Enum(arg0: string, arg1: string) {
-  throw new Error("Function not implemented.");
-}

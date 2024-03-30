@@ -116,6 +116,8 @@ export type Data = {
       assignee: { first_name: string; last_name: string } | null;
       department: { id: number; name: string } | null;
       role: { id: number; name: string } | null;
+      updated_at:string;
+
     }[];
     sample_history: [
       {

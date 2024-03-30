@@ -17,6 +17,7 @@ type Workflow = {
   assignee: { first_name: string; last_name: string } | null;
   department: { id: number; name: string } | null;
   role: { id: number; name: string } | null;
+  updated_at:string;
 }[];
 
 type History = {
@@ -327,13 +328,16 @@ const WorkflowTable = ({ workflow }: { workflow: Workflow }) => {
               <th className="w-[100px] px-4 py-4 font-medium text-black dark:text-white xl:pl-11">
                 Status
               </th>
-              <th className="min-w-[220px] px-4 py-4 font-medium text-black dark:text-white xl:pl-11">
+              <th className="w-[150px] px-4 py-4 font-medium text-black dark:text-white xl:pl-11">
+                Updated At
+              </th>
+              <th className="w-[150px] px-4 py-4 font-medium text-black dark:text-white xl:pl-11">
                 Assignee
               </th>
-              <th className="min-w-[220px] px-4 py-4 font-medium text-black dark:text-white xl:pl-11">
+              <th className="w-[150px] px-4 py-4 font-medium text-black dark:text-white xl:pl-11">
                 Status
               </th>
-              <th className="min-w-[100px] px-4 py-4 font-medium text-black dark:text-white xl:pl-11">
+              <th className="w-[100px] px-4 py-4 font-medium text-black dark:text-white xl:pl-11">
                 Role
               </th>
               <th className="min-w-[100px] px-4 py-4 font-medium text-black dark:text-white xl:pl-11">
@@ -345,32 +349,37 @@ const WorkflowTable = ({ workflow }: { workflow: Workflow }) => {
             {workflow?.map((flow, idx) => (
               <tr key={flow.id}>
                 <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-11">
-                  <h5 className="font-medium text-black dark:text-white">
+                  <p className="font-medium text-base text-black dark:text-white">
                   {status[idx]}
-                  </h5>
+                  </p>
                 </td>
                 <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-11">
-                  <h5 className="font-medium text-black dark:text-white">
+                  <p className="font-medium text-base text-black dark:text-white">
+                  {new Date(flow.updated_at).toLocaleString()}
+                  </p>
+                </td>
+                <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-11">
+                  <p className="font-medium text-base text-black dark:text-white">
                     {flow.assignee
-                      ? `${flow.assignee.first_name} ${flow.assignee.first_name}`
+                      ? `${flow.assignee.first_name} ${flow.assignee.last_name}`
                       : "---"}
-                  </h5>
+                  </p>
                 </td>
                 <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-11">
-                  <h5 className="font-medium text-black dark:text-white">
+                  <p className="font-medium text-base text-black dark:text-white">
                     {flow.status ?? "---"}
-                  </h5>
+                  </p>
                 </td>
 
                 <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-11">
-                  <h5 className="font-medium text-black dark:text-white">
+                  <p className="font-medium text-base text-black dark:text-white">
                     {flow?.role?.name ?? "---"}
-                  </h5>
+                  </p>
                 </td>
                 <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-11">
-                  <h5 className="font-medium text-black dark:text-white">
+                  <p className="font-medium text-base text-black dark:text-white">
                     {flow?.department?.name ?? "---"}
-                  </h5>
+                  </p>
                 </td>
               </tr>
             ))}
@@ -419,14 +428,14 @@ const HistoryTable = ({ history }: { history: History }) => {
                 <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-11">
                   <h5 className="font-medium text-black dark:text-white">
                     {h.assignee
-                      ? `${h.assignee.first_name} ${h.assignee.first_name}`
+                      ? `${h.assignee.first_name} ${h.assignee.last_name}`
                       : "No Name"}
                   </h5>
                 </td>
                 <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-11">
                   <h5 className="font-medium text-black dark:text-white">
                     {h.created_by_user
-                      ? `${h.created_by_user.first_name} ${h.created_by_user.first_name}`
+                      ? `${h.created_by_user.first_name} ${h.created_by_user.last_name}`
                       : "No Name"}{" "}
                   </h5>
                 </td>

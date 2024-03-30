@@ -7,6 +7,7 @@ type Props = {
   width?: string;
   name: string;
   register?: RegisterFunction | undefined;
+  error?: string[] | null;
 } & React.SelectHTMLAttributes<HTMLSelectElement>;
 
 const Select = ({
@@ -15,6 +16,7 @@ const Select = ({
   register,
   name,
   width = "w-full",
+  error=null,
   ...rest
 }: Props) => {
   return (
@@ -37,6 +39,7 @@ const Select = ({
           <DownArrowSvg />
         </span>
       </div>
+      {error && <p className="text-red-500">{error}</p>}
     </div>
   );
 };

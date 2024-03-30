@@ -33,7 +33,7 @@
     "react-apexcharts": "^1.4.1",
     "react-dom": "^18.2.0",
     "react-form-stepper": "^2.0.3",
-    "react-hook-form": "^7.51.1",
+    "react-hook-form": "^7.51.2",
     "react-jvectormap": "^0.0.16",
     "sonner": "^1.4.41",
     "tailwind-merge": "^2.2.2",

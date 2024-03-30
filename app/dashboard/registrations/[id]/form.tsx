@@ -429,7 +429,7 @@ const RegistrationForm = ({
               render={() => (
                 <FormItem>
                   <div className="mb-4">
-                    <label className="mb-2.5 block text-white">Test Type</label>
+                    <label className="mb-2.5 block text-black dark:text-white">Test Type</label>
                   </div>
                   {Object.entries(TESTTYPE).map(([key, value]) => (
                     <FormField

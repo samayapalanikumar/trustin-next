@@ -1,5 +1,6 @@
 "use client";
 import Select from "@/components/select-input";
+import React from "react";
 import { useFieldArray, useForm, Form } from "react-hook-form";
 
 type Parameters = [
@@ -32,22 +33,35 @@ type Parameters = [
   },
 ];
 
+type Props = {
+  showRejectButton?: boolean;
+  parameters: Parameters;
+  patchFn: (data: any) => void;
+  rejectActionData: (data: any) => void;
+  assigned_to: number;
+  step: number;
+  buttonName?: string;
+  comment?: string;
+  currentStep: number;
+};
+
 const UnderTestingForm = ({
   parameters,
   patchFn,
   assigned_to,
   step,
+  currentStep,
   buttonName = "Submit",
   comment = "",
-}: {
-  parameters: Parameters;
-  patchFn: (data: any) => void;
-  assigned_to: number;
-  step: number;
-  buttonName?: string;
-  comment?: string;
-}) => {
-  const { control, register } = useForm({
+  showRejectButton = false,
+  rejectActionData,
+}: Props) => {
+  const {
+    control,
+    register,
+    getValues,
+    formState: { isLoading },
+  } = useForm({
     defaultValues: {
       status: "",
       status_id: step,
@@ -55,7 +69,7 @@ const UnderTestingForm = ({
       comments: comment,
       test_params: parameters.map((para) => ({
         id: para.id,
-        value: para.value,
+        value: para.value ?? "",
         order: para.order,
         result: para.result ? 1 : 0,
         test_name: para.test_parameter.testing_parameters,
@@ -78,6 +92,24 @@ const UnderTestingForm = ({
   }) => {
     console.log(data);
     patchFn(data);
+  };
+
+  const [loading, setLoading] = React.useState(false);
+
+
+  const handleReject = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setLoading(true)
+    console.log(getValues());
+    const { comments, test_params } = getValues();
+    rejectActionData({
+      status: "",
+      status_id: currentStep === 2 ? 2 : currentStep - 1,
+      assigned_to: assigned_to,
+      comments: comments,
+      test_params: test_params,
+    });
   };
 
   return (
@@ -165,13 +197,26 @@ const UnderTestingForm = ({
           </table>
         </div>
       </div>
+      <div className="flex gap-2">
+        <button
+          type="submit"
+          className="flex w-1/2 justify-center rounded bg-primary p-3 font-medium text-gray"
+          disabled={isLoading}
+        >
+          {isLoading ? "Loading..." : buttonName}
+        </button>
+        {showRejectButton && (
+          <button
+            onClick={handleReject}
+            type="button"
 
-      <button
-        type="submit"
-        className="mt-2 flex w-full justify-center rounded bg-primary p-3 font-medium text-gray "
-      >
-        {buttonName}
-      </button>
+            className="flex w-1/2 justify-center rounded bg-danger p-3 font-medium text-gray"
+            disabled={loading}
+          >
+          {loading? "Loading..." : "Reject"}
+          </button>
+        )}
+      </div>
     </Form>
   );
 };

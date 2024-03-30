@@ -7,6 +7,7 @@ type Props = {
   data: Data;
   actionFn: (formData: FormData) => Promise<void>;
   actionFnResult: (formData: FormData) => void;
+  actionFnReject: (data: any) => void;
 };
 
 type Workflow = {
@@ -17,7 +18,7 @@ type Workflow = {
   assignee: { first_name: string; last_name: string } | null;
   department: { id: number; name: string } | null;
   role: { id: number; name: string } | null;
-  updated_at:string;
+  updated_at: string;
 }[];
 
 type History = {
@@ -42,7 +43,12 @@ const status = [
   "Verification Pending",
   "Done",
 ];
-const SampleWorkflowForm = ({ data, actionFn, actionFnResult }: Props) => {
+const SampleWorkflowForm = ({
+  data,
+  actionFn,
+  actionFnResult,
+  actionFnReject,
+}: Props) => {
   return (
     <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
       <Tabs defaultValue="status" className="mt-1 w-full p-4">
@@ -58,6 +64,7 @@ const SampleWorkflowForm = ({ data, actionFn, actionFnResult }: Props) => {
             <div className="mt-1 flex flex-col gap-9 ">
               {data?.sample?.status_id === 1 && (
                 <WorkFlowForm
+                  rejectActionData={actionFnReject}
                   currentStep={data?.sample?.status_id}
                   actionData={actionFn}
                   assign={data?.sample?.assigned_to}
@@ -69,13 +76,8 @@ const SampleWorkflowForm = ({ data, actionFn, actionFnResult }: Props) => {
               {data?.sample?.status_id === 2 && (
                 <>
                   <WorkFlowForm
-                    currentStep={data?.sample?.status_id}
-                    actionData={actionFn}
-                    assign={data.sample.assigned_to}
-                    status_id={1}
-                    buttonName="Reject"
-                  />
-                  <WorkFlowForm
+                    showRejectButton={true}
+                    rejectActionData={actionFnReject}
                     currentStep={data?.sample?.status_id}
                     actionData={actionFn}
                     assign={data.sample.assigned_to}
@@ -87,6 +89,8 @@ const SampleWorkflowForm = ({ data, actionFn, actionFnResult }: Props) => {
 
               {data.sample.status_id === 3 && (
                 <WorkFlowForm
+                  showRejectButton={true}
+                  rejectActionData={actionFnReject}
                   currentStep={data?.sample?.status_id}
                   actionData={actionFn}
                   assign={data.sample.assigned_to}
@@ -98,6 +102,8 @@ const SampleWorkflowForm = ({ data, actionFn, actionFnResult }: Props) => {
 
               {data.sample.status_id === 4 && (
                 <WorkFlowForm
+                  showRejectButton={true}
+                  rejectActionData={actionFnReject}
                   currentStep={data?.sample?.status_id}
                   actionData={actionFn}
                   assign={data.sample.assigned_to}
@@ -110,6 +116,9 @@ const SampleWorkflowForm = ({ data, actionFn, actionFnResult }: Props) => {
 
               {data.sample.status_id === 5 && (
                 <UnderTestingForm
+                showRejectButton={true}
+                  rejectActionData={actionFnReject}
+                  currentStep={data?.sample?.status_id}
                   assigned_to={data.sample.assigned_to}
                   parameters={data.sample.sample_test_parameters}
                   patchFn={actionFnResult}
@@ -118,6 +127,9 @@ const SampleWorkflowForm = ({ data, actionFn, actionFnResult }: Props) => {
               )}
               {data.sample.status_id === 6 && (
                 <UnderTestingForm
+                showRejectButton={true}
+                  rejectActionData={actionFnReject}
+                  currentStep={data?.sample?.status_id}
                   assigned_to={data.sample.assigned_to}
                   parameters={data.sample.sample_test_parameters}
                   patchFn={actionFnResult}
@@ -349,35 +361,35 @@ const WorkflowTable = ({ workflow }: { workflow: Workflow }) => {
             {workflow?.map((flow, idx) => (
               <tr key={flow.id}>
                 <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-11">
-                  <p className="font-medium text-base text-black dark:text-white">
-                  {status[idx]}
+                  <p className="text-base font-medium text-black dark:text-white">
+                    {status[idx]}
                   </p>
                 </td>
                 <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-11">
-                  <p className="font-medium text-base text-black dark:text-white">
-                  {new Date(flow.updated_at).toLocaleString()}
+                  <p className="text-base font-medium text-black dark:text-white">
+                    {new Date(flow.updated_at).toLocaleString()}
                   </p>
                 </td>
                 <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-11">
-                  <p className="font-medium text-base text-black dark:text-white">
+                  <p className="text-base font-medium text-black dark:text-white">
                     {flow.assignee
                       ? `${flow.assignee.first_name} ${flow.assignee.last_name}`
                       : "---"}
                   </p>
                 </td>
                 <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-11">
-                  <p className="font-medium text-base text-black dark:text-white">
+                  <p className="text-base font-medium text-black dark:text-white">
                     {flow.status ?? "---"}
                   </p>
                 </td>
 
                 <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-11">
-                  <p className="font-medium text-base text-black dark:text-white">
+                  <p className="text-base font-medium text-black dark:text-white">
                     {flow?.role?.name ?? "---"}
                   </p>
                 </td>
                 <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-11">
-                  <p className="font-medium text-base text-black dark:text-white">
+                  <p className="text-base font-medium text-black dark:text-white">
                     {flow?.department?.name ?? "---"}
                   </p>
                 </td>

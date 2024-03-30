@@ -1,8 +1,12 @@
+"use client";
 import React from "react";
 import Select from "../select-input";
+import SubmitButton from "../submit-button/submit-button";
 
 type Props = {
   actionData: (data: FormData) => Promise<void>;
+  rejectActionData: (data: any) => void;
+  showRejectButton?: boolean;
   assign: number;
   status?: string;
   status_id: number;
@@ -15,6 +19,8 @@ type Props = {
 
 function WorkFlowForm({
   actionData,
+  rejectActionData,
+  showRejectButton = false,
   assign,
   status = "",
   status_id,
@@ -24,6 +30,26 @@ function WorkFlowForm({
   showComment = false,
   comment = "",
 }: Props) {
+  const [comments, setComments] = React.useState(comment);
+  const [loading, setLoading] = React.useState(false);
+
+  const handleCommentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setComments(e?.target?.value);
+  };
+
+  const handleReject = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setLoading(true)
+    rejectActionData({
+      status: status,
+      status_id: currentStep === 2 ? 2 : currentStep - 1,
+      assigned_to: assign,
+      comments: comments,
+      test_params: [],
+    });
+  };
+
   return (
     <>
       <form action={actionData}>
@@ -50,26 +76,31 @@ function WorkFlowForm({
               <textarea
                 rows={3}
                 name="comments"
-                defaultValue={comment}
+                onChange={handleCommentChange}
+                defaultValue={comments}
                 className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
               ></textarea>{" "}
             </div>
           ) : (
             <input type="hidden" value={comment} name="comments" />
           )}
-          <button
-            type="submit"
-            className="flex w-1/2 justify-center rounded bg-primary p-3 font-medium text-gray"
-          >
-            {buttonName}
-          </button>
+          <div className="flex gap-2">
+            <SubmitButton name={buttonName} width="w-1/2" />
+            {showRejectButton && (
+              <button
+                onClick={handleReject}
+                type="button"
+                className="flex w-1/2 justify-center rounded bg-danger p-3 font-medium text-gray"
+                disabled={loading}
+              >
+               {loading? "Loading..." : "Reject"}
+              </button>
+            )}
+          </div>
         </div>
       </form>
-     
-
     </>
   );
 }
 
 export default WorkFlowForm;
-

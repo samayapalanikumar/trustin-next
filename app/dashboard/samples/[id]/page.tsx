@@ -3,7 +3,7 @@ import { Metadata } from "next";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { SERVER_API_URL } from "@/app/constant";
-import { patchSampleWorkflow, patchSampleWorkflowTestResult } from "../actions";
+import { patchSampleWorkflow, patchSampleWorkflowTestResult, rejectSampleWorkflow } from "../actions";
 import SampleWorkflowForm from "./sample-workflow-form";
 
 export const metadata: Metadata = {
@@ -48,7 +48,7 @@ async function getData(id: string) {
   const sample = await res.json();
   const branches = await res2.json();
   const users = await res3.json();
-  console.log(sample);
+  // console.log(sample);
   return {
     sample,
     branches,
@@ -179,6 +179,10 @@ const EditSamplePage = async ({
     null,
     id,
   );
+  const rejectSampleWorkflowWithId = patchSampleWorkflowTestResult.bind(
+    null,
+    id,
+  );
 
   return (
     <>
@@ -191,6 +195,7 @@ const EditSamplePage = async ({
             data={data}
             actionFn={patchSampleWorkflowWithId}
             actionFnResult={patchSampleWorkflowResultWithId}
+            actionFnReject={rejectSampleWorkflowWithId}
           />
         </div>
       </div>

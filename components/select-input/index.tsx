@@ -3,7 +3,7 @@ type RegisterFunction = UseFormRegister<FieldValues>;
 
 type Props = {
   children: React.ReactNode;
-  label: string | null;
+  label?: string | null;
   width?: string;
   name: string;
   register?: RegisterFunction | undefined;
@@ -21,7 +21,7 @@ const Select = ({
 }: Props) => {
   return (
     <div className={`mb-4.5 ${width}`}>
-      {label ?? (
+      {label && (
         <label className="mb-2.5 block text-black dark:text-white">
           {label}
         </label>

@@ -1,7 +1,14 @@
 "use client";
 import { SERVER_API_URL } from "@/app/constant";
-import { useEffect } from "react";
-import { useFieldArray, useForm, useWatch, Form } from "react-hook-form";
+import { useEffect, useState } from "react";
+import {
+  useFieldArray,
+  useForm,
+  useWatch,
+  Form,
+  Control,
+  UseFormRegister,
+} from "react-hook-form";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Trash2 } from "lucide-react";
 import Select from "@/components/select-input";
@@ -13,13 +20,17 @@ const SamplesForm = ({
   data: any;
   createFn: (data: any) => void;
 }) => {
-  const { control, register } = useForm({
+  const {
+    control,
+    register,
+    formState: { isLoading },
+  } = useForm({
     defaultValues: {
       samples: data.batches.map((batch: any) => ({
         sample_id: "",
         name: "",
         batch_id: batch.id,
-        test_type_id: 1,
+        test_type_id: "1",
         test_params: [
           {
             test_parameter_id: "",
@@ -34,7 +45,30 @@ const SamplesForm = ({
     name: "samples", // Name of the array in your schema
   });
 
-  const handleSubmit = ({ formdata, data, formDataJson }) => {
+  const test_type_id = useWatch({
+    control,
+    name: data.batches.map(
+      (batch: any, idx: number) => `samples.${idx}.test_type_id`,
+    ),
+  });
+
+  const [filterId, setFilterId] = useState(
+    data.batches.map((batch: any, idx: number) => 1),
+  );
+
+  useEffect(() => {
+    setFilterId(test_type_id);
+  }, [test_type_id]);
+
+  const handleSubmit = ({
+    formData,
+    data,
+    formDataJson,
+  }: {
+    formData: FormData;
+    data: {};
+    formDataJson: {};
+  }) => {
     console.log(data);
     createFn(data);
   };
@@ -133,7 +167,7 @@ const SamplesForm = ({
                 />
               </div>*/}
 
-<div className="w-full xl:w-1/5">
+              <div className="w-full xl:w-1/5">
                 <label className="mb-2.5 block text-black dark:text-white">
                   Batch
                 </label>
@@ -143,10 +177,8 @@ const SamplesForm = ({
                     {...register(`samples.${index}.test_type_id`)}
                     className="relative z-20 w-full appearance-none rounded border border-stroke bg-transparent px-5 py-3 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                   >
-                    <option value={1}>Micro</option>
-                    <option value={2}>Mech</option>
-                  
-                   
+                    <option value={"1"}>Micro</option>
+                    <option value={"2"}>Mech</option>
                   </select>
                   <span className="absolute right-4 top-1/2 z-30 -translate-y-1/2">
                     <svg
@@ -169,10 +201,10 @@ const SamplesForm = ({
                   </span>
                 </div>
               </div>
-
             </div>
             {/* // Test Params */}
             <TestParamsForm
+              filterId={filterId}
               nestIndex={index}
               data={data}
               {...{ control, register }}
@@ -202,20 +234,32 @@ const SamplesForm = ({
         <button
           type="submit"
           className="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray"
+          disabled={isLoading}
         >
-          Submit
+          {isLoading ? "Loading" : "Submit"}
         </button>
       </div>
     </Form>
   );
 };
 
-const TestParamsForm = ({ nestIndex, control, register, data }) => {
+const TestParamsForm = ({
+  nestIndex,
+  control,
+  register,
+  data,
+  filterId,
+}: {
+  nestIndex: number;
+  control: any;
+  register: any;
+  data: any;
+  filterId: [];
+}) => {
   const { fields, append, remove } = useFieldArray({
     control,
     name: `samples.${nestIndex}.test_params`,
   });
-
   return (
     <div className="mb-4">
       {fields.map((item, index) => (
@@ -235,46 +279,25 @@ const TestParamsForm = ({ nestIndex, control, register, data }) => {
             </div>
           </div>
           <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
-            <div className="w-full xl:w-1/5 ">
-              <label className="mb-2.5 block text-black dark:text-white">
-                Test Parameter Name
-              </label>
-
-              <div className="relative z-20 bg-transparent dark:bg-form-input">
-                <select
-                  {...register(
-                    `samples.${nestIndex}.test_params.${index}.test_parameter_id`,
-                  )}
-                  className="relative z-20 w-full appearance-none rounded border border-stroke bg-transparent px-5 py-3 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-                >
-                  <option value="">------------</option>
-                  {data.test_params?.map((t: any) => (
-                    <option value={t.test_parameter.id} key={t.id}>
-                      {t.test_parameter.testing_parameters}
-                    </option>
-                  ))}
-                </select>
-                <span className="absolute right-4 top-1/2 z-30 -translate-y-1/2">
-                  <svg
-                    className="fill-current"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <g opacity="0.8">
-                      <path
-                        fillRule="evenodd"
-                        clipRule="evenodd"
-                        d="M5.29289 8.29289C5.68342 7.90237 6.31658 7.90237 6.70711 8.29289L12 13.5858L17.2929 8.29289C17.6834 7.90237 18.3166 7.90237 18.7071 8.29289C19.0976 8.68342 19.0976 9.31658 18.7071 9.70711L12.7071 15.7071C12.3166 16.0976 11.6834 16.0976 11.2929 15.7071L5.29289 9.70711C4.90237 9.31658 4.90237 8.68342 5.29289 8.29289Z"
-                        fill=""
-                      ></path>
-                    </g>
-                  </svg>
-                </span>
-              </div>
-            </div>
+            <Select
+              name={`samples.${nestIndex}.test_params.${index}.test_parameter_id`}
+              register={register}
+              label={"Test Parameter Name"}
+              width="w-full xl:w-1/5 "
+            >
+              <option value="">------------</option>
+              {data.test_params
+                ?.filter(
+                  (t: any) =>
+                    t.test_parameter.test_type_id.toString() ===
+                    filterId[nestIndex],
+                )
+                .map((t: any) => (
+                  <option value={t.test_parameter.id} key={t.id}>
+                    {t.test_parameter.testing_parameters}
+                  </option>
+                ))}
+            </Select>
             <div className="w-full xl:w-1/5">
               <label className="mb-2.5 block text-black dark:text-white">
                 order

@@ -13,6 +13,20 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Trash2 } from "lucide-react";
 import Select from "@/components/select-input";
 
+interface Sample {
+  sample_id: string;
+  name: string;
+  batch_id: number;
+  test_type_id: string;
+  test_params: Array<{
+    test_parameter_id: string;
+    order: number;
+  }>;
+}
+
+interface FormDatas {
+  samples: Sample[];
+}
 const SamplesForm = ({
   data,
   createFn,
@@ -24,7 +38,7 @@ const SamplesForm = ({
     control,
     register,
     formState: { isLoading },
-  } = useForm({
+  } = useForm<FormDatas>({
     defaultValues: {
       samples: data.batches.map((batch: any) => ({
         sample_id: "",
@@ -45,11 +59,9 @@ const SamplesForm = ({
     name: "samples", // Name of the array in your schema
   });
 
-  const test_type_id = useWatch({
+  const sampleWatch = useWatch({
     control,
-    name: data.batches.map(
-      (batch: any, idx: number) => `samples.${idx}.test_type_id`,
-    ),
+    name: "samples",
   });
 
   const [filterId, setFilterId] = useState(
@@ -57,8 +69,10 @@ const SamplesForm = ({
   );
 
   useEffect(() => {
-    setFilterId(test_type_id);
-  }, [test_type_id]);
+    // TODO: need some imporvement in future 
+    const ids = sampleWatch.map((field, idx) => field.test_type_id);
+    setFilterId(ids);
+  }, [sampleWatch]);
 
   const handleSubmit = ({
     formData,
@@ -219,7 +233,7 @@ const SamplesForm = ({
               sample_id: "",
               name: "",
               batch_id: 0,
-              test_type_id: 1,
+              test_type_id: "1",
               test_params: [
                 {
                   test_parameter_id: "",

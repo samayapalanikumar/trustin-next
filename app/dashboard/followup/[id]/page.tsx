@@ -107,7 +107,6 @@ const EditCustomerFollowupPage = async ({
 }) => {
   const data: Data = await getData(id);
   const updateFollowupWithId = updateFollowup.bind(null, id);
-  console.log(data?.followup?.customer_followup_history);
 
   return (
     <>
@@ -122,7 +121,7 @@ const EditCustomerFollowupPage = async ({
                 Contact Form
               </h3>
             </div> */}
-            <FollowupEditForm data={data} actionFn={updateFollowupWithId} />
+            <FollowupEditForm data={data} actionFn={updateFollowupWithId}  />
           </div>
         </div>
       </div>

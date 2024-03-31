@@ -71,6 +71,10 @@ export type Data = {
     test_types_ids: number[];
     test_details: TestDetail[];
     product_id: number;
+    product:{
+      id:number;
+      product_name: string;
+    }
   };
 };
 type ParametersType = {

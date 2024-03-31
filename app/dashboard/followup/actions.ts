@@ -4,19 +4,15 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { SERVER_API_URL } from "@/app/constant";
+import { revalidateTag } from "next/cache";
+import { getErrorMessage } from "@/lib/utils";
 
 
 
 
-export async function createFollowup(formData: FormData) {
-  let jsonObject  = Array.from(formData.entries()).reduce(
-    (acc, [key, value]) => {
-      acc[key] = value;
-      return acc;
-    },
-    {}
-  );
- 
+export async function createFollowup(prevState, formData: FormData) {
+
+  let jsonObject = Object.fromEntries(formData.entries());
 
 
   const access_token = cookies().get('access_token')
@@ -33,20 +29,33 @@ export async function createFollowup(formData: FormData) {
         body: JSON.stringify(jsonObject),
       });
 
+      if (res.status === 401) redirect("/signin");
+
+      if (res.status !== 201) {
+        const error = await res.json();
+        return {
+          fieldErrors: null,
+          type: "Error",
+          message: getErrorMessage(error.detail),
+        };
+      }
     
-    if(res.status===401) redirect('/signin');
-    if (res.status===201) redirect("/dashboard/followup");
+      revalidateTag("Followup");
+    
+      if (res.status === 201) {
+        return {
+          fieldErrors: null,
+          type: "Success",
+          message: "Followup Created Successfully",
+        };
+      }
+    // if (res.status===201) redirect("/dashboard/followup");
 }
 
 
-export async function updateFollowup(id:string,formData: FormData) {
-  let jsonObject  = Array.from(formData.entries()).reduce(
-    (acc, [key, value]) => {
-      acc[key] = value;
-      return acc;
-    },
-    {}
-  );
+export async function updateFollowup(id:string, prevState:any,formData: FormData) {
+ 
+  let jsonObject = Object.fromEntries(formData.entries());
  
 
 
@@ -63,8 +72,25 @@ export async function updateFollowup(id:string,formData: FormData) {
         },
         body: JSON.stringify(jsonObject),
       });
+      if (res.status === 401) redirect("/signin");
 
-   
-    if(res.status===401) redirect('/signin');
-    if (res.status===204) redirect("/dashboard/followup");
+      if (res.status !== 204) {
+        const error = await res.json();
+        return {
+          fieldErrors: null,
+          type: "Error",
+          message: getErrorMessage(error.detail),
+        };
+      }
+    
+      revalidateTag("Followup");
+    
+      if (res.status === 204) {
+        return {
+          fieldErrors: null,
+          type: "Success",
+          message: "Followup Updated Successfully",
+        };
+      }
+    // if (res.status===204) redirect("/dashboard/followup");
 }

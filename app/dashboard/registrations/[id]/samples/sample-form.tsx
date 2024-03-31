@@ -12,6 +12,8 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Trash2 } from "lucide-react";
 import Select from "@/components/select-input";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 interface Sample {
   sample_id: string;
@@ -24,15 +26,30 @@ interface Sample {
   }>;
 }
 
+
 interface FormDatas {
   samples: Sample[];
 }
+
+
+type InitialState = {
+  fieldErrors?: {} | null;
+  type?: string | null;
+  message?: any | string | null;
+};
+
+const initialState: InitialState = {
+  fieldErrors: {},
+  type: null,
+  message: null,
+};
+
 const SamplesForm = ({
   data,
   createFn,
 }: {
   data: any;
-  createFn: (data: any) => void;
+  createFn: (data: any) => Promise<{ fieldErrors: null; type: string; message: string | undefined; } | undefined>;
 }) => {
   const {
     control,
@@ -74,17 +91,41 @@ const SamplesForm = ({
     setFilterId(ids);
   }, [sampleWatch]);
 
-  const handleSubmit = ({
-    formData,
+ 
+  const [state, setState] = useState<InitialState | undefined>(initialState);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (state?.type === null) return;
+
+    if (state?.type === "Error") {
+      toast.error(state?.message, {
+        duration: 10000,
+        closeButton: true,
+      });
+    }
+    if (state?.type === "Success") {
+      toast.success(state?.message, {
+        duration: 10000,
+        closeButton: true,
+      });
+      router.push("/dashboard/samples");
+    }
+  }, [state, router]);
+
+  const handleSubmit = async ({
+    formdata,
     data,
     formDataJson,
   }: {
-    formData: FormData;
+    formdata: FormData;
     data: {};
     formDataJson: {};
   }) => {
     console.log(data);
-    createFn(data);
+    const res = await createFn(data);
+    console.log(res);
+    setState(res);
   };
 
   return (

@@ -5,6 +5,10 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import { SERVER_API_URL } from "@/app/constant";
+import { revalidateTag } from "next/cache";
+import { getErrorMessage } from "@/lib/utils";
+
+
 
 const contactPersonsSchema = z.object({
   person_name: z.string(),
@@ -34,14 +38,8 @@ const customerSchema = z.object({
   contact_persons: z.array(contactPersonsSchema),
 });
 
-export async function createCustomers(formData: FormData) {
-  let jsonObject  = Array.from(formData.entries()).reduce(
-    (acc, [key, value]) => {
-      acc[key] = value;
-      return acc;
-    },
-    {}
-  );
+export async function createCustomers(prevState, formData: FormData) {
+  let jsonObject = Object.fromEntries(formData.entries());
   const contact_persons = [
     {
       person_name: jsonObject.person_name,
@@ -58,28 +56,46 @@ export async function createCustomers(formData: FormData) {
   delete jsonObject["contact_email"];
 
   jsonObject["contact_persons"] = contact_persons;
-  console.log(jsonObject);
-  const access_token = cookies().get('access_token')
+  // console.log(jsonObject);
+  const access_token = cookies().get("access_token");
 
-      const res = await fetch(`${SERVER_API_URL}/customers/`, {
-        method: "POST", // *GET, POST, PUT, DELETE, etc.
-        // mode: "cors", // no-cors, *cors, same-origin
-        headers: {
-          "Content-Type": "application/json",
-          // "Content-Type": "application/x-www-form-urlencoded",
-          Authorization:`Bearer ${access_token?.value}`,
+  const res = await fetch(`${SERVER_API_URL}/customers/`, {
+    method: "POST", // *GET, POST, PUT, DELETE, etc.
+    // mode: "cors", // no-cors, *cors, same-origin
+    headers: {
+      "Content-Type": "application/json",
+      // "Content-Type": "application/x-www-form-urlencoded",
+      Authorization: `Bearer ${access_token?.value}`,
+    },
+    body: JSON.stringify(jsonObject),
+  });
 
-        },
-        body: JSON.stringify(jsonObject),
-      });
+  if (res.status === 401) redirect("/signin");
 
-  
-    if(res.status===401) redirect('/signin');
-    if (res.status===201) redirect("/dashboard/customers");
+  if (res.status !== 201) {
+    const error = await res.json();
+    return {
+      fieldErrors: null,
+      type: "Error",
+      message: getErrorMessage(error.detail),
+    };
+  }
+
+  revalidateTag("Customers");
+
+  if (res.status === 201) {
+    return {
+      fieldErrors: null,
+      type: "Success",
+      message: "Customer Created Successfully",
+    };
+  }
+  // if (res.status===201) redirect("/dashboard/customers");
 }
 
-export async function updateCustomers(id, formData: FormData) {
-  let jsonObject  = Object.fromEntries(formData.entries());
+export async function updateCustomers(id, pervState, formData: FormData) {
+
+  let jsonObject = Object.fromEntries(formData.entries());
   const contact_persons = [
     {
       person_name: jsonObject.person_name,
@@ -96,23 +112,38 @@ export async function updateCustomers(id, formData: FormData) {
   delete jsonObject["contact_email"];
 
   jsonObject["contact_persons"] = contact_persons;
-  console.log(jsonObject);
-  const access_token = cookies().get('access_token')
-      const res = await fetch(`${SERVER_API_URL}/customers/${id}`, {
-        method: "PUT", // *GET, POST, PUT, DELETE, etc.
-        // mode: "cors", // no-cors, *cors, same-origin
-        headers: {
-          "Content-Type": "application/json",
-          // "Content-Type": "application/x-www-form-urlencoded",
-          Authorization:`Bearer ${access_token?.value}`,
+  // console.log(jsonObject);
+  const access_token = cookies().get("access_token");
+  const res = await fetch(`${SERVER_API_URL}/customers/${id}`, {
+    method: "PUT", // *GET, POST, PUT, DELETE, etc.
+    // mode: "cors", // no-cors, *cors, same-origin
+    headers: {
+      "Content-Type": "application/json",
+      // "Content-Type": "application/x-www-form-urlencoded",
+      Authorization: `Bearer ${access_token?.value}`,
+    },
+    body: JSON.stringify(jsonObject),
+  });
 
-        },
-        body: JSON.stringify(jsonObject),
-      });
+  if (res.status === 401) redirect("/signin");
 
-    
+  if (res.status !== 204) {
+    const error = await res.json();
+    return {
+      fieldErrors: null,
+      type: "Error",
+      message: getErrorMessage(error.detail),
+    };
+  }
 
-    if(res.status===401) redirect('/signin');
+  revalidateTag("Customers");
 
-    if (res.status===204) redirect("/dashboard/customers");
+  if (res.status === 204) {
+    return {
+      fieldErrors: null,
+      type: "Success",
+      message: "Customer Updated Successfully",
+    };
+  }
+  // if (res.status===204) redirect("/dashboard/customers");
 }

@@ -1,3 +1,10 @@
+"use client";
+import { useEffect } from "react";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import { useFormState } from "react-dom";
+import SubmitButton from "@/components/submit-button/submit-button";
+import { updateFollowup } from "../actions";
 import { Data } from "./page";
 import { MarketingStatus } from "../followup-table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -6,10 +13,44 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 type Props = {
   data: Data;
-  actionFn: (formData: FormData) => void;
+  actionFn: (
+    prevState: any,
+    formData: FormData,
+  ) => Promise<{ fieldErrors: null; type: string; message: string | undefined; } | undefined>;
+};
+
+type InitialState = {
+  fieldErrors?: {} | null;
+  type?: string | null;
+  message?: any | string | null;
+};
+
+const initialState: InitialState = {
+  fieldErrors: {},
+  type: null,
+  message: null,
 };
 
 const FollowupEditForm = ({ data, actionFn }: Props) => {
+  const [state, formAction] = useFormState(actionFn, initialState);
+  const router = useRouter();
+  useEffect(() => {
+    if (state?.type === null) return;
+
+    if (state?.type === "Error") {
+      toast.error(state?.message, {
+        duration: 10000,
+        closeButton: true,
+      });
+    }
+    if (state?.type === "Success") {
+      toast.success(state?.message, {
+        duration: 10000,
+        closeButton: true,
+      });
+      router.push("/dashboard/followup");
+    }
+  }, [state, router]);
   return (
     <Tabs defaultValue="edit-form" className="mt-1 w-full p-4">
       <TabsList>
@@ -17,7 +58,8 @@ const FollowupEditForm = ({ data, actionFn }: Props) => {
         <TabsTrigger value="history">History</TabsTrigger>
       </TabsList>
       <TabsContent value="edit-form">
-        <form action={actionFn}>
+        <form action={formAction}>
+          <input type="hidden" name="id" defaultValue={data.followup.id} />
           <div className="p-6.5">
             <div className="mb-4.5">
               <label className="mb-2.5 block text-black dark:text-white">
@@ -196,9 +238,7 @@ const FollowupEditForm = ({ data, actionFn }: Props) => {
               ></textarea>
             </div>
 
-            <button className="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray">
-              Submit
-            </button>
+            <SubmitButton />
           </div>
         </form>
       </TabsContent>

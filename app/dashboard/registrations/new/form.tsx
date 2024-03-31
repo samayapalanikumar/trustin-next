@@ -6,6 +6,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Trash2 } from "lucide-react";
 import { createRegistration } from "../actions";
 import Combobox from "@/components/combo-box";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 import {
   Form as UiForm,
@@ -17,16 +19,29 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Checkbox } from "@/components/ui/checkbox";
+import { CreateData } from "../typings";
 
 const TESTTYPE = {
   1: "MICRO",
   2: "MECH",
 };
 
+type InitialState = {
+  fieldErrors?: {} | null;
+  type?: string | null;
+  message?: any | string | null;
+};
+
+const initialState: InitialState = {
+  fieldErrors: {},
+  type: null,
+  message: null,
+};
+
 const RegistrationForm = ({ data }: { data: any }) => {
   const [parameters, setParameters] = useState([]);
 
-  const form = useForm({
+  const form = useForm<CreateData>({
     defaultValues: {
       test_types: [],
     },
@@ -39,7 +54,7 @@ const RegistrationForm = ({ data }: { data: any }) => {
     fields: testMechFields,
     append: testMechAppend,
     remove: testMechRemove,
-    replace: testMechReplace
+    replace: testMechReplace,
   } = useFieldArray({
     control: form.control,
     name: "test_params_mech", // Name of the array in your schema
@@ -48,8 +63,7 @@ const RegistrationForm = ({ data }: { data: any }) => {
     fields: testMicroFields,
     append: testMicroAppend,
     remove: testMicroRemove,
-    replace: testMicroReplace
-
+    replace: testMicroReplace,
   } = useFieldArray({
     control: form.control,
     name: "test_params_micro", // Name of the array in your schema
@@ -60,6 +74,9 @@ const RegistrationForm = ({ data }: { data: any }) => {
     control: form.control,
     name: "test_types",
   }); // Replace 'fieldName' with the actual name of your field
+
+  const [state, setState] = useState<InitialState | undefined>(initialState);
+  const router = useRouter();
 
   useEffect(() => {
     // Make API call when the watched field value changes
@@ -114,18 +131,18 @@ const RegistrationForm = ({ data }: { data: any }) => {
 
   useEffect(() => {
     if (watchedTestTypeValue && parameters.length) {
-      testMicroReplace([])
-      testMechReplace([])
+      testMicroReplace([]);
+      testMechReplace([]);
       console.log(watchedTestTypeValue);
       console.log(parameters);
       console.log(data.microParameters);
       const listParameters = parameters.map((para) => para.parameter_id);
-      console.log(listParameters)
+      console.log(listParameters);
       if (watchedTestTypeValue?.includes("1")) {
         data?.microParameters.length &&
           data.microParameters.forEach((para) => {
             if (listParameters.includes(para.id)) {
-              console.log('hey')
+              console.log("hey");
               testMicroAppend({ test_params_id: para.id });
             }
           });
@@ -134,18 +151,46 @@ const RegistrationForm = ({ data }: { data: any }) => {
         data?.mechParameters.length &&
           data?.mechParameters?.forEach((para) => {
             if (listParameters.includes(para.id)) {
-              console.log('hi')
+              console.log("hi");
 
-              testMicroAppend({test_params_id: para.id} );
+              testMicroAppend({ test_params_id: para.id });
             }
           });
       }
     }
   }, [watchedTestTypeValue, form.setValue, parameters]);
 
-  const handleSubmit = ({ formdata, data, formDataJson }) => {
+  useEffect(() => {
+    if (state?.type === null) return;
+
+    if (state?.type === "Error") {
+      toast.error(state?.message, {
+        duration: 10000,
+        closeButton: true,
+      });
+    }
+    if (state?.type === "Success") {
+      toast.success(state?.message, {
+        duration: 10000,
+        closeButton: true,
+      });
+      router.push("/dashboard/registrations");
+    }
+  }, [state, router]);
+
+  const handleSubmit = async ({
+    formdata,
+    data,
+    formDataJson,
+  }: {
+    formdata: FormData;
+    data: CreateData;
+    formDataJson: {};
+  }) => {
     console.log(data);
-    createRegistration(data);
+    const res = await createRegistration(data);
+    console.log(res);
+    setState(res);
   };
 
   return (
@@ -251,7 +296,7 @@ const RegistrationForm = ({ data }: { data: any }) => {
                   <option value="">------------</option>
                   {data.customers.map((t: any) => (
                     <option value={t.id} key={t.id}>
-                      {t.company_code}
+                      {t.customer_code}
                     </option>
                   ))}
                 </select>
@@ -433,7 +478,9 @@ const RegistrationForm = ({ data }: { data: any }) => {
               render={() => (
                 <FormItem>
                   <div className="mb-4">
-                    <label className="mb-2.5 block text-black dark:text-white">Test Type</label>
+                    <label className="mb-2.5 block text-black dark:text-white">
+                      Test Type
+                    </label>
                   </div>
                   {Object.entries(TESTTYPE).map(([key, value]) => (
                     <FormField
@@ -751,8 +798,9 @@ const RegistrationForm = ({ data }: { data: any }) => {
           <button
             type="submit"
             className="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray"
+            disabled={form.formState.isLoading}
           >
-            Submit
+            {form.formState.isLoading ? "Loading..." : "Submit"}
           </button>
         </div>
       </Form>

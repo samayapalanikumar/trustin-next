@@ -1,10 +1,13 @@
 "use client";
 import { SERVER_API_URL } from "@/app/constant";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useFieldArray, useForm, useWatch, Form } from "react-hook-form";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Trash2 } from "lucide-react";
 import Combobox from "@/components/combo-box";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+
 
 import {
   Form as UiForm,
@@ -21,6 +24,19 @@ const TESTTYPE = {
   1: "MICRO",
   2: "MECH",
 };
+
+type InitialState = {
+  fieldErrors?: {} | null;
+  type?: string | null;
+  message?: any | string | null;
+};
+
+const initialState: InitialState = {
+  fieldErrors: {},
+  type: null,
+  message: null,
+};
+
 
 const RegistrationForm = ({
   data,
@@ -89,6 +105,11 @@ const RegistrationForm = ({
     control: form.control,
     name: "test_types",
   }); 
+
+  const [state, setState] = useState<InitialState | undefined>(initialState);
+  const router = useRouter();
+
+
   useEffect(() => {
     // Make API call when the watched field value changes
     const fetchData = async (trf_id: any) => {
@@ -138,11 +159,38 @@ const RegistrationForm = ({
     }
   }, [watchedFieldValue, form.setValue]);
 
-  const handleSubmit = ({ formdata, data, formDataJson }) => {
-    console.log(data);
-    updateFn(data);
-  };
+  useEffect(() => {
+    if (state?.type === null) return;
 
+    if (state?.type === "Error") {
+      toast.error(state?.message, {
+        duration: 10000,
+        closeButton: true,
+      });
+    }
+    if (state?.type === "Success") {
+      toast.success(state?.message, {
+        duration: 10000,
+        closeButton: true,
+      });
+      router.push("/dashboard/registrations");
+    }
+  }, [state, router]);
+
+  const handleSubmit = async ({
+    formdata,
+    data,
+    formDataJson,
+  }: {
+    formdata: FormData;
+    data: {};
+    formDataJson: {};
+  }) => {
+    console.log(data);
+    const res = await updateFn(data);
+    console.log(res);
+    setState(res);
+  };
   return (
     <UiForm {...form}>
       <Form control={form.control} onSubmit={handleSubmit}>
@@ -246,7 +294,7 @@ const RegistrationForm = ({
                   <option value="">------------</option>
                   {data.customers.map((t: any) => (
                     <option value={t.id} key={t.id}>
-                      {t.company_code}
+                      {t.customer_code}
                     </option>
                   ))}
                 </select>
@@ -751,8 +799,9 @@ const RegistrationForm = ({
           <button
             type="submit"
             className="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray"
+            disabled={form.formState.isLoading}
           >
-            Submit
+            {form.formState.isLoading ? "Loading..." : "Submit"}
           </button>
         </div>
       </Form>

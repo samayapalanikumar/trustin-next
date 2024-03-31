@@ -22,6 +22,9 @@ async function getData() {
         "Content-Type": "application/json",
         Authorization: `Bearer ${access_token?.value}`,
       },
+      next:{
+        tags:['Customers']
+      }
     });
     // The return value is *not* serialized
     // You can return Date, Map, Set, etc.
@@ -38,8 +41,16 @@ async function getData() {
 
 }
 
+export type Data = {
+  id: number;
+  company_name: string;
+  company_id:string;
+  customer_code:string;
+  email: string;
+}[]
+
 const CustomerPage = async () => {
-  const data = await getData();
+  const data:Data = await getData();
   return (
     <>
       <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">

@@ -1,7 +1,7 @@
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import { Metadata } from "next";
 import { redirect } from "next/navigation";
-import TRFAdminForm from "./form";
+import TRFAdminForm from "./trf-edit-form";
 import { updateTRFAdmin } from "../actions";
 import { cookies } from "next/headers";
 import { Data } from "./typings";
@@ -50,6 +50,7 @@ async function getData(id:string) {
   const trf = await res.json();
   const products = await res2.json();
   const test_types = await res3.json();
+  console.log(trf)
   return({
     products,
     test_types,

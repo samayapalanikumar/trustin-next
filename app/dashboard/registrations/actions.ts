@@ -4,6 +4,8 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { SERVER_API_URL } from "@/app/constant";
+import { revalidateTag } from "next/cache";
+import { getErrorMessage } from "@/lib/utils";
 
 
 
@@ -36,12 +38,37 @@ export async function createRegistration(jsonObject) {
         body: JSON.stringify(jsonObject),
       });
 
-      const response = await res.json()
-      console.log(response)
-     
+      
 
-      if(res.status===401) redirect('/signin');
-      if (res.status===200) redirect("/dashboard/registrations");
+      if (res.status===422){
+        const resJson =  await res.json()
+
+        console.log(resJson)
+        console.log(resJson.detail[0].loc)
+        console.log(resJson.detail[0].input)
+      }
+
+      if (res.status === 401) redirect("/signin");
+
+      if (res.status !== 200) {
+        const error = await res.json();
+        return {
+          fieldErrors: null,
+          type: "Error",
+          message: getErrorMessage(error.detail),
+        };
+      }
+    
+      revalidateTag("Registration");
+    
+      if (res.status === 200) {
+        return {
+          fieldErrors: null,
+          type: "Success",
+          message: "Registration created Successfully",
+        };
+      }
+      // if (res.status===200) redirect("/dashboard/registrations");
 }
 
 
@@ -77,7 +104,26 @@ export async function updateRegistration(id:string, data) {
         console.log(resJson.detail[0].loc)
         console.log(resJson.detail[0].input)
       }
+      const response = await res.json()
+      if (res.status === 401) redirect("/signin");
 
-      if(res.status===401) redirect('/signin');
-      if (res.status===200) redirect("/dashboard/registrations");
+      if (res.status !== 200) {
+        const error = await res.json();
+        return {
+          fieldErrors: null,
+          type: "Error",
+          message: getErrorMessage(error.detail),
+        };
+      }
+    
+      revalidateTag("Registration");
+    
+      if (res.status === 200) {
+        return {
+          fieldErrors: null,
+          type: "Success",
+          message: "Registration Updated Successfully",
+        };
+      }
+      // if (res.status===200) redirect("/dashboard/registrations");
 }

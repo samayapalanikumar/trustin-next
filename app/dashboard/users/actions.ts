@@ -7,8 +7,8 @@ import { SERVER_API_URL } from "@/app/constant";
 
 import { z } from "zod";
 
-import { toast } from "sonner";
-
+import { revalidateTag } from "next/cache";
+import { getErrorMessage } from "@/lib/utils";
 const schema = z
   .object({
     first_name: z.string().min(1, "First Name Required").trim(),
@@ -75,18 +75,20 @@ export async function createUser(prevState, formData: FormData) {
     };
   }
 
-  if (res.status === 201) redirect("/dashboard/users");
+  // if (res.status === 201) redirect("/dashboard/users");
 
-  // if (res.status === 201) {
+  revalidateTag('Users')
 
-  //     fieldErrors: null,
-  //     type: 'Success',
-  //     message: "User Created Successfully",
-  //   })
-  // }
+  if (res.status === 201) {
+    return ({
+      fieldErrors: null,
+      type: 'Success',
+      message: "User Created Successfully",
+    })
+  }
 }
 
-export async function updateUser(id: string, formData: FormData) {
+export async function updateUser(id: string,   formData: FormData) {
   console.log(formData);
   let jsonObject = Object.fromEntries(formData.entries());
 
@@ -109,7 +111,7 @@ export async function updateUser(id: string, formData: FormData) {
   if (res.status === 204) redirect("/dashboard/users");
 }
 
-export async function updateUser1(state, id: string, formData: FormData) {
+export async function updateUser1(id: string, state,  formData: FormData) {
   console.log(formData);
   let jsonObject = Object.fromEntries(formData.entries());
 
@@ -127,7 +129,25 @@ export async function updateUser1(state, id: string, formData: FormData) {
     },
     body: JSON.stringify(jsonObject),
   });
-
   if (res.status === 401) redirect("/signin");
-  if (res.status === 204) redirect("/dashboard/users");
+
+  if (res.status !== 204) {
+    const error = await res.json();
+    return {
+      fieldErrors: null,
+      type: "Error",
+      message: getErrorMessage(error.detail),
+    };
+  }
+
+  revalidateTag("Users");
+
+  if (res.status === 204) {
+    return {
+      fieldErrors: null,
+      type: "Success",
+      message: "User Updated Successfully",
+    };
+  }
+  // if (res.status === 204) redirect("/dashboard/users");
 }

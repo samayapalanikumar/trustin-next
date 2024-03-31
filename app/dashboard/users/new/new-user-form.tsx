@@ -32,7 +32,7 @@ const initalState = {
 };
 const NewUserForm = ({ roles, departments, test_types }: Props) => {
   const [state, formAction] = useFormState(createUser, initalState);
-
+  const router = useRouter();
   useEffect(() => {
     if (state?.type === null) return;
 
@@ -42,7 +42,14 @@ const NewUserForm = ({ roles, departments, test_types }: Props) => {
         closeButton: true,
       });
     }
-  }, [state]);
+    if (state?.type === "Success") {
+      toast.success(state?.message, {
+        duration: 10000,
+        closeButton: true,
+      });
+      router.push("/dashboard/users");
+    }
+  }, [state, router]);
   return (
     <form action={formAction}>
       <div className="p-6.5">

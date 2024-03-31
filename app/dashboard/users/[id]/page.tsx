@@ -27,6 +27,9 @@ async function getData(id: string) {
       "Content-Type": "application/json",
       Authorization: `Bearer ${access_token?.value}`,
     },
+    next:{
+      tags:['Users']
+    }
   });
   const res1 = await fetch(`${SERVER_API_URL}/roles/`, {
     headers: {
@@ -76,7 +79,7 @@ const EditUserPage = async ({ params: { id } }: { params: { id: string } }) => {
   const updateUserWithId = updateUser.bind(null, id );
   return (
     <>
-      <Breadcrumb pageName="Add New User" />
+      <Breadcrumb pageName="Edit New User" />
 
       <div className="grid grid-cols-1 gap-9 sm:grid-cols-1">
         <div className="flex flex-col gap-9">

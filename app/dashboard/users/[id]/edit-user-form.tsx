@@ -6,20 +6,28 @@ import { Department } from "@/types/department";
 import { TestType } from "@/types/test-type";
 import { Role } from "@/types/role";
 import { User } from "@/types/user";
-
-
+import { updateUser1 } from "../actions";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+import { toast } from "sonner";
 
 type Props = {
   user: User;
   roles: Role[];
   departments: Department[];
   test_types: TestType[];
-  action: (data: FormData) => Promise<void>;
+  action: (data: FormData) => void|Promise<void>;
 };
-const initalState = {
-  fieldErrors: null,
-  type: null, 
-  message: "",
+type InitialState = {
+  fieldErrors?: {} | null;
+  type?: string | null;
+  message?: any | string | null;
+};
+
+const initialState: InitialState = {
+  fieldErrors: {},
+  type: null,
+  message: null,
 };
 const EditUserForm = ({
   roles,
@@ -28,10 +36,29 @@ const EditUserForm = ({
   user,
   action,
 }: Props) => {
+const updateUserWithId = updateUser1.bind(null, user.id.toString());
+const [state, formAction]=useFormState(updateUserWithId, initialState)
+const router = useRouter();
+useEffect(() => {
+  if (state?.type === null) return;
 
+  if (state?.type === "Error") {
+    toast.error(state?.message, {
+      duration: 10000,
+      closeButton: true,
+    });
+  }
+  if (state?.type === "Success") {
+    toast.success(state?.message, {
+      duration: 10000,
+      closeButton: true,
+    });
+    router.push("/dashboard/users");
+  }
+}, [state, router]);
 
   return (
-    <form action={action}>
+    <form action={formAction}>
       <div className="p-6.5">
         <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
           <div className="w-full xl:w-1/2">

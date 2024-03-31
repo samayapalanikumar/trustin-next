@@ -4,6 +4,8 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { SERVER_API_URL } from "@/app/constant";
+import { revalidateTag } from "next/cache";
+import { getErrorMessage } from "@/lib/utils";
 
 
 
@@ -34,7 +36,25 @@ export async function updateTRFAdmin(id:string,formData: FormData) {
       // console.log(error.input)
     });
   }
+  if (res.status === 401) redirect("/signin");
 
-  if(res.status===401) redirect('/signin');
-  if (res.status===204) redirect("/dashboard/trf");
+  if (res.status !== 204) {
+    const error = await res.json();
+    return {
+      fieldErrors: null,
+      type: "Error",
+      message: getErrorMessage(error.detail),
+    };
+  }
+
+  revalidateTag("TRF");
+
+  if (res.status === 204) {
+    return {
+      fieldErrors: null,
+      type: "Success",
+      message: "TRF Updated Successfully",
+    };
+  }
+  // if (res.status===204) redirect("/dashboard/trf");
 }

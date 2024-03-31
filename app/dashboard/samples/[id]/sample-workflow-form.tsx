@@ -1,8 +1,20 @@
+'use client';
 import { Data } from "./page";
+import React, {useState} from 'react';
+import { createRoot } from 'react-dom/client';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import StatusStepper from "./status-stepper1";
 import UnderTestingForm from "./under-testing-form";
 import WorkFlowForm from "@/components/WorkFlowForms/workflowform";
+// import InvoicePDF from '@/components/Print/InvoicePDF';
+import { PDFViewer,PDFDownloadLink, Document, Page, Text, View, StyleSheet } from '@react-pdf/renderer';
+import ReactDOMServer from 'react-dom/server';
+// import Modal from 'react-modal';
+import Modal from '@/components/Modal/Modal';
+import MyDocument from '@/components/Print/InvoicePDF';
+// Make sure to bind modal to your app element (https://reactcommunity.org/react-modal/accessibility/)
+
+// import { PDFDocument, Page, Text, View, Document, StyleSheet } from '@react-pdf/renderer';
 type Props = {
   data: Data;
   actionFn: (formData: FormData) => Promise<void>;
@@ -43,19 +55,157 @@ const status = [
   "Verification Pending",
   "Done",
 ];
+
+
+// Create a function to generate the PDF content
+const generatePDFContent = () => {
+  // Render the PDF content to a string
+  const pdfContent = ReactDOMServer.renderToString(
+    <Document>
+      <Page>
+        <View>
+          <Text>Hello, World!</Text>
+        </View>
+      </Page>
+    </Document>
+  );
+  
+  return pdfContent;
+};
+
+
+// Create a function to generate the PDF and open it in a new window
+const generateAndDisplayPDF = () => {
+  // Generate the PDF content
+  const pdfContent = generatePDFContent();
+  // const pdfContent = ReactDOMServer.renderToString(
+  //   InvoicePDF()
+  // )
+
+  console.log(pdfContent)
+
+  // Convert the PDF content string to a blob
+  const blob = new Blob([pdfContent], { type: 'application/pdf' });
+
+  // Create blob URL
+  const pdfBlobUrl = URL.createObjectURL(blob);
+
+  // Open a new window and display the PDF
+  const newWindow = window.open(pdfBlobUrl, '_blank');
+  if (newWindow) {
+    newWindow.focus();
+  } else {
+    alert('Please allow pop-ups for this site');
+  }
+};
+
+// Create a React component to generate the PDF
+const InvoicePDF = () => {
+  // Styles for the PDF
+  const styles = StyleSheet.create({
+    page: {
+      flexDirection: 'row',
+      backgroundColor: '#E4E4E4',
+    },
+    section: {
+      margin: 10,
+      padding: 10,
+      flexGrow: 1,
+    },
+  });
+
+  return (
+    <Document>
+      <Page size="A4" style={styles.page}>
+        <View style={styles.section}>
+          <Text>Section #1</Text>
+        </View>
+        <View style={styles.section}>
+          <Text>Section #2</Text>
+        </View>
+      </Page>
+    </Document>
+  );
+};
+
 const SampleWorkflowForm = ({
   data,
   actionFn,
   actionFnResult,
   actionFnReject,
 }: Props) => {
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
+
+  const handlePrintButtonClick = () => {
+    generateAndDisplayPDF();
+  };
+  // const handlePrint = () => {
+  //   // Open a new tab
+  //   const newWindow = window.open('', '_blank');
+  //   if (newWindow) {
+  //     // Render the PDF preview component in the new tab
+  //     newWindow.document.body.innerHTML = '<div id="pdf-preview"></div>';
+  //     ReactDOM.render(<PDFPreview />, newWindow.document.getElementById('pdf-preview'));
+  //   } else {
+  //     alert('Popup blocked! Please allow popups for this website.');
+  //   }
+  // };
+  // const handlePrint = () => {
+    
+  //   const root = createRoot(document.getElementById('root'));
+  //   // Render the PDF component into the new window
+  //   // root.render(<React.StrictMode><InvoicePDF /></React.StrictMode>, newWindow?.document.getElementById('invoice'));
+  //   root.render(
+  //     <PDFViewer style={{ width: '100%', height: '100vh' }}>
+  //       <InvoicePDF />
+  //     </PDFViewer>
+  //   );
+  //    // Convert PDF to blob URL
+  //    const pdfBlobUrl = root.toBlobUrl();
+  //   const newWindow = window.open(pdfBlobUrl, '_blank');
+  //   newWindow?.document.write('<html><head><title>Print</title></head><body>');
+  //   newWindow?.document.write('<div id="invoice"></div>');
+  //   newWindow?.document.write('</body></html>');
+  //   newWindow?.document.close();
+
+    
+   
+  //   // Open a new window and display the PDF
+  //   // const newWindow = window.open(pdfBlobUrl, '_blank');
+  //   if (newWindow) {
+  //     newWindow.focus();
+  //   } else {
+  //     alert('Please allow pop-ups for this site');
+  //   }
+  // };
   return (
     <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+      <div className="flex flex-col gap-3 sm:flex-row items-end sm:justify-end align-items:flex-end ">
+      <button type="button" onClick={openModal} className="  justify-center rounded bg-primary p-2 font-medium text-gray align-items: flex-end m-1">
+          Print
+        </button>
+      </div>
+      <Modal isOpen={isModalOpen} onClose={closeModal}>
+        {/* <h2>This is a modal</h2>
+        <p>Modal content goes here...</p> */}
+        <PDFViewer width="1000" height="600">
+            <MyDocument />
+        </PDFViewer>
+        {/* <PDFDownloadLink document={< MyDocument/>} fileName="somename.pdf">
+      {({ blob, url, loading, error }) => (loading ? 'Loading document...' : 'Download now!')}
+    </PDFDownloadLink> */}
+      </Modal>
+      
       <Tabs defaultValue="status" className="mt-1 w-full p-4">
         <TabsList>
           <TabsTrigger value="status">Status</TabsTrigger>
           <TabsTrigger value="workflow">Workflow</TabsTrigger>
           <TabsTrigger value="history">History</TabsTrigger>
+         
         </TabsList>
         <TabsContent value="status">
           <div className="mb-3 w-full flex-col">
@@ -324,6 +474,7 @@ const SampleWorkflowForm = ({
           </div>
         </TabsContent>
       </Tabs>
+      
     </div>
   );
 };

@@ -1,18 +1,17 @@
 "use client";
-import React from "react";
-import { useFormState } from "react-dom";
+import React, { useState, useEffect } from "react";
 import Select from "../select-input";
 import SubmitButton from "../submit-button/submit-button";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 type Props = {
-  actionData: (prevState:any, data: FormData) =>  Promise<
-  { fieldErrors: null; type: string; message: string | undefined } | undefined
->;
-  rejectActionData: (data: any) =>  Promise<
-  { fieldErrors: null; type: string; message: string | undefined } | undefined
->;
+  actionData: (data: FormData) => void;
+  rejectActionData: (
+    data: any,
+  ) => Promise<
+    { fieldErrors: null; type: string; message: string | undefined } | undefined
+  >;
   showRejectButton?: boolean;
   assign: number;
   status?: string;
@@ -48,40 +47,19 @@ function WorkFlowForm({
   showComment = false,
   comment = "",
 }: Props) {
-  const [comments, setComments] = React.useState(comment);
-  const [loading, setLoading] = React.useState(false);
+  const [comments, setComments] = useState(comment);
+  const [loading, setLoading] = useState(false);
 
-  const [state, formAction]=useFormState(actionData, initialState)
-  const [rejectState, setRejectState]=React.useState<InitialState|undefined>(initialState)
+  const [rejectState, setRejectState] = useState<InitialState | undefined>(
+    initialState,
+  );
   const router = useRouter();
 
   const handleCommentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setComments(e?.target?.value);
   };
 
-  
-React.useEffect(() => {
-  console.log("Hey")
-  console.log(state)
-  if (state?.type === null) return;
-
-  if (state?.type === "Error") {
-    toast.error(state?.message, {
-      duration: 10000,
-      closeButton: true,
-    });
-  }
-  if (state?.type === "Success") {
-    toast.success(state?.message, {
-      duration: 10000,
-      closeButton: true,
-    });
-    router.push("/dashboard/samples");
-  }
-}, [state, router]);
-
-
-  React.useEffect(() => {
+  useEffect(() => {
     if (rejectState?.type === null) return;
 
     if (rejectState?.type === "Error") {
@@ -101,11 +79,13 @@ React.useEffect(() => {
     }
   }, [rejectState, router]);
 
-  const handleReject = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  const handleReject = async (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  ) => {
     e.preventDefault();
     e.stopPropagation();
-    setLoading(true)
-    const res =await rejectActionData({
+    setLoading(true);
+    const res = await rejectActionData({
       status: status,
       status_id: currentStep === 2 ? 2 : currentStep - 1,
       assigned_to: assign,
@@ -113,61 +93,56 @@ React.useEffect(() => {
       test_params: [],
     });
     setRejectState(res);
-
   };
 
-
-
   return (
-    <>
-      <form action={formAction}>
-        <div className="p-2.5">
-          <input type="hidden" value={status} name="status" />
-          <input type="hidden" value={status_id} name="status_id" />
-          {currentStep === 4 ? (
-            <Select name="assigned_to" label="assignee">
-              {assigneeData?.map((assignee) => (
-                <option value={assignee.id} key={assignee.id}>
-                  {assignee.first_name + assignee.last_name}
-                </option>
-              ))}
-            </Select>
-          ) : (
-            <input type="hidden" defaultValue={assign} name="assigned_to" />
-          )}
+    <form action={actionData}>
+      <div className="p-2.5">
+        <input type="hidden" value={status} name="status" />
+        <input type="hidden" value={status_id} name="status_id" />
+        {currentStep === 4 ? (
+          <Select name="assigned_to" label="assignee">
+            {assigneeData?.map((assignee) => (
+              <option value={assignee.id} key={assignee.id}>
+                {assignee.first_name + assignee.last_name}
+              </option>
+            ))}
+          </Select>
+        ) : (
+          <input type="hidden" defaultValue={assign} name="assigned_to" />
+        )}
 
-          {showComment ? (
-            <div className="mb-6">
-              <label className="mb-2.5 block text-black dark:text-white">
-                Comments
-              </label>
-              <textarea
-                rows={3}
-                name="comments"
-                onChange={handleCommentChange}
-                defaultValue={comments}
-                className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-              ></textarea>{" "}
-            </div>
-          ) : (
-            <input type="hidden" value={comment} name="comments" />
-          )}
-          <div className="flex gap-2">
-            <SubmitButton name={buttonName} width="w-1/2" />
-            {showRejectButton && (
-              <button
-                onClick={handleReject}
-                type="button"
-                className="flex w-1/2 justify-center rounded bg-danger p-3 font-medium text-gray"
-                disabled={loading}
-              >
-               {loading? "Loading..." : "Reject"}
-              </button>
-            )}
+        {showComment ? (
+          <div className="mb-6">
+            <label className="mb-2.5 block text-black dark:text-white">
+              Comments
+            </label>
+            <textarea
+              rows={3}
+              name="comments"
+              onChange={handleCommentChange}
+              defaultValue={comments}
+              className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+            ></textarea>{" "}
           </div>
+        ) : (
+          <input type="hidden" value={comment} name="comments" />
+        )}
+        <div className="flex gap-2">
+          <SubmitButton name={buttonName} width="w-1/2" />
+          {showRejectButton && (
+            <button
+              onClick={handleReject}
+              type="button"
+              className="flex w-1/2 justify-center rounded bg-danger p-3 font-medium text-gray"
+              disabled={loading}
+            >
+              {loading ? "Loading..." : "Reject"}
+            </button>
+          )}
         </div>
-      </form>
-    </>
+      </div>
+    </form>
   );
 }
 

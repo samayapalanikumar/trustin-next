@@ -12,11 +12,18 @@ export async function patchSampleWorkflow(
   prevState: any,
   formData: FormData,
 ) {
-  let jsonObject = Object.fromEntries(formData.entries());
+  
+  if(!formData){
+    return{
+      fieldErrors: null,
+      type: "Error",
+      message: "Oh, Snap, Data not pass-through",
+    }
+  }
 
+  let jsonObject =Object.fromEntries(formData.entries());
   jsonObject.test_params = [];
   console.log(jsonObject);
-  console.log(prevState);
 
   const access_token = cookies().get("access_token");
 
@@ -37,7 +44,7 @@ export async function patchSampleWorkflow(
     console.log(response.detail[0].loc);
     console.log(response.detail[0].input);
   }
-  console.log(res.status);
+
   if (res.status === 401) redirect("/signin");
 
   if (res.status !== 200) {
@@ -52,14 +59,14 @@ export async function patchSampleWorkflow(
   revalidateTag("Samples");
 
   if (res.status === 200) {
-    console.log("Hi");
     return {
       fieldErrors: null,
       type: "Success",
-      message: "Status Approve updated Successfully",
+      message: "Status updated Successfully",
     };
   }
-  // if (res.status===200) redirect("/dashboard/samples");
+
+  if (res.status === 200) redirect("/dashboard/samples");
 }
 
 export async function patchSampleWorkflowTestResult(id: string, data: any) {

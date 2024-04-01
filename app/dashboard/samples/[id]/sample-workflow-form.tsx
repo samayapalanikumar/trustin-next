@@ -1,16 +1,21 @@
+"use client";
+import { useFormState } from "react-dom";
 import { Data } from "./page";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import StatusStepper from "./status-stepper1";
 import UnderTestingForm from "./under-testing-form";
 import WorkFlowForm from "@/components/WorkFlowForms/workflowform";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { useEffect } from "react";
 type Props = {
   data: Data;
   actionFn: (
-    prevState: any,
+    prevState:any,
     data: FormData,
   ) => Promise<
-    { fieldErrors: null; type: string; message: string | undefined } | undefined
-  >;
+  { fieldErrors: null; type: string; message: string | undefined } | undefined
+>;
   actionFnResult: (
     data: any,
   ) => Promise<
@@ -47,6 +52,19 @@ type History = {
   assignee: { first_name: string; last_name: string } | null;
   created_by_user: { first_name: string; last_name: string } | null;
 }[];
+
+type InitialState = {
+  fieldErrors?: {} | null;
+  type?: string | null;
+  message?: any | string | null;
+};
+
+const initialState: InitialState = {
+  fieldErrors: {},
+  type: null,
+  message: null,
+};
+
 const status = [
   "Draft",
   "Review Pending",
@@ -62,6 +80,27 @@ const SampleWorkflowForm = ({
   actionFnResult,
   actionFnReject,
 }: Props) => {
+  const [state, formAction] = useFormState(actionFn, initialState)
+  const router = useRouter();
+
+  useEffect(() => {
+    if (state?.type === null) return;
+
+    if (state?.type === "Error") {
+      toast.error(state?.message, {
+        duration: 10000,
+        closeButton: true,
+      });
+    }
+    if (state?.type === "Success") {
+      toast.success(state?.message, {
+        duration: 10000,
+        closeButton: true,
+      });
+      router.push("/dashboard/samples");
+    }
+  }, [state, router]);
+
   return (
     <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
       <Tabs defaultValue="status" className="mt-1 w-full p-4">
@@ -79,7 +118,7 @@ const SampleWorkflowForm = ({
                 <WorkFlowForm
                   rejectActionData={actionFnReject}
                   currentStep={data?.sample?.status_id}
-                  actionData={actionFn}
+                  actionData={formAction}
                   assign={data?.sample?.assigned_to}
                   status="Submitted"
                   status_id={2}
@@ -92,7 +131,7 @@ const SampleWorkflowForm = ({
                     showRejectButton={true}
                     rejectActionData={actionFnReject}
                     currentStep={data?.sample?.status_id}
-                    actionData={actionFn}
+                    actionData={formAction}
                     assign={data.sample.assigned_to}
                     status_id={3}
                     buttonName="Approve"
@@ -105,7 +144,7 @@ const SampleWorkflowForm = ({
                   showRejectButton={true}
                   rejectActionData={actionFnReject}
                   currentStep={data?.sample?.status_id}
-                  actionData={actionFn}
+                  actionData={formAction}
                   assign={data.sample.assigned_to}
                   status_id={4}
                   buttonName="Sample Received"
@@ -118,7 +157,7 @@ const SampleWorkflowForm = ({
                   showRejectButton={true}
                   rejectActionData={actionFnReject}
                   currentStep={data?.sample?.status_id}
-                  actionData={actionFn}
+                  actionData={formAction}
                   assign={data.sample.assigned_to}
                   status_id={5}
                   buttonName="Assign"

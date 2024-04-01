@@ -5,9 +5,22 @@ import UnderTestingForm from "./under-testing-form";
 import WorkFlowForm from "@/components/WorkFlowForms/workflowform";
 type Props = {
   data: Data;
-  actionFn: (formData: FormData) => Promise<void>;
-  actionFnResult: (formData: FormData) => void;
-  actionFnReject: (data: any) => void;
+  actionFn: (
+    prevState: any,
+    data: FormData,
+  ) => Promise<
+    { fieldErrors: null; type: string; message: string | undefined } | undefined
+  >;
+  actionFnResult: (
+    data: any,
+  ) => Promise<
+    { fieldErrors: null; type: string; message: string | undefined } | undefined
+  >;
+  actionFnReject: (
+    data: any,
+  ) => Promise<
+    { fieldErrors: null; type: string; message: string | undefined } | undefined
+  >;
 };
 
 type Workflow = {
@@ -116,7 +129,7 @@ const SampleWorkflowForm = ({
 
               {data.sample.status_id === 5 && (
                 <UnderTestingForm
-                showRejectButton={true}
+                  showRejectButton={true}
                   rejectActionData={actionFnReject}
                   currentStep={data?.sample?.status_id}
                   assigned_to={data.sample.assigned_to}
@@ -127,7 +140,7 @@ const SampleWorkflowForm = ({
               )}
               {data.sample.status_id === 6 && (
                 <UnderTestingForm
-                showRejectButton={true}
+                  showRejectButton={true}
                   rejectActionData={actionFnReject}
                   currentStep={data?.sample?.status_id}
                   assigned_to={data.sample.assigned_to}

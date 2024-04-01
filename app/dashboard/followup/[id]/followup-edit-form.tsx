@@ -59,7 +59,6 @@ const FollowupEditForm = ({ data, actionFn }: Props) => {
       </TabsList>
       <TabsContent value="edit-form">
         <form action={formAction}>
-          <input type="hidden" name="id" defaultValue={data.followup.id} />
           <div className="p-6.5">
             <div className="mb-4.5">
               <label className="mb-2.5 block text-black dark:text-white">

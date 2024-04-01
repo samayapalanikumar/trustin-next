@@ -56,7 +56,6 @@ const CustomerEditForm = ({
           <label className="mb-2.5 block text-black dark:text-white">
             Company Name
           </label>
-          <input type="hidden" name="id" defaultValue={data.id} />
           <input
             type="text"
             name="company_name"

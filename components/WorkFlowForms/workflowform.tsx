@@ -1,11 +1,18 @@
 "use client";
 import React from "react";
+import { useFormState } from "react-dom";
 import Select from "../select-input";
 import SubmitButton from "../submit-button/submit-button";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 type Props = {
-  actionData: (data: FormData) => Promise<void>;
-  rejectActionData: (data: any) => void;
+  actionData: (prevState:any, data: FormData) =>  Promise<
+  { fieldErrors: null; type: string; message: string | undefined } | undefined
+>;
+  rejectActionData: (data: any) =>  Promise<
+  { fieldErrors: null; type: string; message: string | undefined } | undefined
+>;
   showRejectButton?: boolean;
   assign: number;
   status?: string;
@@ -17,6 +24,17 @@ type Props = {
   showComment?: boolean;
 };
 
+type InitialState = {
+  fieldErrors?: {} | null;
+  type?: string | null;
+  message?: any | string | null;
+};
+
+const initialState: InitialState = {
+  fieldErrors: {},
+  type: null,
+  message: null,
+};
 function WorkFlowForm({
   actionData,
   rejectActionData,
@@ -33,26 +51,76 @@ function WorkFlowForm({
   const [comments, setComments] = React.useState(comment);
   const [loading, setLoading] = React.useState(false);
 
+  const [state, formAction]=useFormState(actionData, initialState)
+  const [rejectState, setRejectState]=React.useState<InitialState|undefined>(initialState)
+  const router = useRouter();
+
   const handleCommentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setComments(e?.target?.value);
   };
 
-  const handleReject = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  
+React.useEffect(() => {
+  console.log("Hey")
+  console.log(state)
+  if (state?.type === null) return;
+
+  if (state?.type === "Error") {
+    toast.error(state?.message, {
+      duration: 10000,
+      closeButton: true,
+    });
+  }
+  if (state?.type === "Success") {
+    toast.success(state?.message, {
+      duration: 10000,
+      closeButton: true,
+    });
+    router.push("/dashboard/samples");
+  }
+}, [state, router]);
+
+
+  React.useEffect(() => {
+    if (rejectState?.type === null) return;
+
+    if (rejectState?.type === "Error") {
+      toast.error(rejectState?.message, {
+        duration: 10000,
+        closeButton: true,
+      });
+      setLoading(false);
+    }
+    if (rejectState?.type === "Success") {
+      toast.success(rejectState?.message, {
+        duration: 10000,
+        closeButton: true,
+      });
+      setLoading(false);
+      router.push("/dashboard/samples");
+    }
+  }, [rejectState, router]);
+
+  const handleReject = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
     e.stopPropagation();
     setLoading(true)
-    rejectActionData({
+    const res =await rejectActionData({
       status: status,
       status_id: currentStep === 2 ? 2 : currentStep - 1,
       assigned_to: assign,
       comments: comments,
       test_params: [],
     });
+    setRejectState(res);
+
   };
+
+
 
   return (
     <>
-      <form action={actionData}>
+      <form action={formAction}>
         <div className="p-2.5">
           <input type="hidden" value={status} name="status" />
           <input type="hidden" value={status_id} name="status_id" />

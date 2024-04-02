@@ -22,6 +22,9 @@ async function getData(id:string) {
       cache: 'no-store'
 
     },
+    next:{
+      tags:["TRF"]
+    }
   });
   const res2 = await fetch(`${SERVER_API_URL}/products/trf`, {
     headers: {

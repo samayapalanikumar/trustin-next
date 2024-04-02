@@ -276,7 +276,7 @@ const SampleWorkflowForm = ({
                   currentStep={data?.sample?.status_id}
                   actionData={formAction}
                   assign={data?.sample?.assigned_to}
-                  status="Submitted"
+                  status={data?.sample?.status != "Submitted" ? "Submitted" : ""}
                   status_id={2}
                   buttonName="Submit for Review"
                 />

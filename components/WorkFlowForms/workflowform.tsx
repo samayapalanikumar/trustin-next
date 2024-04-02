@@ -87,7 +87,7 @@ function WorkFlowForm({
     setLoading(true);
     const res = await rejectActionData({
       status: status,
-      status_id: currentStep === 2 ? 2 : currentStep - 1,
+      status_id: currentStep === 2 ? 1 : currentStep - 1,
       assigned_to: assign,
       comments: comments,
       test_params: [],

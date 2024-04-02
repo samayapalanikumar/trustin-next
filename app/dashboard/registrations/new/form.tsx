@@ -143,22 +143,23 @@ const RegistrationForm = ({ data }: { data: any }) => {
           data.microParameters.forEach((para) => {
             if (listParameters.includes(para.id)) {
               console.log("hey");
-              testMicroAppend({ test_params_id: para.id });
+              testMicroAppend  ({ test_params_id: para.id });
             }
           });
       }
       if (watchedTestTypeValue?.includes("2")) {
+        console.log("Micro")
         data?.mechParameters.length &&
           data?.mechParameters?.forEach((para) => {
             if (listParameters.includes(para.id)) {
               console.log("hi");
 
-              testMicroAppend({ test_params_id: para.id });
+              testMechAppend({ test_params_id: para.id });
             }
           });
       }
     }
-  }, [watchedTestTypeValue, form.setValue, parameters]);
+  }, [watchedTestTypeValue, form.setValue, parameters, testMicroReplace, testMechReplace, data.microParameters, data?.mechParameters, testMicroAppend]);
 
   useEffect(() => {
     if (state?.type === null) return;

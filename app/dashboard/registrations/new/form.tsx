@@ -97,18 +97,18 @@ const RegistrationForm = ({ data }: { data: any }) => {
         form.setValue("company_id", data.customer_id);
         form.setValue("product", data.product_id);
         form.setValue("company_name", data?.customer?.company_name);
-        form.setValue("city", data?.product?.city);
-        form.setValue("state", data?.product?.state);
-        form.setValue("pincode_no", data?.product?.pincode_no);
+        form.setValue("city", data?.customer?.city);
+        form.setValue("state", data?.customer?.state);
+        form.setValue("pincode_no", data?.customer?.pincode_no);
         form.setValue(
           "customer_address_line1",
-          data?.product?.customer_address_line1,
+          data?.customer?.customer_address_line1,
         );
         form.setValue(
           "customer_address_line2",
-          data?.product?.customer_address_line2,
+          data?.customer?.customer_address_line2,
         );
-        form.setValue("gst", data?.product?.gst);
+        form.setValue("gst", data?.customer?.gst);
 
         // data?.test_details.forEach((para) => {
         //   testAppend({ test_params_id: para?.parameter_id });

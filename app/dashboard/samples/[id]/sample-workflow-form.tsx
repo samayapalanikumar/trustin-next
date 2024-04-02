@@ -1,4 +1,6 @@
-'use client';
+"use client";
+import { useFormState } from "react-dom";
+
 import { Data } from "./page";
 import React, {useState} from 'react';
 import { createRoot } from 'react-dom/client';
@@ -6,6 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import StatusStepper from "./status-stepper1";
 import UnderTestingForm from "./under-testing-form";
 import WorkFlowForm from "@/components/WorkFlowForms/workflowform";
+
 // import InvoicePDF from '@/components/Print/InvoicePDF';
 import { PDFViewer,PDFDownloadLink, Document, Page, Text, View, StyleSheet } from '@react-pdf/renderer';
 import ReactDOMServer from 'react-dom/server';
@@ -15,11 +18,29 @@ import MyDocument from '@/components/Print/InvoicePDF';
 // Make sure to bind modal to your app element (https://reactcommunity.org/react-modal/accessibility/)
 
 // import { PDFDocument, Page, Text, View, Document, StyleSheet } from '@react-pdf/renderer';
+
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { useEffect } from "react";
+
 type Props = {
   data: Data;
-  actionFn: (formData: FormData) => Promise<void>;
-  actionFnResult: (formData: FormData) => void;
-  actionFnReject: (data: any) => void;
+  actionFn: (
+    prevState:any,
+    data: FormData,
+  ) => Promise<
+  { fieldErrors: null; type: string; message: string | undefined } | undefined
+>;
+  actionFnResult: (
+    data: any,
+  ) => Promise<
+    { fieldErrors: null; type: string; message: string | undefined } | undefined
+  >;
+  actionFnReject: (
+    data: any,
+  ) => Promise<
+    { fieldErrors: null; type: string; message: string | undefined } | undefined
+  >;
 };
 
 type Workflow = {
@@ -46,6 +67,19 @@ type History = {
   assignee: { first_name: string; last_name: string } | null;
   created_by_user: { first_name: string; last_name: string } | null;
 }[];
+
+type InitialState = {
+  fieldErrors?: {} | null;
+  type?: string | null;
+  message?: any | string | null;
+};
+
+const initialState: InitialState = {
+  fieldErrors: {},
+  type: null,
+  message: null,
+};
+
 const status = [
   "Draft",
   "Review Pending",
@@ -135,6 +169,7 @@ const SampleWorkflowForm = ({
   actionFnReject,
 }: Props) => {
 
+
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const openModal = () => setIsModalOpen(true);
@@ -182,6 +217,29 @@ const SampleWorkflowForm = ({
   //     alert('Please allow pop-ups for this site');
   //   }
   // };
+
+  const [state, formAction] = useFormState(actionFn, initialState)
+  const router = useRouter();
+
+  useEffect(() => {
+    if (state?.type === null) return;
+
+    if (state?.type === "Error") {
+      toast.error(state?.message, {
+        duration: 10000,
+        closeButton: true,
+      });
+    }
+    if (state?.type === "Success") {
+      toast.success(state?.message, {
+        duration: 10000,
+        closeButton: true,
+      });
+      router.push("/dashboard/samples");
+    }
+  }, [state, router]);
+
+
   return (
     <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
       <div className="flex flex-col gap-3 sm:flex-row items-end sm:justify-end align-items:flex-end ">
@@ -216,7 +274,7 @@ const SampleWorkflowForm = ({
                 <WorkFlowForm
                   rejectActionData={actionFnReject}
                   currentStep={data?.sample?.status_id}
-                  actionData={actionFn}
+                  actionData={formAction}
                   assign={data?.sample?.assigned_to}
                   status="Submitted"
                   status_id={2}
@@ -229,7 +287,7 @@ const SampleWorkflowForm = ({
                     showRejectButton={true}
                     rejectActionData={actionFnReject}
                     currentStep={data?.sample?.status_id}
-                    actionData={actionFn}
+                    actionData={formAction}
                     assign={data.sample.assigned_to}
                     status_id={3}
                     buttonName="Approve"
@@ -242,7 +300,7 @@ const SampleWorkflowForm = ({
                   showRejectButton={true}
                   rejectActionData={actionFnReject}
                   currentStep={data?.sample?.status_id}
-                  actionData={actionFn}
+                  actionData={formAction}
                   assign={data.sample.assigned_to}
                   status_id={4}
                   buttonName="Sample Received"
@@ -255,7 +313,7 @@ const SampleWorkflowForm = ({
                   showRejectButton={true}
                   rejectActionData={actionFnReject}
                   currentStep={data?.sample?.status_id}
-                  actionData={actionFn}
+                  actionData={formAction}
                   assign={data.sample.assigned_to}
                   status_id={5}
                   buttonName="Assign"
@@ -266,7 +324,7 @@ const SampleWorkflowForm = ({
 
               {data.sample.status_id === 5 && (
                 <UnderTestingForm
-                showRejectButton={true}
+                  showRejectButton={true}
                   rejectActionData={actionFnReject}
                   currentStep={data?.sample?.status_id}
                   assigned_to={data.sample.assigned_to}
@@ -277,7 +335,7 @@ const SampleWorkflowForm = ({
               )}
               {data.sample.status_id === 6 && (
                 <UnderTestingForm
-                showRejectButton={true}
+                  showRejectButton={true}
                   rejectActionData={actionFnReject}
                   currentStep={data?.sample?.status_id}
                   assigned_to={data.sample.assigned_to}

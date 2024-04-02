@@ -22,6 +22,7 @@ async function getData() {
       "Content-Type": "application/json",
       Authorization: `Bearer ${access_token?.value}`,
     },
+    next:{tags:['Samples']}
   });
 
   // The return value is *not* serialized

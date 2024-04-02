@@ -48,7 +48,7 @@ export async function createSamples(id, data: any) {
     };
   }
 
-  revalidateTag("Registration");
+  revalidateTag("Samples");
 
   if (res.status === 200) {
     return {

@@ -43,7 +43,7 @@ const RegistrationForm = ({
   updateFn,
 }: {
   data: any;
-  updateFn: (data: any) => void;
+  updateFn: (data: any) => Promise<{ fieldErrors: null; type: string; message: string | undefined; } | undefined>;
 }) => {
   const form = useForm({
     defaultValues: {

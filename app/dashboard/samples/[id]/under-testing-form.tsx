@@ -2,6 +2,8 @@
 import Select from "@/components/select-input";
 import React from "react";
 import { useFieldArray, useForm, Form } from "react-hook-form";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 type Parameters = [
   {
@@ -36,13 +38,33 @@ type Parameters = [
 type Props = {
   showRejectButton?: boolean;
   parameters: Parameters;
-  patchFn: (data: any) => void;
-  rejectActionData: (data: any) => void;
+  patchFn: (
+    data: any,
+  ) => Promise<
+    { fieldErrors: null; type: string; message: string | undefined } | undefined
+  >;
+  rejectActionData: (
+    data: any,
+  ) => Promise<
+    { fieldErrors: null; type: string; message: string | undefined } | undefined
+  >;
   assigned_to: number;
   step: number;
   buttonName?: string;
   comment?: string;
   currentStep: number;
+};
+
+type InitialState = {
+  fieldErrors?: {} | null;
+  type?: string | null;
+  message?: any | string | null;
+};
+
+const initialState: InitialState = {
+  fieldErrors: {},
+  type: null,
+  message: null,
 };
 
 const UnderTestingForm = ({
@@ -81,7 +103,13 @@ const UnderTestingForm = ({
     name: "test_params",
   });
 
-  const handleSubmit = ({
+  const [loading, setLoading] = React.useState(false);
+  const [state, setState] = React.useState<InitialState | undefined>(
+    initialState,
+  );
+  const router = useRouter();
+
+  const handleSubmit = async ({
     formData,
     data,
     formDataJson,
@@ -91,25 +119,45 @@ const UnderTestingForm = ({
     formDataJson: {};
   }) => {
     console.log(data);
-    patchFn(data);
+    const res = await patchFn(data);
+    setState(res);
   };
 
-  const [loading, setLoading] = React.useState(false);
+  React.useEffect(() => {
+    if (state?.type === null) return;
 
+    if (state?.type === "Error") {
+      toast.error(state?.message, {
+        duration: 10000,
+        closeButton: true,
+      });
+    }
+    if (state?.type === "Success") {
+      toast.success(state?.message, {
+        duration: 10000,
+        closeButton: true,
+      });
+      router.push("/dashboard/samples");
+    }
+  }, [state, router]);
 
-  const handleReject = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  const handleReject = async (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  ) => {
     e.preventDefault();
     e.stopPropagation();
-    setLoading(true)
+    setLoading(true);
     console.log(getValues());
     const { comments, test_params } = getValues();
-    rejectActionData({
+    const res = await rejectActionData({
       status: "",
       status_id: currentStep === 2 ? 2 : currentStep - 1,
       assigned_to: assigned_to,
       comments: comments,
       test_params: test_params,
     });
+
+    setState(res);
   };
 
   return (
@@ -209,11 +257,10 @@ const UnderTestingForm = ({
           <button
             onClick={handleReject}
             type="button"
-
             className="flex w-1/2 justify-center rounded bg-danger p-3 font-medium text-gray"
             disabled={loading}
           >
-          {loading? "Loading..." : "Reject"}
+            {loading ? "Loading..." : "Reject"}
           </button>
         )}
       </div>

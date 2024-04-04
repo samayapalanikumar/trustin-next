@@ -1,8 +1,6 @@
 "use client";
-import CheckboxThree from "@/components/Checkboxes/CheckboxThree";
 import { Checkbox } from "@/components/ui/checkbox";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { redirect } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useFieldArray, useForm, useWatch } from "react-hook-form";
 import * as z from "zod";
@@ -20,10 +18,12 @@ import { Data } from "./typings";
 import { SERVER_API_URL } from "@/app/constant";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import Select from "@/components/select-input";
 
 type ParametersType = {
   id: number;
   testing_parameters: string;
+  method_or_spec: string;
   test_type: {
     name: string;
   };
@@ -132,8 +132,8 @@ const TRFAdminForm = ({
 }) => {
   //   const data: Data = await getData();
   //   const [data, setData] = useState<Data>();
-  const [parameters, setParameters] = useState<ParametersType>();
-  const form = useForm<z.infer<typeof trfSchema>>({
+  const [parameters, setParameters] = useState<ParametersType>([]);
+  const form = useForm({
     resolver: zodResolver(trfSchema),
     defaultValues: {
       sample_name: data.trf?.sample_name ?? "",
@@ -158,7 +158,12 @@ const TRFAdminForm = ({
       report_sent_by: data.trf?.report_sent_by,
       submission_of_documents: data.trf?.submission_of_documents,
       nabl_logo: data.trf?.nabl_logo ? "1" : "0",
-      testing_details: data.trf?.test_details,
+      testing_details: [
+        {
+          parameter_id: "",
+          priority_order: 0,
+        },
+      ],
     },
   });
   const { fields, append, remove, replace } = useFieldArray({
@@ -179,29 +184,43 @@ const TRFAdminForm = ({
   const [state, setState] = useState<InitialState | undefined>(initialState);
   const router = useRouter();
 
-  async function fetchTestParameters(query: string, product: string) {
-    let res = await fetch(
-      `${SERVER_API_URL}/parameters/trf/${data.trf.product_id}/?${query}`,
-    );
-    const response: ParametersType = await res.json();
-    setParameters(response);
-  }
-
   useEffect(() => {
+    async function fetchTestParameters(query: string, product: string) {
+      let res = await fetch(
+        `${SERVER_API_URL}/parameters/trf/${data.trf.product_id}/?${query}`,
+      );
+      const response: ParametersType = await res.json();
+      setParameters(response);
+    }
+
     if (testTypes) {
       if (testTypes.length > 0) {
         const query = testTypes
-          .map((value, index) => `test_type=${encodeURIComponent(value)}`)
+          .map((value, idx) => `test_type=${encodeURIComponent(value)}`)
           .join("&");
 
         fetchTestParameters(query, data.trf.product_id.toString());
       }
     }
-  }, [testTypes]);
+  }, [append, data.trf.product_id, data.trf?.test_details, testTypes]);
 
-  const getTestTypeName = () => {
-    return "";
-  };
+  useEffect(() => {
+    if (parameters && parameters?.length) {
+      replace([]);
+      data?.trf?.test_details.forEach((test) => {
+        append({
+          parameter_id: test.parameter_id.toString(),
+          priority_order: test.priority_order,
+        });
+      });
+    }
+  }, [
+    append,
+    data?.trf?.test_details,
+    parameters,
+    parameters?.length,
+    replace,
+  ]);
 
   useEffect(() => {
     if (state?.type === null) return;
@@ -220,6 +239,40 @@ const TRFAdminForm = ({
       router.push("/dashboard/trf");
     }
   }, [state, router]);
+
+  const test_watch = useWatch({
+    control: form.control,
+    name: "testing_details",
+  });
+
+  const [testTypesName, setTestTypesName] = useState<string[]>([]);
+  const [methods, setMethods] = useState<string[]>([]);
+
+  useEffect(() => {
+    const ids = test_watch.map((field, idx) => {
+      if (field.parameter_id !== "") return field.parameter_id.toString();
+    });
+    console.log(ids);
+    const tests = parameters.filter((para) => ids.includes(para.id.toString()));
+    console.log(parameters);
+
+    const test_names:string[]= []
+
+    ids.forEach((id)=>{
+      const test_name = tests?.find(t=>t.id.toString()===id)?.test_type?.name ?? undefined;
+      if(test_name) test_names.push(test_name)
+    })
+
+    const methods:string[] = [];
+    ids.forEach((id)=>{
+      const method = tests?.find(t=>t.id.toString()===id)?.method_or_spec ?? undefined;
+      if(method) methods.push(method)
+    })
+    console.log(test_names)
+
+    setTestTypesName(test_names);
+    setMethods(methods);
+  }, [parameters, test_watch]);
 
   const handleFormSubmit = async (data: {}) => {
     console.log(data);
@@ -871,93 +924,79 @@ const TRFAdminForm = ({
                       <table className="w-full table-auto">
                         <thead>
                           <tr className="bg-gray-2 text-left dark:bg-meta-4">
-                            <th className="min-w-[220px] px-4 py-4 font-medium text-black dark:text-white xl:pl-11">
+                            <th className="w-[50px] px-4 py-4 font-medium text-black dark:text-white xl:pl-11">
                               S.NO
                             </th>
                             <th className="min-w-[220px] px-4 py-4 font-medium text-black dark:text-white xl:pl-11">
                               Test Parameter Name
                             </th>
-                            <th className="min-w-[220px] px-4 py-4 font-medium text-black dark:text-white xl:pl-11">
+                            <th className="w-[100px] px-4 py-4 font-medium text-black dark:text-white xl:pl-11">
                               Test Type
                             </th>
                             <th className="min-w-[220px] px-4 py-4 font-medium text-black dark:text-white xl:pl-11">
+                              Method / Spec
+                            </th>
+                            <th className="w-[100px] px-4 py-4 font-medium text-black dark:text-white xl:pl-11">
                               Priority Order
                             </th>
-                            <th className="min-w-[220px] px-4 py-4 font-medium text-black dark:text-white xl:pl-11">
+                            <th className="w-[100px] px-4 py-4 font-medium text-black dark:text-white xl:pl-11">
                               Remove?
                             </th>
                           </tr>
                         </thead>
                         <tbody>
-                          {fields.map((item, index) => (
+                          {fields.map((item, idx) => (
                             <tr key={item.id}>
                               <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-11">
                                 <h5 className="font-medium text-black dark:text-white">
-                                  {index + 1}
+                                  {idx + 1}
                                 </h5>
                               </td>
                               <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-11">
                                 {/* <h5 className="font-medium text-black dark:text-white">
                                   {
-                                    data.trf?.test_details?.[index]?.parameter
+                                    data.trf?.test_details?.[idx]?.parameter
                                       ?.testing_parameters
                                   }
                                 </h5>
                                 <input
                                   type="hidden"
                                   {...form.register(
-                                    `testing_details.${index}.parameter_id`
+                                    `testing_details.${idx}.parameter_id`
                                   )}
                                   className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                                 /> */}
-                                <div className="relative z-20 bg-transparent dark:bg-form-input">
-                                  <select
-                                    {...form.register(
-                                      `testing_details.${index}.parameter_id`,
-                                    )}
-                                    className="relative z-20 w-full appearance-none rounded border border-stroke bg-transparent px-5 py-3 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-                                  >
-                                    {parameters?.map((parameter) => (
-                                      <option
-                                        value={parameter.id}
-                                        key={parameter.id}
-                                        defaultValue={parameter.id}
-                                      >
-                                        {parameter.testing_parameters}
-                                      </option>
-                                    ))}
-                                  </select>
-                                  <span className="absolute right-4 top-1/2 z-30 -translate-y-1/2">
-                                    <svg
-                                      className="fill-current"
-                                      width="24"
-                                      height="24"
-                                      viewBox="0 0 24 24"
-                                      fill="none"
-                                      xmlns="http://www.w3.org/2000/svg"
+
+                                <Select
+                                  name={`testing_details.${idx}.parameter_id`}
+                                  register={form.register}
+                                >
+                                  <option value="">------------</option>
+                                  {parameters?.map((parameter) => (
+                                    <option
+                                      value={parameter.id}
+                                      key={parameter.id}
                                     >
-                                      <g opacity="0.8">
-                                        <path
-                                          fillRule="evenodd"
-                                          clipRule="evenodd"
-                                          d="M5.29289 8.29289C5.68342 7.90237 6.31658 7.90237 6.70711 8.29289L12 13.5858L17.2929 8.29289C17.6834 7.90237 18.3166 7.90237 18.7071 8.29289C19.0976 8.68342 19.0976 9.31658 18.7071 9.70711L12.7071 15.7071C12.3166 16.0976 11.6834 16.0976 11.2929 15.7071L5.29289 9.70711C4.90237 9.31658 4.90237 8.68342 5.29289 8.29289Z"
-                                          fill=""
-                                        ></path>
-                                      </g>
-                                    </svg>
-                                  </span>
-                                </div>
+                                      {parameter.testing_parameters}
+                                    </option>
+                                  ))}
+                                </Select>
                               </td>
                               <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-11">
                                 <h5 className="font-medium text-black dark:text-white">
-                                  {getTestTypeName()}
+                                  {testTypesName[idx]}
+                                </h5>
+                              </td>
+                              <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-11">
+                                <h5 className="font-medium text-black dark:text-white">
+                                  {methods[idx]}
                                 </h5>
                               </td>
                               <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-11">
                                 <input
                                   type="text"
                                   {...form.register(
-                                    `testing_details.${index}.priority_order`,
+                                    `testing_details.${idx}.priority_order`,
                                   )}
                                   className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                                 />
@@ -965,7 +1004,7 @@ const TRFAdminForm = ({
                               <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-11">
                                 <button
                                   type="button"
-                                  onClick={() => remove(index)}
+                                  onClick={() => remove(idx)}
                                 >
                                   Remove
                                 </button>
@@ -979,8 +1018,8 @@ const TRFAdminForm = ({
                         className="mt-2 flex justify-center rounded bg-primary p-3 font-medium text-gray"
                         onClick={() =>
                           append({
-                            parameter_id: 1,
-                            priority_order: 0,
+                            parameter_id: "",
+                            priority_order: fields.length + 1,
                           })
                         }
                       >

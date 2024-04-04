@@ -235,8 +235,8 @@ const UnderTestingForm = ({
                       name={`test_params.${index}.result`}
                       register={register}
                     >
-                      <option value={1}>True</option>
-                      <option value={0}>False</option>
+                      <option value={1}>Pass</option>
+                      <option value={0}>Fail</option>
                     </Select>
                   </td>
                 </tr>

@@ -4,16 +4,24 @@ import RegistrationForm from "./form";
 import { cookies } from "next/headers";
 import { SERVER_API_URL } from "@/app/constant";
 import { redirect } from "next/navigation";
-import { createRegistration, updateRegistration } from "../actions";
-import SampleDialog from "./sample-dialog";
+import { updateRegistration } from "../actions";
 import Link from "next/link";
-// import { createBranch } from "../actions";
 
 export const metadata: Metadata = {
   title: "Edit New Registration | Trustin",
   description: "This is Form Layout page for TailAdmin Next.js",
   // other metadata
 };
+
+type ParametersType = {
+  id: number;
+  testing_parameters: string;
+  method_or_spec: string;
+  test_type_id: number;
+  test_type: {
+    name: string;
+  };
+}[];
 
 async function getData(id: string) {
   const cookieStore = cookies();
@@ -79,7 +87,7 @@ async function getData(id: string) {
   const customers = await res2.json();
   const branches = await res3.json();
   const products = await res4.json();
-  const parameters = await res5.json();
+  const parameters:ParametersType = await res5.json();
 
   const batches = registration.batches.map((batch: any) => ({
     ...batch,
@@ -92,15 +100,14 @@ async function getData(id: string) {
   const microParameters = parameters.filter((para) => para.test_type_id == 1);
   const mechParameters = parameters.filter((para) => para.test_type_id == 2);
   const trflist = trf.map((t: any) => ({ label: t.trf_code, value: t.id }));
-
   registration.test_params_micro = registration.test_params.filter(
-    (para) => para.test_parameter.test_type_id == 1,
+    (para:any) => para.test_parameter.test_type_id == 1,
   );
   registration.test_params_mech = registration.test_params.filter(
-    (para) => para.test_parameter.test_type_id == 2,
+    (para:any) => para.test_parameter.test_type_id == 2,
   );
   registration.test_types = registration.test_types.map(
-    (type) => ""+type.test_type_id,
+    (type:any) => ""+type.test_type_id,
   );
   console.log( registration.test_types)
   return {

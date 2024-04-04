@@ -17,6 +17,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { AnyAaaaRecord } from "dns";
 type Data = {
   products: {
     id: number;
@@ -29,11 +30,12 @@ type Data = {
 };
 
 type ParametersType = {
-  id:number;
-  testing_parameters:string;
-  test_type:{
-    name:string;
-  }
+  id: number;
+  testing_parameters: string;
+  method_or_spec:string;
+  test_type: {
+    name: string;
+  };
 }[];
 
 const yesOrNoSchema = z.enum(["YES", "NO"]);
@@ -114,11 +116,10 @@ const DOCTYPE = {
   IF_ANY_OTHER: "IF ANY OTHER",
 };
 
-const TRFForm = ({trf, updateAction}) => {
+const TRFForm = ({ trf, updateAction }) => {
   //   const data: Data = await getData();
   const [data, setData] = useState<Data>();
-  const [parameters, setParameters] =
-    useState<ParametersType>();
+  const [parameters, setParameters] = useState<ParametersType>();
   const form = useForm<z.infer<typeof trfSchema>>({
     resolver: zodResolver(trfSchema),
     defaultValues: {
@@ -141,22 +142,61 @@ const TRFForm = ({trf, updateAction}) => {
     name: "test_types_ids", // Replace with the actual name of your checkbox group
     defaultValue: [],
   });
-  const product = useWatch({
+
+  const test_watch = useWatch({
     control: form.control,
-    name: "product_id", // Replace with the actual name of your checkbox group
+    name: "testing_details",
   });
 
-  async function fetchTestParameters(query: string, product: string) {
-    let res = await fetch(
-      `${SERVER_API_URL}/parameters/trf/${product}/?${query}`
-    );
-    const response:ParametersType = await res.json();
-    setParameters(response);
-    
-    replace(response);
-  }
+  const [testTypesName, setTestTypesName] = useState<string[]>([]);
+  const [methods, setMethods] = useState<string[]>([]);
 
   useEffect(() => {
+    if (test_watch) {
+      const ids = test_watch.map((field, idx) => {
+        if (field.parameter_id.toString() !== "") return field.parameter_id.toString();
+      });
+      if (parameters?.length) {
+        const tests = parameters.filter((para) =>
+          ids.includes(para.id.toString()),
+        );
+        console.log(parameters);
+
+        const test_names: string[] = [];
+
+        ids.forEach((id) => {
+          const test_name =
+            tests?.find((t) => t.id.toString() === id)?.test_type?.name ??
+            undefined;
+          if (test_name) test_names.push(test_name);
+        });
+
+        const methods: string[] = [];
+        ids.forEach((id) => {
+          const method =
+            tests?.find((t) => t.id.toString() === id)?.method_or_spec ??
+            undefined;
+          if (method) methods.push(method);
+        });
+        console.log(test_names);
+
+        setTestTypesName(test_names);
+        setMethods(methods);
+      }
+    }
+  }, [parameters, test_watch]);
+
+  useEffect(() => {
+    async function fetchTestParameters(query: string, product: string) {
+      let res = await fetch(
+        `${SERVER_API_URL}/parameters/trf/${product}/?${query}`,
+      );
+      const response: ParametersType = await res.json();
+      setParameters(response);
+
+      replace(response);
+    }
+
     if (testTypes) {
       if (testTypes.length > 0) {
         replace([]);
@@ -167,7 +207,7 @@ const TRFForm = ({trf, updateAction}) => {
         fetchTestParameters(query, trf.product_id);
       }
     }
-  }, [testTypes]);
+  }, [replace, testTypes, trf.product_id]);
 
   useEffect(() => {
     async function getData() {
@@ -209,73 +249,76 @@ const TRFForm = ({trf, updateAction}) => {
       <div className="bg-boxdark-2 text-bodydark">
         {Object.keys(form.formState.errors).length > 0 && (
           <ul>
-            {Object.entries(form.formState.errors).map(([fieldName, fieldError]) => (
-              <li key={fieldName}>{fieldError.message}</li>
-            ))}
+            {Object.entries(form.formState.errors).map(
+              ([fieldName, fieldError]) => (
+                <li key={fieldName}>{fieldError.message}</li>
+              ),
+            )}
           </ul>
         )}
       </div>
 
-      <div className="grid grid-cols-1 gap-9 sm:grid-cols-1 bg-boxdark-2 text-bodydark">
+      <div className="grid grid-cols-1 gap-9 bg-boxdark-2 text-bodydark sm:grid-cols-1">
         <div className="flex flex-col gap-9">
           {/* <!-- Contact Form --> */}
-          <div className="rounded-sm border   shadow-default border-strokedark bg-boxdark text-bodydark">
+          <div className="rounded-sm border   border-strokedark bg-boxdark text-bodydark shadow-default">
             {/* <div className="border-b  py-4 px-6.5 dark:border-strokedark">
               <h3 className="font-medium text-white">
                 Contact Form
               </h3>
             </div> */}
-            
+
             <Form {...form}>
               <form
-              
-                onSubmit={form.handleSubmit((data) =>{
-                  console.log(data)
-                  updateAction(data)
-                } )}
+                onSubmit={form.handleSubmit((data) => {
+                  console.log(data);
+                  updateAction(data);
+                })}
                 // action={updateAction}
               >
-
                 <div className="p-6.5">
-
-                <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
-                <div  className="w-full xl:w-1/2">
-                    <label className="mb-2.5  text-white">
-                      Trf Code:
-                    </label>
-                    <div className="relative inline-block z-20 bg-transparent dark:bg-form-input">
-                     <p className='font-extrabold'> {" "}{trf.trf_code}</p>
+                  <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
+                    <div className="w-full xl:w-1/2">
+                      <label className="mb-2.5  text-white">Trf Code:</label>
+                      <div className="relative z-20 inline-block bg-transparent dark:bg-form-input">
+                        <p className="font-extrabold"> {trf.trf_code}</p>
+                      </div>
                     </div>
-                  </div>
-                  <div  className="w-full xl:w-1/2">
-                    <label className="mb-2.5  text-white">
-                      Company Name:
-                    </label>
-                    <div className="relative inline-block z-20 bg-transparent dark:bg-form-input">
-                     <p className='font-extrabold'>{" "}{trf.customer.company_name}</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
-                  <div  className="w-full xl:w-1/2">
-                    <label className="mb-2.5  text-white">
-                      Company Code:
-                    </label>
-                    <div className="relative inline-block z-20 bg-transparent dark:bg-form-input">
-                     <p className='font-extrabold'>{" "}{trf.customer.customer_code}</p>
+                    <div className="w-full xl:w-1/2">
+                      <label className="mb-2.5  text-white">
+                        Company Name:
+                      </label>
+                      <div className="relative z-20 inline-block bg-transparent dark:bg-form-input">
+                        <p className="font-extrabold">
+                          {" "}
+                          {trf.customer.company_name}
+                        </p>
+                      </div>
                     </div>
                   </div>
 
-                  <div  className="w-full xl:w-1/2">
-                    <label className="mb-2.5  text-white">
-                      Company Email: 
-                    </label>
-                    <div className="relative inline-block z-20 bg-transparent dark:bg-form-input">
-                     <p className='font-extrabold'> {trf.customer.email}</p>
+                  <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
+                    <div className="w-full xl:w-1/2">
+                      <label className="mb-2.5  text-white">
+                        Company Code:
+                      </label>
+                      <div className="relative z-20 inline-block bg-transparent dark:bg-form-input">
+                        <p className="font-extrabold">
+                          {" "}
+                          {trf.customer.customer_code}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="w-full xl:w-1/2">
+                      <label className="mb-2.5  text-white">
+                        Company Email:
+                      </label>
+                      <div className="relative z-20 inline-block bg-transparent dark:bg-form-input">
+                        <p className="font-extrabold"> {trf.customer.email}</p>
+                      </div>
                     </div>
                   </div>
-                </div>
 
                   <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
                     <div className="w-full xl:w-1/2">
@@ -285,7 +328,7 @@ const TRFForm = ({trf, updateAction}) => {
                       <input
                         type="hidden"
                         {...form.register("sample_id")}
-                        className="w-full rounded border-[1.5px]  bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter border-form-strokedark bg-form-input dark:focus:border-primary"
+                        className="w-full rounded border-[1.5px]  border-form-strokedark bg-form-input bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:focus:border-primary"
                       />
                     </div>
 
@@ -297,7 +340,7 @@ const TRFForm = ({trf, updateAction}) => {
                         type="hidden"
                         {...form.register("sample_name")}
                         name="sample_name"
-                        className="w-full rounded border-[1.5px]  bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter border-form-strokedark bg-form-input dark:focus:border-primary"
+                        className="w-full rounded border-[1.5px]  border-form-strokedark bg-form-input bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:focus:border-primary"
                       />
                     </div>
                   </div>
@@ -309,7 +352,7 @@ const TRFForm = ({trf, updateAction}) => {
                     <textarea
                       rows={6}
                       {...form.register("description")}
-                      className="w-full rounded border-[1.5px]  bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter border-form-strokedark bg-form-input dark:focus:border-primary"
+                      className="w-full rounded border-[1.5px]  border-form-strokedark bg-form-input bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:focus:border-primary"
                     ></textarea>
                   </div>
 
@@ -321,7 +364,7 @@ const TRFForm = ({trf, updateAction}) => {
                       <input
                         type="number"
                         {...form.register("no_of_samples")}
-                        className="w-full rounded border-[1.5px]  bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter border-form-strokedark bg-form-input dark:focus:border-primary"
+                        className="w-full rounded border-[1.5px]  border-form-strokedark bg-form-input bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:focus:border-primary"
                       />
                     </div>
 
@@ -332,7 +375,7 @@ const TRFForm = ({trf, updateAction}) => {
                       <input
                         type="text"
                         {...form.register("manufactured_by")}
-                        className="w-full rounded border-[1.5px]  bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter border-form-strokedark bg-form-input dark:focus:border-primary"
+                        className="w-full rounded border-[1.5px]  border-form-strokedark bg-form-input bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:focus:border-primary"
                       />
                     </div>
                   </div>
@@ -344,7 +387,7 @@ const TRFForm = ({trf, updateAction}) => {
                       <input
                         type="date"
                         {...form.register("manufactured_date")}
-                        className="w-full rounded border-[1.5px]  bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter border-form-strokedark bg-form-input dark:focus:border-primary"
+                        className="w-full rounded border-[1.5px]  border-form-strokedark bg-form-input bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:focus:border-primary"
                       />
                     </div>
 
@@ -355,7 +398,7 @@ const TRFForm = ({trf, updateAction}) => {
                       <input
                         type="date"
                         {...form.register("expiry_date")}
-                        className="w-full rounded border-[1.5px]  bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter border-form-strokedark bg-form-input dark:focus:border-primary"
+                        className="w-full rounded border-[1.5px]  border-form-strokedark bg-form-input bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:focus:border-primary"
                       />
                     </div>
                   </div>
@@ -368,7 +411,7 @@ const TRFForm = ({trf, updateAction}) => {
                       <input
                         type="text"
                         {...form.register("batch_or_lot_no")}
-                        className="w-full rounded border-[1.5px]  bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter border-form-strokedark bg-form-input dark:focus:border-primary"
+                        className="w-full rounded border-[1.5px]  border-form-strokedark bg-form-input bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:focus:border-primary"
                       />
                     </div>
 
@@ -379,7 +422,7 @@ const TRFForm = ({trf, updateAction}) => {
                       <input
                         type="number"
                         {...form.register("batch_size")}
-                        className="w-full rounded border-[1.5px]  bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter border-form-strokedark bg-form-input dark:focus:border-primary"
+                        className="w-full rounded border-[1.5px]  border-form-strokedark bg-form-input bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:focus:border-primary"
                       />
                     </div>
                   </div>
@@ -391,7 +434,7 @@ const TRFForm = ({trf, updateAction}) => {
                     <input
                       type="text"
                       {...form.register("format_name")}
-                      className="w-full rounded border-[1.5px]  bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter border-form-strokedark bg-form-input dark:focus:border-primary"
+                      className="w-full rounded border-[1.5px]  border-form-strokedark bg-form-input bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:focus:border-primary"
                     />
                   </div>
 
@@ -402,7 +445,7 @@ const TRFForm = ({trf, updateAction}) => {
                     <textarea
                       rows={6}
                       {...form.register("sample_storage_condition")}
-                      className="w-full rounded border-[1.5px]  bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter border-form-strokedark bg-form-input dark:focus:border-primary"
+                      className="w-full rounded border-[1.5px]  border-form-strokedark bg-form-input bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:focus:border-primary"
                     ></textarea>
                   </div>
 
@@ -410,18 +453,20 @@ const TRFForm = ({trf, updateAction}) => {
                     <label className="mb-2.5 block text-white">
                       SAMPILING BY
                     </label>
-                    <div className="relative z-20 bg-transparent bg-form-input">
+                    <div className="relative z-20 bg-form-input bg-transparent">
                       <select
                         {...form.register("sampling_by")}
-                        className="relative z-20 w-full appearance-none rounded border  bg-transparent py-3 px-5 outline-none transition focus:border-primary active:border-primary border-form-strokedark bg-form-input dark:focus:border-primary"
+                        className="relative z-20 w-full appearance-none rounded border  border-form-strokedark bg-form-input bg-transparent px-5 py-3 outline-none transition focus:border-primary active:border-primary dark:focus:border-primary"
                       >
-                        {Object.entries(SAMPILINGBY).map(([key, value]) => (
-                          <option value={key} key={key}>
-                            {value}
-                          </option>
-                        ))}
+                        {Object.entries(SAMPILINGBY).map(
+                          ([key, value]: [any, any]) => (
+                            <option value={key} key={key}>
+                              {value}
+                            </option>
+                          ),
+                        )}
                       </select>
-                      <span className="absolute top-1/2 right-4 z-30 -translate-y-1/2">
+                      <span className="absolute right-4 top-1/2 z-30 -translate-y-1/2">
                         <svg
                           className="fill-current"
                           width="24"
@@ -455,7 +500,7 @@ const TRFForm = ({trf, updateAction}) => {
                             </label>
                           </div>
                           {Object.entries(TESTPROCESSING).map(
-                            ([key, value]) => (
+                            ([key, value]: [any, any]) => (
                               <FormField
                                 key={key}
                                 control={form.control}
@@ -477,8 +522,8 @@ const TRFForm = ({trf, updateAction}) => {
                                                 ])
                                               : field.onChange(
                                                   field.value?.filter(
-                                                    (value) => value !== key
-                                                  )
+                                                    (value) => value !== key,
+                                                  ),
                                                 );
                                           }}
                                         />
@@ -490,7 +535,7 @@ const TRFForm = ({trf, updateAction}) => {
                                   );
                                 }}
                               />
-                            )
+                            ),
                           )}
                           <FormMessage />
                         </FormItem>
@@ -512,42 +557,44 @@ const TRFForm = ({trf, updateAction}) => {
                               Report Sent
                             </label>
                           </div>
-                          {Object.entries(REPORTSENT).map(([key, value]) => (
-                            <FormField
-                              key={key}
-                              control={form.control}
-                              name="report_sent_by"
-                              render={({ field }) => {
-                                return (
-                                  <FormItem
-                                    key={key}
-                                    className="flex flex-row items-start space-x-3 space-y-0"
-                                  >
-                                    <FormControl>
-                                      <Checkbox
-                                        checked={field.value?.includes(key)}
-                                        onCheckedChange={(checked) => {
-                                          return checked
-                                            ? field.onChange([
-                                                ...field.value,
-                                                key,
-                                              ])
-                                            : field.onChange(
-                                                field.value?.filter(
-                                                  (value) => value !== key
-                                                )
-                                              );
-                                        }}
-                                      />
-                                    </FormControl>
-                                    <FormLabel className="font-normal">
-                                      {value}
-                                    </FormLabel>
-                                  </FormItem>
-                                );
-                              }}
-                            />
-                          ))}
+                          {Object.entries(REPORTSENT).map(
+                            ([key, value]: [any, any]) => (
+                              <FormField
+                                key={key}
+                                control={form.control}
+                                name="report_sent_by"
+                                render={({ field }) => {
+                                  return (
+                                    <FormItem
+                                      key={key}
+                                      className="flex flex-row items-start space-x-3 space-y-0"
+                                    >
+                                      <FormControl>
+                                        <Checkbox
+                                          checked={field.value?.includes(key)}
+                                          onCheckedChange={(checked) => {
+                                            return checked
+                                              ? field.onChange([
+                                                  ...field.value,
+                                                  key,
+                                                ])
+                                              : field.onChange(
+                                                  field.value?.filter(
+                                                    (value) => value !== key,
+                                                  ),
+                                                );
+                                          }}
+                                        />
+                                      </FormControl>
+                                      <FormLabel className="font-normal">
+                                        {value}
+                                      </FormLabel>
+                                    </FormItem>
+                                  );
+                                }}
+                              />
+                            ),
+                          )}
                           <FormMessage />
                         </FormItem>
                       )}
@@ -566,10 +613,10 @@ const TRFForm = ({trf, updateAction}) => {
                     <label className="mb-2.5 block text-white">
                       Sample Disposal Process
                     </label>
-                    <div className="relative z-20 bg-transparent bg-form-input">
+                    <div className="relative z-20 bg-form-input bg-transparent">
                       <select
                         {...form.register("sample_disposal_process")}
-                        className="relative z-20 w-full appearance-none rounded border  bg-transparent py-3 px-5 outline-none transition focus:border-primary active:border-primary border-form-strokedark bg-form-input dark:focus:border-primary"
+                        className="relative z-20 w-full appearance-none rounded border  border-form-strokedark bg-form-input bg-transparent px-5 py-3 outline-none transition focus:border-primary active:border-primary dark:focus:border-primary"
                       >
                         {Object.entries(DISPOSALPROCESS).map(([key, value]) => (
                           <option value={key} key={key}>
@@ -577,7 +624,7 @@ const TRFForm = ({trf, updateAction}) => {
                           </option>
                         ))}
                       </select>
-                      <span className="absolute top-1/2 right-4 z-30 -translate-y-1/2">
+                      <span className="absolute right-4 top-1/2 z-30 -translate-y-1/2">
                         <svg
                           className="fill-current"
                           width="24"
@@ -603,10 +650,10 @@ const TRFForm = ({trf, updateAction}) => {
                     <label className="mb-2.5 block text-white">
                       Fail Statement Sent{" "}
                     </label>
-                    <div className="relative z-20 bg-transparent bg-form-input">
+                    <div className="relative z-20 bg-form-input bg-transparent">
                       <select
                         {...form.register("fail_statement_sent")}
-                        className="relative z-20 w-full appearance-none rounded border  bg-transparent py-3 px-5 outline-none transition focus:border-primary active:border-primary border-form-strokedark bg-form-input dark:focus:border-primary"
+                        className="relative z-20 w-full appearance-none rounded border  border-form-strokedark bg-form-input bg-transparent px-5 py-3 outline-none transition focus:border-primary active:border-primary dark:focus:border-primary"
                       >
                         {Object.entries(YESORNO).map(([key, value]) => (
                           <option value={key} key={key}>
@@ -614,7 +661,7 @@ const TRFForm = ({trf, updateAction}) => {
                           </option>
                         ))}
                       </select>
-                      <span className="absolute top-1/2 right-4 z-30 -translate-y-1/2">
+                      <span className="absolute right-4 top-1/2 z-30 -translate-y-1/2">
                         <svg
                           className="fill-current"
                           width="24"
@@ -639,10 +686,10 @@ const TRFForm = ({trf, updateAction}) => {
                     <label className="mb-2.5 block text-white">
                       Specific Decision Rule{" "}
                     </label>
-                    <div className="relative z-20 bg-transparent bg-form-input">
+                    <div className="relative z-20 bg-form-input bg-transparent">
                       <select
                         {...form.register("specific_decision_rule")}
-                        className="relative z-20 w-full appearance-none rounded border bg-transparent py-3 px-5 outline-none transition focus:border-primary active:border-primary border-form-strokedark bg-form-input dark:focus:border-primary"
+                        className="relative z-20 w-full appearance-none rounded border border-form-strokedark bg-form-input bg-transparent px-5 py-3 outline-none transition focus:border-primary active:border-primary dark:focus:border-primary"
                       >
                         {Object.entries(YESORNO).map(([key, value]) => (
                           <option value={key} key={key}>
@@ -650,7 +697,7 @@ const TRFForm = ({trf, updateAction}) => {
                           </option>
                         ))}
                       </select>
-                      <span className="absolute top-1/2 right-4 z-30 -translate-y-1/2">
+                      <span className="absolute right-4 top-1/2 z-30 -translate-y-1/2">
                         <svg
                           className="fill-current"
                           width="24"
@@ -679,7 +726,7 @@ const TRFForm = ({trf, updateAction}) => {
                     <div className="relative z-20 bg-transparent dark:bg-form-input">
                       <select
                         {...form.register("binary_decision_rule")}
-                        className="relative z-20 w-full appearance-none rounded border  bg-transparent py-3 px-5 outline-none transition focus:border-primary active:border-primary border-form-strokedark bg-form-input dark:focus:border-primary"
+                        className="relative z-20 w-full appearance-none rounded border  border-form-strokedark bg-form-input bg-transparent px-5 py-3 outline-none transition focus:border-primary active:border-primary dark:focus:border-primary"
                       >
                         {Object.entries(YESORNO).map(([key, value]) => (
                           <option value={key} key={key}>
@@ -687,7 +734,7 @@ const TRFForm = ({trf, updateAction}) => {
                           </option>
                         ))}
                       </select>
-                      <span className="absolute top-1/2 right-4 z-30 -translate-y-1/2">
+                      <span className="absolute right-4 top-1/2 z-30 -translate-y-1/2">
                         <svg
                           className="fill-current"
                           width="24"
@@ -720,42 +767,44 @@ const TRFForm = ({trf, updateAction}) => {
                               Submission of Documents
                             </label>
                           </div>
-                          {Object.entries(DOCTYPE).map(([key, value]) => (
-                            <FormField
-                              key={key}
-                              control={form.control}
-                              name="submission_of_documents"
-                              render={({ field }) => {
-                                return (
-                                  <FormItem
-                                    key={key}
-                                    className="flex flex-row items-start space-x-3 space-y-0"
-                                  >
-                                    <FormControl>
-                                      <Checkbox
-                                        checked={field.value?.includes(key)}
-                                        onCheckedChange={(checked) => {
-                                          return checked
-                                            ? field.onChange([
-                                                ...field.value,
-                                                key,
-                                              ])
-                                            : field.onChange(
-                                                field.value?.filter(
-                                                  (value) => value !== key
-                                                )
-                                              );
-                                        }}
-                                      />
-                                    </FormControl>
-                                    <FormLabel className="font-normal">
-                                      {value}
-                                    </FormLabel>
-                                  </FormItem>
-                                );
-                              }}
-                            />
-                          ))}
+                          {Object.entries(DOCTYPE).map(
+                            ([key, value]: [any, any]) => (
+                              <FormField
+                                key={key}
+                                control={form.control}
+                                name="submission_of_documents"
+                                render={({ field }) => {
+                                  return (
+                                    <FormItem
+                                      key={key}
+                                      className="flex flex-row items-start space-x-3 space-y-0"
+                                    >
+                                      <FormControl>
+                                        <Checkbox
+                                          checked={field.value?.includes(key)}
+                                          onCheckedChange={(checked) => {
+                                            return checked
+                                              ? field.onChange([
+                                                  ...field.value,
+                                                  key,
+                                                ])
+                                              : field.onChange(
+                                                  field.value?.filter(
+                                                    (value) => value !== key,
+                                                  ),
+                                                );
+                                          }}
+                                        />
+                                      </FormControl>
+                                      <FormLabel className="font-normal">
+                                        {value}
+                                      </FormLabel>
+                                    </FormItem>
+                                  );
+                                }}
+                              />
+                            ),
+                          )}
                           <FormMessage />
                         </FormItem>
                       )}
@@ -810,10 +859,8 @@ const TRFForm = ({trf, updateAction}) => {
                     />
                   </div>
 
-                  <div className="border-b  py-4 px-2 ">
-                    <h3 className="font-medium text-white">
-                      Test Parameters
-                    </h3>
+                  <div className="border-b  px-2 py-4 ">
+                    <h3 className="font-medium text-white">Test Parameters</h3>
                   </div>
 
                   <div className="mb-4.5 mt-2">
@@ -821,7 +868,9 @@ const TRFForm = ({trf, updateAction}) => {
                       Product Name:
                     </label>
                     <div className="relative z-20 bg-transparent dark:bg-form-input">
-                     <p className='font-extrabold'>{trf.product.product_name}</p>
+                      <p className="font-extrabold">
+                        {trf.product.product_name}
+                      </p>
                     </div>
                   </div>
 
@@ -858,8 +907,8 @@ const TRFForm = ({trf, updateAction}) => {
                                               ])
                                             : field.onChange(
                                                 field.value?.filter(
-                                                  (value) => value !== test.id
-                                                )
+                                                  (value) => value !== test.id,
+                                                ),
                                               );
                                         }}
                                       />
@@ -878,24 +927,27 @@ const TRFForm = ({trf, updateAction}) => {
                     />
                   </div>
 
-                  <div className="rounded-sm border px-2 pt-2 pb-2.5 shadow-default border-strokedark bg-boxdark sm:px-3.5 xl:pb-1">
+                  <div className="rounded-sm border border-strokedark bg-boxdark px-2 pb-2.5 pt-2 shadow-default sm:px-3.5 xl:pb-1">
                     <div className="max-w-full overflow-x-auto">
                       <table className="w-full table-auto">
                         <thead>
-                          <tr className=" text-left bg-meta-4">
-                            <th className="min-w-[220px] py-4 px-4 font-medium text-white xl:pl-11">
+                          <tr className=" bg-meta-4 text-left">
+                            <th className="w-[50px] px-4 py-4 font-medium text-white xl:pl-11">
                               S.NO
                             </th>
-                            <th className="min-w-[220px] py-4 px-4 font-medium text-white xl:pl-11">
+                            <th className="min-w-[220px] px-4 py-4 font-medium text-white xl:pl-11">
                               Test Parameter Name
                             </th>
-                            <th className="min-w-[220px] py-4 px-4 font-medium text-white xl:pl-11">
+                            <th className="w-[100px] px-4 py-4 font-medium text-white xl:pl-11">
                               Test Type
                             </th>
-                            <th className="min-w-[220px] py-4 px-4 font-medium text-white xl:pl-11">
+                            <th className="min-w-[220px] px-4 py-4 font-medium text-white xl:pl-11">
+                              Methods / Spec
+                            </th>
+                            <th className="w-[120px] px-4 py-4 font-medium text-white xl:pl-11">
                               Priority Order
                             </th>
-                            <th className="min-w-[220px] py-4 px-4 font-medium text-white xl:pl-11">
+                            <th className="w-[100px] px-4 py-4 font-medium text-white xl:pl-11">
                               Remove?
                             </th>
                           </tr>
@@ -903,40 +955,47 @@ const TRFForm = ({trf, updateAction}) => {
                         <tbody>
                           {fields.map((item, index) => (
                             <tr key={item.id}>
-                              <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
+                              <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-11">
                                 <h5 className="font-medium text-white">
                                   {index + 1}
                                 </h5>
                               </td>
-                              <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
+                              <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-11">
                                 <h5 className="font-medium text-white">
-                                  { parameters?.[index]?.testing_parameters}
+                                  {parameters?.[index]?.testing_parameters}
                                 </h5>
                                 <input
                                   type="hidden"
                                   {...form.register(
-                                    `testing_details.${index}.parameter_id`
+                                    `testing_details.${index}.parameter_id`,
                                   )}
-                                  defaultValue={parameters && parameters[index]?.id}
-                                  className="w-full rounded border-[1.5px]  bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                                  defaultValue={
+                                    parameters && parameters[index]?.id
+                                  }
+                                  className="w-full rounded border-[1.5px]  border-form-strokedark bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:bg-form-input dark:focus:border-primary"
                                 />
                               </td>
-                              <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
+                              <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-11">
                                 <h5 className="font-medium text-white">
-                                { parameters?.[index]?.test_type?.name}
+                                  {testTypesName[index]}
                                 </h5>
                               </td>
-                              <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
+                              <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-11">
+                                <h5 className="font-medium text-white">
+                                  {methods[index]}
+                                </h5>
+                              </td>
+                              <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-11">
                                 <input
                                   type="text"
                                   {...form.register(
-                                    `testing_details.${index}.priority_order`
+                                    `testing_details.${index}.priority_order`,
                                   )}
-                                  defaultValue={index+1}
-                                  className="w-full rounded border-[1.5px]  bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                                  defaultValue={index + 1}
+                                  className="w-full rounded border-[1.5px]  border-form-strokedark bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:bg-form-input dark:focus:border-primary"
                                 />
                               </td>
-                              <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
+                              <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-11">
                                 <button
                                   type="button"
                                   onClick={() => remove(index)}
@@ -953,7 +1012,7 @@ const TRFForm = ({trf, updateAction}) => {
 
                   <button
                     type="submit"
-                    className="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray"
+                    className="flex mt-3 w-full justify-center rounded bg-primary p-3 font-medium text-gray"
                   >
                     Submit
                   </button>

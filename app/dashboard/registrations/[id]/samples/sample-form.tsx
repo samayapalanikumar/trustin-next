@@ -16,7 +16,6 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
 interface Sample {
-  sample_id: string;
   name: string;
   batch_id: number;
   test_type_id: string;
@@ -58,7 +57,6 @@ const SamplesForm = ({
   } = useForm<FormDatas>({
     defaultValues: {
       samples: data.batches.map((batch: any) => ({
-        sample_id: "",
         name: "",
         batch_id: batch.id,
         test_type_id: "1",
@@ -148,7 +146,7 @@ const SamplesForm = ({
               </div>
             </div>
             <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
-              <div className="w-full xl:w-1/5">
+              <div className="w-full xl:w-1/4">
                 <label className="mb-2.5 block text-black dark:text-white">
                   Batch
                 </label>
@@ -186,31 +184,21 @@ const SamplesForm = ({
                   </span>
                 </div>
               </div>
-              <div className="w-full xl:w-1/5">
-                <label className="mb-2.5 block text-black dark:text-white">
-                  Sample ID
-                </label>
-                <input
-                  type="text"
-                  {...register(`samples.${index}.sample_id`)}
-                  placeholder="Enter Test Type"
-                  className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-                />
-              </div>
+          
 
-              <div className="w-full xl:w-1/5">
+              <div className="w-full xl:w-1/4">
                 <label className="mb-2.5 block text-black dark:text-white">
                   Sample Name
                 </label>
                 <input
                   type="text"
                   {...register(`samples.${index}.name`)}
-                  placeholder="Enter Test Type"
+                  placeholder="Enter Sample Name"
                   className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                 />
               </div>
 
-              {/* <div className="w-full xl:w-1/5">
+              {/* <div className="w-full xl:w-1/4">
                 <label className="mb-2.5 block text-black dark:text-white">
                   Department
                 </label>
@@ -222,7 +210,7 @@ const SamplesForm = ({
                 />
               </div>*/}
 
-              <div className="w-full xl:w-1/5">
+              <div className="w-full xl:w-1/4">
                 <label className="mb-2.5 block text-black dark:text-white">
                   Batch
                 </label>
@@ -271,7 +259,6 @@ const SamplesForm = ({
           className="mb-4 mt-2  flex justify-center rounded bg-primary p-3 font-medium text-gray"
           onClick={() =>
             append({
-              sample_id: "",
               name: "",
               batch_id: 0,
               test_type_id: "1",

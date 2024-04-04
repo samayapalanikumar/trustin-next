@@ -24,6 +24,9 @@ async function getData() {
         "Content-Type": "application/json",
         Authorization: `Bearer ${access_token?.value}`,
       },
+      next:{
+        tags:['Products'],
+      }
     });
     // The return value is *not* serialized
     // You can return Date, Map, Set, etc.

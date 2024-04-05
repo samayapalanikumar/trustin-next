@@ -1,14 +1,34 @@
 "use client";
 import { useEffect, useState } from "react";
-import { createParameters } from "../actions";
+import { useFormState } from "react-dom";
 import Select from "@/components/select-input";
 import { Data } from "./page";
 import { useForm, Form, useWatch } from "react-hook-form";
 import SubmitButton from "@/components/submit-button/submit-button";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+
+
+type InitialState = {
+  fieldErrors?: {} | null;
+  type?: string | null;
+  message?: any | string | null;
+};
+
+const initialState: InitialState = {
+  fieldErrors: {},
+  type: null,
+  message: null,
+};
 
 type Props = {
   data: Data;
-  actionFn: (formData: FormData) => void;
+  actionFn: (
+    prevState: any,
+    formData: FormData,
+  ) => Promise<
+    { fieldErrors: null; type: string; message: string | undefined } | undefined
+  >;
 };
 const ParameterEditForm = ({ data, actionFn }: Props) => {
   const { parameter, products, customers, branch, test_types } = data;
@@ -43,6 +63,27 @@ const ParameterEditForm = ({ data, actionFn }: Props) => {
     }
   }, [setShowProductSelect, setValue, watchTestType]);
 
+  const [state, formAction] = useFormState(actionFn, initialState);
+  const router = useRouter();
+  useEffect(() => {
+    if (state?.type === null) return;
+
+    if (state?.type === "Error") {
+      toast.error(state?.message, {
+        duration: 10000,
+        closeButton: true,
+      });
+    }
+    if (state?.type === "Success") {
+      toast.success(state?.message, {
+        duration: 10000,
+        closeButton: true,
+      });
+      router.push("/dashboard/parameters");
+    }
+  }, [state, router]);
+
+
   const handleSubmit = ({
     formData,
     data,
@@ -55,7 +96,7 @@ const ParameterEditForm = ({ data, actionFn }: Props) => {
 
   return (
     // <Form control={control} onSubmit={handleSubmit}>
-    <form action={actionFn}>
+    <form action={formAction}>
       <div className="p-6.5">
         <Select name="branch_id" label="Branch" register={register}>
           {data?.branch.map((b) => (

@@ -4,6 +4,8 @@ import React from "react";
 import { useFieldArray, useForm, Form } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import Loader from "@/components/common/Loader";
+import SubmitButton from "@/components/submit-button/submit-button";
 
 type Parameters = [
   {
@@ -82,7 +84,8 @@ const UnderTestingForm = ({
     control,
     register,
     getValues,
-    formState: { isLoading },
+    formState: { isLoading, isSubmitting },
+    handleSubmit
   } = useForm({
     defaultValues: {
       status: "",
@@ -109,15 +112,7 @@ const UnderTestingForm = ({
   );
   const router = useRouter();
 
-  const handleSubmit = async ({
-    formData,
-    data,
-    formDataJson,
-  }: {
-    formData: FormData;
-    data: {};
-    formDataJson: {};
-  }) => {
+  const handleForm = async (data:{}) => {
     console.log(data);
     const res = await patchFn(data);
     setState(res);
@@ -159,9 +154,15 @@ const UnderTestingForm = ({
 
     setState(res);
   };
+// console.log(isLoading, isSubmitting)
+//   if (isLoading || isSubmitting){
+//     return(
+//       <Loader bg="bg-transparent z-20"/>
+//     )
+//   }
 
   return (
-    <Form onSubmit={handleSubmit} control={control} className="p-2">
+    <form onSubmit={handleSubmit(handleForm)}  className="p-2">
       <input type="hidden" {...register("status")} />
       <input type="hidden" {...register("status_id")} />
       <input type="hidden" {...register("assigned_to")} />
@@ -248,23 +249,24 @@ const UnderTestingForm = ({
       <div className="flex gap-2">
         <button
           type="submit"
-          className="flex w-1/2 justify-center rounded bg-primary p-3 font-medium text-gray"
-          disabled={isLoading}
+          className="flex w-1/2 justify-center rounded bg-primary p-3 font-medium text-gray disabled:bg-slate-500"
+          disabled={isLoading||isSubmitting}
         >
-          {isLoading ? "Loading..." : buttonName}
+          {isLoading || isSubmitting ? "Loading..." : buttonName}
         </button>
+        {/* <SubmitButton  width="w-1/2" /> */}
         {showRejectButton && (
           <button
             onClick={handleReject}
             type="button"
-            className="flex w-1/2 justify-center rounded bg-danger p-3 font-medium text-gray"
+            className="flex w-1/2 justify-center rounded bg-danger p-3 font-medium text-gray disabled:bg-slate-500"
             disabled={loading}
           >
             {loading ? "Loading..." : "Reject"}
           </button>
         )}
       </div>
-    </Form>
+    </form>
   );
 };
 

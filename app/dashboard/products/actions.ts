@@ -1,11 +1,11 @@
-// @ts-nocheck
-
 "use server";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { SERVER_API_URL } from "@/app/constant";
+import { getErrorMessage } from "@/lib/utils";
+import { revalidateTag } from "next/cache";
 
-export async function createProduct(formData: FormData) {
+export async function createProduct(prevState:any, formData: FormData) {
   let jsonObject = Object.fromEntries(formData.entries());
 
   const access_token = cookies().get("access_token");
@@ -21,13 +21,30 @@ export async function createProduct(formData: FormData) {
     body: JSON.stringify(jsonObject),
   });
 
-  console.log(res.status);
-
   if (res.status === 401) redirect("/signin");
-  if (res.status === 201) redirect("/dashboard/products");
+
+  if (res.status !== 201) {
+    const error = await res.json();
+    return {
+      fieldErrors: null,
+      type: "Error",
+      message: getErrorMessage(error.detail),
+    };
+  }
+
+  revalidateTag("Products");
+
+  if (res.status === 201) {
+    return {
+      fieldErrors: null,
+      type: "Success",
+      message: "Product Created Successfully",
+    };
+  }
+  // if (res.status === 201) redirect("/dashboard/products");
 }
 
-export async function updateProducts(id: string, formData: FormData) {
+export async function updateProducts(id: string, prevState:any, formData: FormData) {
   let jsonObject = Object.fromEntries(formData.entries());
 
   const access_token = cookies().get("access_token");
@@ -44,5 +61,24 @@ export async function updateProducts(id: string, formData: FormData) {
   });
 
   if (res.status === 401) redirect("/signin");
-  if (res.status === 204) redirect("/dashboard/products");
+
+  if (res.status !== 204) {
+    const error = await res.json();
+    return {
+      fieldErrors: null,
+      type: "Error",
+      message: getErrorMessage(error.detail),
+    };
+  }
+
+  revalidateTag("Products");
+
+  if (res.status === 204) {
+    return {
+      fieldErrors: null,
+      type: "Success",
+      message: "Product Updated Successfully",
+    };
+  }
+  // if (res.status === 204) redirect("/dashboard/products");
 }

@@ -32,7 +32,7 @@ type Data = {
 type ParametersType = {
   id: number;
   testing_parameters: string;
-  method_or_spec:string;
+  method_or_spec: string;
   test_type: {
     name: string;
   };
@@ -154,7 +154,8 @@ const TRFForm = ({ trf, updateAction }) => {
   useEffect(() => {
     if (test_watch) {
       const ids = test_watch.map((field, idx) => {
-        if (field.parameter_id.toString() !== "") return field.parameter_id.toString();
+        if (field.parameter_id.toString() !== "")
+          return field.parameter_id.toString();
       });
       if (parameters?.length) {
         const tests = parameters.filter((para) =>
@@ -1012,9 +1013,10 @@ const TRFForm = ({ trf, updateAction }) => {
 
                   <button
                     type="submit"
-                    className="flex mt-3 w-full justify-center rounded bg-primary p-3 font-medium text-gray"
+                    className="mt-3 flex w-full justify-center rounded bg-primary p-3 font-medium text-gray disabled:bg-slate-500"
+                    disabled={form.formState.isSubmitting}
                   >
-                    Submit
+                    {form.formState.isSubmitting ? "Loading..." : "Submit"}
                   </button>
                 </div>
               </form>

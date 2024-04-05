@@ -53,7 +53,7 @@ const SamplesForm = ({
   const {
     control,
     register,
-    formState: { isLoading },
+    formState: { isLoading, isSubmitting },
   } = useForm<FormDatas>({
     defaultValues: {
       samples: data.batches.map((batch: any) => ({
@@ -117,8 +117,8 @@ const SamplesForm = ({
     formDataJson,
   }: {
     formdata: FormData;
-    data: {};
-    formDataJson: {};
+    data: FormDatas;
+    formDataJson: FormDatas;
   }) => {
     console.log(data);
     const res = await createFn(data);
@@ -256,7 +256,7 @@ const SamplesForm = ({
         ))}
         <button
           type="button"
-          className="mb-4 mt-2  flex justify-center rounded bg-primary p-3 font-medium text-gray"
+          className="mb-4 mt-2  flex justify-center rounded bg-primary p-3 font-medium text-gray disabled:bg-slate-500"
           onClick={() =>
             append({
               name: "",
@@ -276,9 +276,9 @@ const SamplesForm = ({
         <button
           type="submit"
           className="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray"
-          disabled={isLoading}
+          disabled={isSubmitting}
         >
-          {isLoading ? "Loading" : "Submit"}
+          {isSubmitting ? "Loading" : "Submit"}
         </button>
       </div>
     </Form>

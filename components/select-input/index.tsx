@@ -26,7 +26,7 @@ const Select = ({
           {label}
         </label>
       ) }
-      <div className="relative z-20 bg-transparent dark:bg-form-input">
+      <div className={`relative z-20 bg-transparent dark:bg-form-input ${!label ? "mt-3":""}`}>
         <select
           {...rest}
           name={name}

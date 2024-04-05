@@ -4,13 +4,14 @@ import { updateTestType } from "../action";
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 import { SERVER_API_URL } from "@/app/constant";
+import TestTypeEditForm from "./testtype-edit-form";
 export const metadata: Metadata = {
   title: "Edit  Test Type | Trustin",
   description: "This is Form Layout page for TailAdmin Next.js",
   // other metadata
 };
 
-async function getData(id:string) {
+async function getData(id: string) {
   const cookieStore = cookies();
   const access_token = cookieStore.get("access_token");
 
@@ -20,7 +21,7 @@ async function getData(id:string) {
       Authorization: `Bearer ${access_token?.value}`,
     },
   });
-  
+
   // The return value is *not* serialized
   // You can return Date, Map, Set, etc.
 
@@ -35,19 +36,18 @@ async function getData(id:string) {
   return user;
 }
 
-type Data = {
+export type Data = {
   name: string;
-  description:string;
-}
+  description: string;
+};
 
-const EditTestTypePage =  async ({
+const EditTestTypePage = async ({
   params: { id },
 }: {
   params: { id: string };
 }) => {
-
-  const data:Data = await getData(id)
-  const updateTestTypeWithId = updateTestType.bind(null, id)
+  const data: Data = await getData(id);
+  const updateTestTypeWithId = updateTestType.bind(null, id);
 
   return (
     <>
@@ -62,41 +62,7 @@ const EditTestTypePage =  async ({
                 Contact Form
               </h3>
             </div> */}
-            <form action={updateTestTypeWithId}>
-              <div className="p-6.5">
-                
-
-                <div className="mb-4.5">
-                  <label className="mb-2.5 block text-black dark:text-white">
-                    Test Name <span className="text-meta-1">*</span>
-                  </label>
-                  <input
-                    type="Text"
-                    name = "name"
-                    defaultValue={data.name}
-                    className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-                  />
-                </div>
-
-               
-
-                <div className="mb-6">
-                  <label className="mb-2.5 block text-black dark:text-white">
-                    Description
-                  </label>
-                  <textarea
-                    rows={6}
-                    name="description"
-                    defaultValue={data.description}
-                    className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-                  ></textarea>
-                </div>
-
-                <button type="submit" className="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray">
-                  Submit
-                </button>
-              </div>
-            </form>
+            <TestTypeEditForm data={data} actionFn={updateTestTypeWithId} />
           </div>
         </div>
       </div>

@@ -13,7 +13,7 @@ type Props = {
 const ParameterEditForm = ({ data, actionFn }: Props) => {
   const { parameter, products, customers, branch, test_types } = data;
 
-  const { register, control, setValue } = useForm({
+  const { register, control, setValue, formState:{isSubmitting} } = useForm({
     defaultValues: {
       branch_id: parameter.branch_id,
       test_type_id: "" + parameter.test_type_id,

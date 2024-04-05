@@ -134,7 +134,7 @@ function WorkFlowForm({
             <button
               onClick={handleReject}
               type="button"
-              className="flex w-1/2 justify-center rounded bg-danger p-3 font-medium text-gray"
+              className="flex w-1/2 justify-center rounded bg-danger p-3 font-medium text-gray disabled:bg-slate-500"
               disabled={loading}
             >
               {loading ? "Loading..." : "Reject"}

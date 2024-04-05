@@ -1030,10 +1030,10 @@ const TRFAdminForm = ({
 
                   <button
                     type="submit"
-                    className="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray"
-                    disabled={form.formState.isLoading}
+                    className="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray disabled:bg-slate-500"
+                    disabled={form.formState.isSubmitting}
                   >
-                    {form.formState.isLoading ? "Loading..." : "Submit"}
+                    {form.formState.isSubmitting ? "Loading..." : "Submit"}
                   </button>
                 </div>
               </form>

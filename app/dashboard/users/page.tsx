@@ -1,4 +1,3 @@
-import TableThree from "@/components/Tables/TableThree";
 import Link from "next/link";
 import UserTable, { UserType } from "./user-table";
 import { redirect } from "next/navigation";

@@ -15,7 +15,9 @@ type Props = {
   actionFn: (
     prevState: any,
     formData: FormData,
-  ) => Promise<{ fieldErrors: null; type: string; message: string | undefined; } | undefined>;
+  ) => Promise<
+    { fieldErrors: null; type: string; message: string | undefined } | undefined
+  >;
 };
 
 type InitialState = {
@@ -196,10 +198,34 @@ const FollowupEditForm = ({ data, actionFn }: Props) => {
                   defaultValue={data.followup.marketing_status}
                   className="relative z-20 w-full appearance-none rounded border border-stroke bg-transparent px-5 py-3 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                 >
-                  <option value={MarketingStatus.FOLLOWUP}>Follow Up</option>
-                  <option value={MarketingStatus.HOLD}>Hold</option>
+                  <option value={MarketingStatus.NONE}>----</option>
+                  <option value={MarketingStatus.MAIL_SENT}>Mail Sent</option>
+                  <option value={MarketingStatus.ENQUIRES_RECEIVED}>
+                    Enquires Received
+                  </option>
+                  <option value={MarketingStatus.QUOTE_SENT}>Quote Sent</option>
+                  <option value={MarketingStatus.MARKETING_PLAN}>
+                    Marketing Plan
+                  </option>
+                  <option value={MarketingStatus.SITE_VISITED}>
+                    Site Visited
+                  </option>
+                  <option value={MarketingStatus.LAB_VISIT_PLAN}>
+                    Lab Visit Plan
+                  </option>
+                  <option value={MarketingStatus.LAB_VISITED}>
+                    Lab Visited
+                  </option>
+                  <option value={MarketingStatus.FOLLOWUP}>Followup</option>
                   <option value={MarketingStatus.WON}>Won </option>
-                  <option value={MarketingStatus.LOST}>LOST </option>
+                  <option value={MarketingStatus.WORK_IN_PROGRESS}>
+                    Work In Progress{" "}
+                  </option>
+                  <option value={MarketingStatus.HOLD}>Hold</option>
+                  <option value={MarketingStatus.LOST}>Lost </option>
+                  <option value={MarketingStatus.SAMPLE_RECEIVED}>
+                    Sample Receiced{" "}
+                  </option>
                 </select>
                 <span className="absolute right-4 top-1/2 z-30 -translate-y-1/2">
                   <svg

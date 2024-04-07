@@ -1,7 +1,5 @@
-import TableThree from "@/components/Tables/TableThree";
 import { cookies } from "next/headers";
 import Link from "next/link";
-
 import { redirect } from "next/navigation";
 import ParametersTable, { ParametersType } from "./parametes-table";
 import { Metadata } from "next";

@@ -1,5 +1,3 @@
-// @ts-nocheck
-
 "use server";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
@@ -7,15 +5,11 @@ import { SERVER_API_URL } from "@/app/constant";
 import { revalidateTag } from "next/cache";
 import { getErrorMessage } from "@/lib/utils";
 
-
-
-
-export async function updateTRFAdmin(id:string,formData: FormData) {
-  
+export async function updateTRFAdmin(id: string, formData: any) {
   const nabl_logo = formData.nabl_logo === "1" ? true : false;
   formData.nabl_logo = nabl_logo;
   const bodyData = JSON.stringify(formData);
-  console.log(bodyData)
+  console.log(bodyData);
   const access_token = cookies().get("access_token");
 
   const res = await fetch(`${SERVER_API_URL}/trf/admin/${id}`, {
@@ -29,9 +23,9 @@ export async function updateTRFAdmin(id:string,formData: FormData) {
     body: bodyData,
   });
 
-
   if (res.status == 422) {
-    resJson.detail.map((error) => {
+    const resJson = await res.json();
+    resJson.detail.map((error: any) => {
       console.log(error.loc);
       // console.log(error.input)
     });

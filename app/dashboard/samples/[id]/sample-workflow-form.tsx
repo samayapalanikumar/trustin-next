@@ -3,7 +3,6 @@ import { useFormState } from "react-dom";
 
 import { Data } from "./page";
 import React, {useState} from 'react';
-import { createRoot } from 'react-dom/client';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import StatusStepper from "./status-stepper1";
 import UnderTestingForm from "./under-testing-form";
@@ -269,6 +268,7 @@ const SampleWorkflowForm = ({
         <TabsContent value="status">
           <div className="mb-3 w-full flex-col">
             <StatusStepper step={data?.sample?.status_id} />
+            {/* <p>{data?.sample?.status}</p> */}
 
             <div className="mt-1 flex flex-col gap-9 ">
               {data?.sample?.status_id === 1 && (

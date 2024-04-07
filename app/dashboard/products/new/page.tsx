@@ -2,9 +2,9 @@ import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import { Metadata } from "next";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { createProduct } from "../actions";
 import { SERVER_API_URL } from "@/app/constant";
 import ProductAddForm from "./product-add-form";
+
 export const metadata: Metadata = {
   title: "Add New Product | Trustin",
   description: "This is Form Layout page for TailAdmin Next.js",

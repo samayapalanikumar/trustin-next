@@ -4,9 +4,7 @@ import SamplesForm from "./sample-form";
 import { cookies } from "next/headers";
 import { SERVER_API_URL } from "@/app/constant";
 import { redirect } from "next/navigation";
-import { createRegistration, updateRegistration } from "../../actions";
 import { createSamples } from "./actions";
-// import { createBranch } from "../actions";
 
 export const metadata: Metadata = {
   title: "New Samples | Trustin",

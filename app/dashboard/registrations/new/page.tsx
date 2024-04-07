@@ -5,6 +5,10 @@ import { cookies } from "next/headers";
 import { SERVER_API_URL } from "@/app/constant";
 import { redirect } from "next/navigation";
 import { createRegistration } from "../actions";
+import { Data, ParametersType } from "../typings";
+import { TestReportForm } from "@/app/trf/typings";
+import { Customer } from "../../customers/[id]/typings";
+import { BranchType } from "../../branches/branch-table";
 // import { createBranch } from "../actions";
 
 export const metadata: Metadata = {
@@ -65,21 +69,21 @@ async function getData() {
   if (res4.status === 401) redirect("/signin");
   if (res5.status === 401) redirect("/signin");
 
-  const trf = await res.json();
-  const customers = await res2.json();
-  const branches = await res3.json();
+  const trf:TestReportForm[] = await res.json();
+  const customers:Customer[] = await res2.json();
+  const branches:BranchType = await res3.json();
   const products = await res4.json();
-  const parameters = await res5.json();
+  const parameters:ParametersType = await res5.json();
 
   const microParameters = parameters.filter(para=>para.test_type_id ==1)
   const mechParameters = parameters.filter(para=>para.test_type_id ==2)
 
-  const trflist = trf.map((t:any) => ({ label: t.trf_code, value: t.id })) ;
+  const trflist = trf.map((t) => ({ label: t.trf_code, value: t.id })) ;
   return { trf: trf, trflist, customers, branches, products, parameters, microParameters, mechParameters };
 }
 
 const NewRegistrationPage = async () => {
-  const data = await getData();
+  const data:Data = await getData();
   return (
     <>
       <Breadcrumb pageName="Registration Form" />

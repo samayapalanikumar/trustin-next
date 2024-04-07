@@ -1,4 +1,3 @@
-// @ts-nocheck
 
 "use server";
 import { cookies } from "next/headers";
@@ -38,7 +37,7 @@ const customerSchema = z.object({
   contact_persons: z.array(contactPersonsSchema),
 });
 
-export async function createCustomers(prevState, formData: FormData) {
+export async function createCustomers(prevState:any, formData: FormData) {
   let jsonObject = Object.fromEntries(formData.entries());
   const contact_persons = [
     {
@@ -55,7 +54,7 @@ export async function createCustomers(prevState, formData: FormData) {
   delete jsonObject["landline_number"];
   delete jsonObject["contact_email"];
 
-  jsonObject["contact_persons"] = contact_persons;
+  jsonObject["contact_persons"] = contact_persons as any;
   // console.log(jsonObject);
   const access_token = cookies().get("access_token");
 
@@ -93,7 +92,7 @@ export async function createCustomers(prevState, formData: FormData) {
   // if (res.status===201) redirect("/dashboard/customers");
 }
 
-export async function updateCustomers(id, pervState, formData: FormData) {
+export async function updateCustomers(id:any, pervState:any, formData: FormData) {
 
   let jsonObject = Object.fromEntries(formData.entries());
   const contact_persons = [
@@ -111,7 +110,7 @@ export async function updateCustomers(id, pervState, formData: FormData) {
   delete jsonObject["landline_number"];
   delete jsonObject["contact_email"];
 
-  jsonObject["contact_persons"] = contact_persons;
+  jsonObject["contact_persons"] = contact_persons as any;
   // console.log(jsonObject);
   const access_token = cookies().get("access_token");
   const res = await fetch(`${SERVER_API_URL}/customers/${id}`, {

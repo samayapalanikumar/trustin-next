@@ -1,10 +1,8 @@
-import TableThree from "@/components/Tables/TableThree";
 import { cookies } from "next/headers";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import FollowupTable, { FollowUP } from "./followup-table";
 import { SERVER_API_URL } from "@/app/constant";
-
 import { Metadata } from "next";
 
 export const metadata: Metadata = {

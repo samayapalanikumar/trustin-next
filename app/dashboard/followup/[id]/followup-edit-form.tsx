@@ -4,7 +4,6 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { useFormState } from "react-dom";
 import SubmitButton from "@/components/submit-button/submit-button";
-import { updateFollowup } from "../actions";
 import { Data } from "./page";
 import { MarketingStatus } from "../followup-table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";

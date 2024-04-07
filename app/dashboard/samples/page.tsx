@@ -1,10 +1,7 @@
-import TableThree from "@/components/Tables/TableThree";
-import Link from "next/link";
 import SampleTable, { RegisterType } from "./samples-table";
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 import { SERVER_API_URL } from "@/app/constant";
-
 import { Metadata } from "next";
 
 export const metadata: Metadata = {

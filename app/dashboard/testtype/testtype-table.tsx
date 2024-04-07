@@ -1,4 +1,3 @@
-import { Package } from "@/types/package";
 import Link from "next/link";
 
 export enum MarketingStatus {

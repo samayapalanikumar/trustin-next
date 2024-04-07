@@ -6,7 +6,6 @@ import { Department } from "@/types/department";
 import { TestType } from "@/types/test-type";
 import { Role } from "@/types/role";
 import { User } from "@/types/user";
-import { updateUser1 } from "../actions";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { toast } from "sonner";
@@ -16,7 +15,12 @@ type Props = {
   roles: Role[];
   departments: Department[];
   test_types: TestType[];
-  action: (data: FormData) => void|Promise<void>;
+  actionFn: (
+    prevState: any,
+    formData: FormData,
+  ) => Promise<
+    { fieldErrors: null; type: string; message: string | undefined } | undefined
+  >;
 };
 type InitialState = {
   fieldErrors?: {} | null;
@@ -34,10 +38,9 @@ const EditUserForm = ({
   departments,
   test_types,
   user,
-  action,
+  actionFn,
 }: Props) => {
-const updateUserWithId = updateUser1.bind(null, user.id.toString());
-const [state, formAction]=useFormState(updateUserWithId, initialState)
+const [state, formAction]=useFormState(actionFn, initialState)
 const router = useRouter();
 useEffect(() => {
   if (state?.type === null) return;

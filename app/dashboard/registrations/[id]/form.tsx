@@ -157,7 +157,7 @@ const RegistrationForm = ({
       );
       if (trf_code) fetchData(trf_code);
     }
-  }, [watchedFieldValue, form.setValue]);
+  }, [watchedFieldValue, form.setValue, data.trf]);
 
   useEffect(() => {
     if (state?.type === null) return;

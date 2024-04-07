@@ -1,14 +1,12 @@
-// @ts-nocheck
-
 "use server";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { SERVER_API_URL } from "@/app/constant";
-
 import { z } from "zod";
-
 import { revalidateTag } from "next/cache";
 import { getErrorMessage } from "@/lib/utils";
+
+
 const schema = z
   .object({
     first_name: z.string().min(1, "First Name Required").trim(),
@@ -20,9 +18,7 @@ const schema = z
       .trim()
       .min(1, "Phone Required")
       .max(10, "Enter valid 10 digit phone number"),
-    password: z
-      .string()
-      .min(8, { message: "Password is min 8 digit long" }),
+    password: z.string().min(8, { message: "Password is min 8 digit long" }),
     password2: z.string(),
 
     role_id: z.string().min(1, "Role Required"),
@@ -34,7 +30,7 @@ const schema = z
     path: ["password2"], // path of error
   });
 
-export async function createUser(prevState, formData: FormData) {
+export async function createUser(prevState: any, formData: FormData) {
   let jsonObject = Object.fromEntries(formData.entries());
 
   const validatedFields = schema.safeParse(jsonObject);
@@ -49,7 +45,8 @@ export async function createUser(prevState, formData: FormData) {
     };
   }
 
-  if (jsonObject["qa_type_id"] == "null") jsonObject["qa_type_id"] = null;
+  if (jsonObject["qa_type_id"] == "null")
+    jsonObject["qa_type_id"] = null as any;
   // delete jsonObject["qa_type_id"]
   const access_token = cookies().get("access_token");
 
@@ -77,45 +74,28 @@ export async function createUser(prevState, formData: FormData) {
 
   // if (res.status === 201) redirect("/dashboard/users");
 
-  revalidateTag('Users')
+  revalidateTag("Users");
 
   if (res.status === 201) {
-    return ({
+    return {
       fieldErrors: null,
-      type: 'Success',
+      type: "Success",
       message: "User Created Successfully",
-    })
+    };
   }
 }
 
-export async function updateUser(id: string,   formData: FormData) {
+
+export async function updateUser(
+  id: string,
+  prevState: any,
+  formData: FormData,
+) {
   console.log(formData);
   let jsonObject = Object.fromEntries(formData.entries());
 
-  if (jsonObject["qa_type_id"] == "null") jsonObject["qa_type_id"] = null;
-
-  const access_token = cookies().get("access_token");
-
-  const res = await fetch(`${SERVER_API_URL}/users/${id}`, {
-    method: "PUT", // *GET, POST, PUT, DELETE, etc.
-    // mode: "cors", // no-cors, *cors, same-origin
-    headers: {
-      "Content-Type": "application/json",
-      // "Content-Type": "application/x-www-form-urlencoded",
-      Authorization: `Bearer ${access_token?.value}`,
-    },
-    body: JSON.stringify(jsonObject),
-  });
-
-  if (res.status === 401) redirect("/signin");
-  if (res.status === 204) redirect("/dashboard/users");
-}
-
-export async function updateUser1(id: string, state,  formData: FormData) {
-  console.log(formData);
-  let jsonObject = Object.fromEntries(formData.entries());
-
-  if (jsonObject["qa_type_id"] == "null") jsonObject["qa_type_id"] = null;
+  if (jsonObject["qa_type_id"] == "null")
+    jsonObject["qa_type_id"] = null as any;
 
   const access_token = cookies().get("access_token");
 

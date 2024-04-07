@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { updateProducts } from "../actions";
 import { SERVER_API_URL } from "@/app/constant";
 import ProductEditForm from "./product-edit-form";
+
 export const metadata: Metadata = {
   title: "Edit  Product | Trustin",
   description: "This is Form Layout page for TailAdmin Next.js",

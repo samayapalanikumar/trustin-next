@@ -1,4 +1,3 @@
-// @ts-nocheck
 
 "use server";
 import { cookies } from "next/headers";
@@ -22,8 +21,7 @@ export async function patchSampleWorkflow(
   }
 
   let jsonObject =Object.fromEntries(formData.entries());
-  jsonObject.test_params = [];
-  console.log(jsonObject);
+  jsonObject.test_params = [] as any;
 
   const access_token = cookies().get("access_token");
 
@@ -70,11 +68,7 @@ export async function patchSampleWorkflow(
 }
 
 export async function patchSampleWorkflowTestResult(id: string, data: any) {
-  // let jsonObject  = Object.fromEntries(formData.entries())
 
-  // jsonObject.test_params=[];
-  // console.log(jsonObject)
-  console.log(data);
   const access_token = cookies().get("access_token");
 
   const res = await fetch(`${SERVER_API_URL}/samples/${id}`, {
@@ -119,11 +113,7 @@ export async function patchSampleWorkflowTestResult(id: string, data: any) {
 }
 
 export async function rejectSampleWorkflow(id: string, data: any) {
-  console.log("----");
-  console.log(data);
-  console.log("----");
-  console.log("Hi");
-
+ 
   const access_token = cookies().get("access_token");
 
   const res = await fetch(`${SERVER_API_URL}/samples/${id}`, {

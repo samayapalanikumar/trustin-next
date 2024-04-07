@@ -1,5 +1,3 @@
-// @ts-nocheck
-
 "use server";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
@@ -7,12 +5,8 @@ import { SERVER_API_URL } from "@/app/constant";
 import { revalidateTag } from "next/cache";
 import { getErrorMessage } from "@/lib/utils";
 
-export async function createSamples(id, data: any) {
+export async function createSamples(id: string, data: any) {
   let { samples } = data;
-
-  console.log("CCCC");
-  console.log(samples[0]["test_params"]);
-  console.log(samples);
 
   const access_token = cookies().get("access_token");
 

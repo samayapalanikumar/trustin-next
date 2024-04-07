@@ -1,5 +1,4 @@
 "use client";
-import CheckboxThree from "@/components/Checkboxes/CheckboxThree";
 import { Checkbox } from "@/components/ui/checkbox";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { redirect } from "next/navigation";
@@ -17,7 +16,9 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { AnyAaaaRecord } from "dns";
+import { TestReportForm } from "./typings";
+
+
 type Data = {
   products: {
     id: number;
@@ -116,7 +117,12 @@ const DOCTYPE = {
   IF_ANY_OTHER: "IF ANY OTHER",
 };
 
-const TRFForm = ({ trf, updateAction }) => {
+type Props = {
+  trf: TestReportForm;
+  updateAction: (data: any) => void;
+};
+
+const TRFForm = ({ trf, updateAction }: Props) => {
   //   const data: Data = await getData();
   const [data, setData] = useState<Data>();
   const [parameters, setParameters] = useState<ParametersType>();
@@ -194,18 +200,22 @@ const TRFForm = ({ trf, updateAction }) => {
       );
       const response: ParametersType = await res.json();
       setParameters(response);
+      const test_details = response.map((r, idx) => ({
+        parameter_id: r.id,
+        priority_order: idx + 1,
+      }));
 
-      replace(response);
+      replace(test_details);
     }
 
     if (testTypes) {
       if (testTypes.length > 0) {
         replace([]);
         const query = testTypes
-          .map((value, index) => `test_type=${encodeURIComponent(value)}`)
+          .map((value) => `test_type=${encodeURIComponent(value)}`)
           .join("&");
 
-        fetchTestParameters(query, trf.product_id);
+        fetchTestParameters(query, trf.product_id.toString());
       }
     }
   }, [replace, testTypes, trf.product_id]);

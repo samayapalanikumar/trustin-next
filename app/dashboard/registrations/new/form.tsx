@@ -19,7 +19,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Checkbox } from "@/components/ui/checkbox";
-import { CreateData } from "../typings";
+import { CreateData, Data } from "../typings";
 
 const TESTTYPE = {
   1: "MICRO",
@@ -38,7 +38,7 @@ const initialState: InitialState = {
   message: null,
 };
 
-const RegistrationForm = ({ data }: { data: any }) => {
+const RegistrationForm = ({ data }: { data: Data }) => {
   const [parameters, setParameters] = useState([]);
 
   const form = useForm<CreateData>({
@@ -127,7 +127,7 @@ const RegistrationForm = ({ data }: { data: any }) => {
       );
       if (trf_code) fetchData(trf_code);
     }
-  }, [watchedFieldValue, form.setValue]);
+  }, [watchedFieldValue, form.setValue, form, data.trf]);
 
   useEffect(() => {
     if (watchedTestTypeValue && parameters.length) {
@@ -138,17 +138,17 @@ const RegistrationForm = ({ data }: { data: any }) => {
       console.log(data.microParameters);
       const listParameters = parameters.map((para) => para.parameter_id);
       console.log(listParameters);
-      if (watchedTestTypeValue?.includes("1")) {
+      if (watchedTestTypeValue?.includes("1" )) {
         data?.microParameters.length &&
           data.microParameters.forEach((para) => {
             if (listParameters.includes(para.id)) {
               console.log("hey");
-              testMicroAppend  ({ test_params_id: para.id });
+              testMicroAppend({ test_params_id: para.id });
             }
           });
       }
       if (watchedTestTypeValue?.includes("2")) {
-        console.log("Micro")
+        console.log("Micro");
         data?.mechParameters.length &&
           data?.mechParameters?.forEach((para) => {
             if (listParameters.includes(para.id)) {
@@ -159,7 +159,17 @@ const RegistrationForm = ({ data }: { data: any }) => {
           });
       }
     }
-  }, [watchedTestTypeValue, form.setValue, parameters, testMicroReplace, testMechReplace, data.microParameters, data?.mechParameters, testMicroAppend]);
+  }, [
+    watchedTestTypeValue,
+    form.setValue,
+    parameters,
+    testMicroReplace,
+    testMechReplace,
+    data.microParameters,
+    data?.mechParameters,
+    testMicroAppend,
+    testMechAppend,
+  ]);
 
   useEffect(() => {
     if (state?.type === null) return;

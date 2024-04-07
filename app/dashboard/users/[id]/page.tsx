@@ -1,9 +1,7 @@
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import { Metadata } from "next";
-import { object } from "zod";
 import { updateUser } from "../actions";
 import { cookies } from "next/headers";
-import { RoleType } from "../user-table";
 import { redirect } from "next/navigation";
 import { SERVER_API_URL } from "@/app/constant";
 import { User } from "@/types/user";
@@ -95,7 +93,7 @@ const EditUserPage = async ({ params: { id } }: { params: { id: string } }) => {
               departments={departments}
               test_types={test_types}
               user={user}
-              action={updateUserWithId}
+              actionFn={updateUserWithId}
             />
           </div>
         </div>

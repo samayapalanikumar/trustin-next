@@ -1,21 +1,12 @@
 "use client";
-import { SERVER_API_URL } from "@/app/constant";
 import { useEffect, useState } from "react";
-import {
-  useFieldArray,
-  useForm,
-  useWatch,
-  Form,
-  Control,
-  UseFormRegister,
-} from "react-hook-form";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useFieldArray, useForm, useWatch, Form } from "react-hook-form";
 import { Trash2 } from "lucide-react";
 import Select from "@/components/select-input";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
-interface Sample {
+type Sample = {
   name: string;
   batch_id: number;
   test_type_id: string;
@@ -23,13 +14,11 @@ interface Sample {
     test_parameter_id: string;
     order: number;
   }>;
-}
+};
 
-
-interface FormDatas {
+type FormDatas = {
   samples: Sample[];
-}
-
+};
 
 type InitialState = {
   fieldErrors?: {} | null;
@@ -48,12 +37,17 @@ const SamplesForm = ({
   createFn,
 }: {
   data: any;
-  createFn: (data: any) => Promise<{ fieldErrors: null; type: string; message: string | undefined; } | undefined>;
+  createFn: (
+    data: any,
+  ) => Promise<
+    { fieldErrors: null; type: string; message: string | undefined } | undefined
+  >;
 }) => {
   const {
     control,
     register,
     formState: { isLoading, isSubmitting },
+    handleSubmit,
   } = useForm<FormDatas>({
     defaultValues: {
       samples: data.batches.map((batch: any) => ({
@@ -84,12 +78,11 @@ const SamplesForm = ({
   );
 
   useEffect(() => {
-    // TODO: need some imporvement in future 
+    // TODO: need some imporvement in future
     const ids = sampleWatch.map((field, idx) => field.test_type_id);
     setFilterId(ids);
   }, [sampleWatch]);
 
- 
   const [state, setState] = useState<InitialState | undefined>(initialState);
   const router = useRouter();
 
@@ -111,23 +104,13 @@ const SamplesForm = ({
     }
   }, [state, router]);
 
-  const handleSubmit = async ({
-    formdata,
-    data,
-    formDataJson,
-  }: {
-    formdata: FormData;
-    data: FormDatas;
-    formDataJson: FormDatas;
-  }) => {
-    console.log(data);
+  const handleForm = async (data: FormDatas) => {
     const res = await createFn(data);
-    console.log(res);
     setState(res);
   };
 
   return (
-    <Form control={control} onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit(handleForm)}>
       <div className="p-6.5">
         {fields.map((item, index) => (
           <div key={item.id}>
@@ -184,7 +167,6 @@ const SamplesForm = ({
                   </span>
                 </div>
               </div>
-          
 
               <div className="w-full xl:w-1/4">
                 <label className="mb-2.5 block text-black dark:text-white">
@@ -281,7 +263,7 @@ const SamplesForm = ({
           {isSubmitting ? "Loading" : "Submit"}
         </button>
       </div>
-    </Form>
+    </form>
   );
 };
 

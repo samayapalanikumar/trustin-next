@@ -1,50 +1,43 @@
-import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
-import CheckboxThree from "@/components/Checkboxes/CheckboxThree";
 import { Metadata } from "next";
-import { redirect } from "next/navigation";
-import { useEffect, useState } from "react";
 import TRFForm from "../client-form";
 import { updateTRF } from "../actions";
 import { SERVER_API_URL } from "@/app/constant";
+import { TestReportForm } from "../typings";
+
 export const metadata: Metadata = {
   title: "TRF | Trustin",
   description: "This is Form Layout page for TailAdmin Next.js",
   // other metadata
 };
 
-async function getData(id:string) {
-
-
+async function getData(id: string) {
   const res = await fetch(`${SERVER_API_URL}/trf/customer/${id}`, {
     headers: {
       "Content-Type": "application/json",
     },
   });
 
-
-
   const trf = await res.json();
-  console.log(trf)
+  console.log(trf);
   return trf;
 }
-
 
 const CustomerTRFPage = async ({
   params: { id },
 }: {
   params: { id: string };
 }) => {
-  const data = await getData(id)
-  const updateTRFWithId = updateTRF.bind(null, id)
-  return(
-    <div className='flex items-center flex-col justify-center mx-auto bg-boxdark-2 text-bodydark'>
-        <div>
-        <h2 className="text-xl font-bold p-1">Test Request Form</h2>
-        <h5 className="text-center p-1">{data.trf_code}</h5>
-        </div>
-        <TRFForm trf={data} updateAction={updateTRFWithId}/>
+  const data:TestReportForm = await getData(id);
+  const updateTRFWithId = updateTRF.bind(null, id);
+  return (
+    <div className="mx-auto flex flex-col items-center justify-center bg-boxdark-2 text-bodydark">
+      <div>
+        <h2 className="p-1 text-xl font-bold">Test Request Form</h2>
+        <h5 className="p-1 text-center">{data.trf_code}</h5>
+      </div>
+      <TRFForm trf={data} updateAction={updateTRFWithId} />
     </div>
-  )
+  );
 };
 
 export default CustomerTRFPage;

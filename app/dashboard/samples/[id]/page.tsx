@@ -3,11 +3,15 @@ import { Metadata } from "next";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { SERVER_API_URL } from "@/app/constant";
-import { patchSampleWorkflow, patchSampleWorkflowTestResult, rejectSampleWorkflow } from "../actions";
+import {
+  patchSampleWorkflow,
+  patchSampleWorkflowTestResult,
+  rejectSampleWorkflow,
+} from "../actions";
 import SampleWorkflowForm from "./sample-workflow-form";
 
 export const metadata: Metadata = {
-  title: "Edit  Product | Trustin",
+  title: "Sample Workflow | Trustin",
   description: "This is Form Layout page for TailAdmin Next.js",
   // other metadata
 };
@@ -35,6 +39,12 @@ async function getData(id: string) {
       Authorization: `Bearer ${access_token?.value}`,
     },
   });
+  const res4 = await fetch(`${SERVER_API_URL}/users/me/`, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${access_token?.value}`,
+    },
+  });
 
   // The return value is *not* serialized
   // You can return Date, Map, Set, etc.
@@ -48,15 +58,18 @@ async function getData(id: string) {
   const sample = await res.json();
   const branches = await res2.json();
   const users = await res3.json();
+  const currentUser = await res4.json();
   // console.log(sample);
   return {
     sample,
     branches,
     users,
+    currentUser
   };
 }
 
 export type Data = {
+  currentUser: { id: number; department_id: number };
   sample: {
     id: number;
     sample_id: string;
@@ -107,6 +120,7 @@ export type Data = {
       city: string;
       state: string;
       pincode_no: string;
+      gst: string;
     };
     sample_workflows: {
       id: number;
@@ -116,8 +130,7 @@ export type Data = {
       assignee: { first_name: string; last_name: string } | null;
       department: { id: number; name: string } | null;
       role: { id: number; name: string } | null;
-      updated_at:string;
-
+      updated_at: string;
     }[];
     sample_history: [
       {

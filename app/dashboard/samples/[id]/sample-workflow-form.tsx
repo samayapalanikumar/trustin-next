@@ -2,18 +2,26 @@
 import { useFormState } from "react-dom";
 
 import { Data } from "./page";
-import React, {useState} from 'react';
+import React, { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import StatusStepper from "./status-stepper1";
 import UnderTestingForm from "./under-testing-form";
 import WorkFlowForm from "@/components/WorkFlowForms/workflowform";
 
 // import InvoicePDF from '@/components/Print/InvoicePDF';
-import { PDFViewer,PDFDownloadLink, Document, Page, Text, View, StyleSheet } from '@react-pdf/renderer';
-import ReactDOMServer from 'react-dom/server';
+import {
+  PDFViewer,
+  PDFDownloadLink,
+  Document,
+  Page,
+  Text,
+  View,
+  StyleSheet,
+} from "@react-pdf/renderer";
+import ReactDOMServer from "react-dom/server";
 // import Modal from 'react-modal';
-import Modal from '@/components/Modal/Modal';
-import MyDocument from '@/components/Print/InvoicePDF';
+import Modal from "@/components/Modal/Modal";
+import MyDocument from "@/components/Print/InvoicePDF";
 // Make sure to bind modal to your app element (https://reactcommunity.org/react-modal/accessibility/)
 
 // import { PDFDocument, Page, Text, View, Document, StyleSheet } from '@react-pdf/renderer';
@@ -25,11 +33,11 @@ import { useEffect } from "react";
 type Props = {
   data: Data;
   actionFn: (
-    prevState:any,
+    prevState: any,
     data: FormData,
   ) => Promise<
-  { fieldErrors: null; type: string; message: string | undefined } | undefined
->;
+    { fieldErrors: null; type: string; message: string | undefined } | undefined
+  >;
   actionFnResult: (
     data: any,
   ) => Promise<
@@ -89,7 +97,6 @@ const status = [
   "Done",
 ];
 
-
 // Create a function to generate the PDF content
 const generatePDFContent = () => {
   // Render the PDF content to a string
@@ -100,12 +107,11 @@ const generatePDFContent = () => {
           <Text>Hello, World!</Text>
         </View>
       </Page>
-    </Document>
+    </Document>,
   );
-  
+
   return pdfContent;
 };
-
 
 // Create a function to generate the PDF and open it in a new window
 const generateAndDisplayPDF = () => {
@@ -115,20 +121,20 @@ const generateAndDisplayPDF = () => {
   //   InvoicePDF()
   // )
 
-  console.log(pdfContent)
+  console.log(pdfContent);
 
   // Convert the PDF content string to a blob
-  const blob = new Blob([pdfContent], { type: 'application/pdf' });
+  const blob = new Blob([pdfContent], { type: "application/pdf" });
 
   // Create blob URL
   const pdfBlobUrl = URL.createObjectURL(blob);
 
   // Open a new window and display the PDF
-  const newWindow = window.open(pdfBlobUrl, '_blank');
+  const newWindow = window.open(pdfBlobUrl, "_blank");
   if (newWindow) {
     newWindow.focus();
   } else {
-    alert('Please allow pop-ups for this site');
+    alert("Please allow pop-ups for this site");
   }
 };
 
@@ -137,8 +143,8 @@ const InvoicePDF = () => {
   // Styles for the PDF
   const styles = StyleSheet.create({
     page: {
-      flexDirection: 'row',
-      backgroundColor: '#E4E4E4',
+      flexDirection: "row",
+      backgroundColor: "#E4E4E4",
     },
     section: {
       margin: 10,
@@ -167,8 +173,6 @@ const SampleWorkflowForm = ({
   actionFnResult,
   actionFnReject,
 }: Props) => {
-
-
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const openModal = () => setIsModalOpen(true);
@@ -189,7 +193,7 @@ const SampleWorkflowForm = ({
   //   }
   // };
   // const handlePrint = () => {
-    
+
   //   const root = createRoot(document.getElementById('root'));
   //   // Render the PDF component into the new window
   //   // root.render(<React.StrictMode><InvoicePDF /></React.StrictMode>, newWindow?.document.getElementById('invoice'));
@@ -206,8 +210,6 @@ const SampleWorkflowForm = ({
   //   newWindow?.document.write('</body></html>');
   //   newWindow?.document.close();
 
-    
-   
   //   // Open a new window and display the PDF
   //   // const newWindow = window.open(pdfBlobUrl, '_blank');
   //   if (newWindow) {
@@ -217,7 +219,7 @@ const SampleWorkflowForm = ({
   //   }
   // };
 
-  const [state, formAction] = useFormState(actionFn, initialState)
+  const [state, formAction] = useFormState(actionFn, initialState);
   const router = useRouter();
 
   useEffect(() => {
@@ -238,12 +240,14 @@ const SampleWorkflowForm = ({
     }
   }, [state, router]);
 
- 
-
   return (
     <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-      <div className="flex flex-col gap-3 sm:flex-row items-end sm:justify-end align-items:flex-end ">
-      <button type="button" onClick={openModal} className="  justify-center rounded bg-primary p-2 font-medium text-gray align-items: flex-end m-1">
+      <div className="align-items:flex-end flex flex-col items-end gap-3 sm:flex-row sm:justify-end ">
+        <button
+          type="button"
+          onClick={openModal}
+          className="  align-items: flex-end m-1 justify-center rounded bg-primary p-2 font-medium text-gray"
+        >
           Print
         </button>
       </div>
@@ -251,19 +255,18 @@ const SampleWorkflowForm = ({
         {/* <h2>This is a modal</h2>
         <p>Modal content goes here...</p> */}
         <PDFViewer width="1000" height="600">
-            <MyDocument />
+          <MyDocument />
         </PDFViewer>
         {/* <PDFDownloadLink document={< MyDocument/>} fileName="somename.pdf">
       {({ blob, url, loading, error }) => (loading ? 'Loading document...' : 'Download now!')}
     </PDFDownloadLink> */}
       </Modal>
-      
+
       <Tabs defaultValue="status" className="mt-1 w-full p-4">
         <TabsList>
           <TabsTrigger value="status">Status</TabsTrigger>
           <TabsTrigger value="workflow">Workflow</TabsTrigger>
           <TabsTrigger value="history">History</TabsTrigger>
-         
         </TabsList>
         <TabsContent value="status">
           <div className="mb-3 w-full flex-col">
@@ -277,7 +280,9 @@ const SampleWorkflowForm = ({
                   currentStep={data?.sample?.status_id}
                   actionData={formAction}
                   assign={data?.sample?.assigned_to}
-                  status={data?.sample?.status != "Submitted" ? "Submitted" : ""}
+                  status={
+                    data?.sample?.status != "Submitted" ? "Submitted" : ""
+                  }
                   status_id={2}
                   buttonName="Submit for Review"
                 />
@@ -456,21 +461,53 @@ const SampleWorkflowForm = ({
               <p>{data?.sample?.assignee?.department}</p>
             </div>
           </div>
-          <div className="mb-4.5 ml-2 flex flex-col gap-6 p-2 xl:flex-row">
-            <div className="w-full xl:w-1/5">
-              <p className="mb-2.5 block font-semibold text-black dark:text-white">
-                Company Name:
-              </p>
-              <p>{data.sample?.registration?.company_name}</p>
-            </div>
+          {data.currentUser.department_id !== 3 && (
+            <div className="mb-4.5 ml-2 flex flex-col gap-6 p-2 xl:flex-row">
+              <div className="w-full xl:w-1/5">
+                <p className="mb-2.5 block font-semibold text-black dark:text-white">
+                  Company Name:
+                </p>
+                <p>{data.sample?.registration?.company_name}</p>
+              </div>
 
-            <div className="w-full xl:w-1/5">
-              <p className="mb-2.5 block font-semibold text-black dark:text-white">
-                Department:
-              </p>
-              <p>{data?.sample?.assignee?.department}</p>
+              <div className="w-full xl:w-1/5">
+                <p className="mb-2.5 block font-semibold text-black dark:text-white">
+                  Adderess Line 1:
+                </p>
+                <p>{data?.sample?.registration?.customer_address_line1}</p>
+              </div>
+              <div className="w-full xl:w-1/5">
+                <p className="mb-2.5 block font-semibold text-black dark:text-white">
+                  Adderess Line 2:
+                </p>
+                <p>{data?.sample?.registration?.customer_address_line2}</p>
+              </div>
+              <div className="w-full xl:w-1/5">
+                <p className="mb-2.5 block font-semibold text-black dark:text-white">
+                  City:
+                </p>
+                <p>{data?.sample?.registration?.city}</p>
+              </div>
+              <div className="w-full xl:w-1/5">
+                <p className="mb-2.5 block font-semibold text-black dark:text-white">
+                  State:
+                </p>
+                <p>{data?.sample?.registration?.state}</p>
+              </div>
+              <div className="w-full xl:w-1/5">
+                <p className="mb-2.5 block font-semibold text-black dark:text-white">
+                  Pincode:
+                </p>
+                <p>{data?.sample?.registration?.pincode_no}</p>
+              </div>
+              <div className="w-full xl:w-1/5">
+                <p className="mb-2.5 block font-semibold text-black dark:text-white">
+                  GST:
+                </p>
+                <p>{data?.sample?.registration?.gst}</p>
+              </div>
             </div>
-          </div>
+          )}
 
           <div className="border-b border-stroke px-2 py-4 dark:border-strokedark">
             <h3 className="font-bold text-black dark:text-white">
@@ -533,7 +570,6 @@ const SampleWorkflowForm = ({
           </div>
         </TabsContent>
       </Tabs>
-      
     </div>
   );
 };

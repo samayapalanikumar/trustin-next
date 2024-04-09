@@ -10,12 +10,12 @@ export const metadata: Metadata = {
   // other metadata
 };
 
-type RegistrationData = {
+export type RegistrationData = {
   week: string;
   count: number;
 };
 
-type FollowupData = {
+export type FollowupData = {
   followup_count: number;
   user_id: number;
   user_name: string;

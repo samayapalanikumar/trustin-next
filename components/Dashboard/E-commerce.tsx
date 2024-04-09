@@ -14,6 +14,8 @@ import {
   UserCheck,
   Users,
 } from "lucide-react";
+import RegistrationChart from "./registration-chart";
+import FollowupCountTable from "./followup-count-table";
 // import Map from "../Maps/TestMap";
 
 // without this the component renders on server and throws an error
@@ -25,60 +27,55 @@ import {
 const ECommerce = ({ data }: { data: DashboardInfo }) => {
   return (
     <>
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-4 2xl:gap-7.5">
-        <CardDataStats
-          title="Total Customers"
-          total={data.customer.toString()}
-          rate="0.43%"
-          levelUp
-        >
-          <Users className="text-primary dark:text-white" />
-        </CardDataStats>
-        <CardDataStats
-          title="Total Products"
-          total={data.product.toString()}
-          rate="4.35%"
-          levelUp
-        >
-          <Syringe className="text-primary dark:text-white" />
-        </CardDataStats>
-        <CardDataStats
-          title="Total Registrations"
-          total={data.registration_count.toString()}
-          rate="2.59%"
-          levelUp
-        >
-          <ClipboardPlus className="text-primary dark:text-white" />
-        </CardDataStats>
-
-        <CardDataStats
-          title="Total Followup"
-          total={data.followup_count.toString()}
-          rate="0.95%"
-          levelDown
-        >
-          <UserCheck className="text-primary dark:text-white" />
-        </CardDataStats>
-        <CardDataStats
-          title="Total Samples"
-          total={data.sample_count.toString()}
-          rate="0.95%"
-          levelDown
-        >
-          <TestTube2 className="text-primary dark:text-white" />
-        </CardDataStats>
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-5 2xl:gap-7.5">
+        {data?.customer && (
+          <CardDataStats
+            title="Total Customers"
+            total={data.customer.toString()}
+          >
+            <Users className="text-primary dark:text-white" />
+          </CardDataStats>
+        )}{" "}
+        {data?.product && (
+          <CardDataStats title="Total Products" total={data.product.toString()}>
+            <Syringe className="text-primary dark:text-white" />
+          </CardDataStats>
+        )}
+        {data?.registration_count && (
+          <CardDataStats
+            title="Total Registrations"
+            total={data.registration_count.toString()}
+          >
+            <ClipboardPlus className="text-primary dark:text-white" />
+          </CardDataStats>
+        )}
+        {data?.followup_count && (
+          <CardDataStats
+            title="Total Followup"
+            total={data.followup_count.toString()}
+          >
+            <UserCheck className="text-primary dark:text-white" />
+          </CardDataStats>
+        )}
+        {data?.sample_count && (
+          <CardDataStats
+            title="Total Samples"
+            total={data.sample_count.toString()}
+          >
+            <TestTube2 className="text-primary dark:text-white" />
+          </CardDataStats>
+        )}
       </div>
 
       <div className="mt-4 grid grid-cols-12 gap-4 md:mt-6 md:gap-6 2xl:mt-7.5 2xl:gap-7.5">
-        <ChartOne />
+        <RegistrationChart data={data.registration_data} />
         {/* <ChartTwo /> */}
         {/* <ChartThree /> */}
         {/* <MapOne /> */}
-        <div className="col-span-12 xl:col-span-8">
-          <TableOne />
-        </div>
-        <ChatCard />
+
+        {/* <ChatCard /> */}
       </div>
+      <FollowupCountTable data={data.followup_count_by_assigned_to} />
     </>
   );
 };

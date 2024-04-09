@@ -3,27 +3,7 @@ import { useFormStatus, useFormState } from "react-dom";
 import { toast } from "sonner";
 import { signinJwt } from "./actions";
 import { useEffect } from "react";
-
-const SubmitButton = ({
-  name = "Submit",
-  loading = "Loading...",
-}: {
-  name?: string;
-  loading?: React.ReactNode | string;
-}) => {
-  const { pending } = useFormStatus();
-
-  return (
-    <button
-      type="submit"
-      className="w-full cursor-pointer rounded-lg border border-primary bg-primary p-4 text-white transition hover:bg-opacity-90"
-      aria-disabled={pending}
-      disabled={pending}
-    >
-      {pending ? loading : name}
-    </button>
-  );
-};
+import SubmitButton from "@/components/submit-button/submit-button";
 
 const initalState = {
   message: null,
@@ -63,7 +43,9 @@ const SigninForm = () => {
             <EmailSvg />
           </span>
         </div>
-        {state?.fieldErrors?.username && <p className="text-red-500">{state?.fieldErrors?.username}</p>}
+        {state?.fieldErrors?.username && (
+          <p className="text-red-500">{state?.fieldErrors?.username}</p>
+        )}
       </div>
 
       <div className="mb-6">
@@ -83,7 +65,9 @@ const SigninForm = () => {
             <PasswordSvg />
           </span>
         </div>
-        {state?.fieldErrors?.password && <p className="text-red-500">{state?.fieldErrors?.password}</p>}
+        {state?.fieldErrors?.password && (
+          <p className="text-red-500">{state?.fieldErrors?.password}</p>
+        )}
       </div>
 
       <div className="mb-5">

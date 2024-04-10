@@ -16,7 +16,7 @@ export default function DashboardPage() {
   <div className="flex justify-center items-center  mt-50  md:flex-1 sm:flex">
     <div className="p-15 flex flex-col justify-center items-center shadow-xl bg-zinc-50 rounded   ">
     <Image className="p-2" src={image} width={180} height={150} alt=" "/>
-      <p className="font-black italic text-2xl text-left md:text-center"> Test Request Form Submitted Successfully..!</p>
+      <p className="font-black italic text-2xl text-left md:text-center"> Request Form Submitted Successfully..!</p>
     </div>
   </div>
   </div>

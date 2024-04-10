@@ -6,6 +6,9 @@ import { SERVER_API_URL } from "@/app/constant";
 import { redirect } from "next/navigation";
 import { updateRegistration } from "../actions";
 import Link from "next/link";
+import { Data, RegistrationType, UpdateDataType } from "../typings";
+import { FullParametersType } from "@/types/parametets";
+import { TestReportForm } from "@/app/trf/typings";
 
 export const metadata: Metadata = {
   title: "Edit New Registration | Trustin",
@@ -82,14 +85,14 @@ async function getData(id: string) {
   if (res4.status === 401) redirect("/signin");
   if (res5.status === 401) redirect("/signin");
 
-  const registration = await res.json();
-  const trf = await res1.json();
+  const registration:RegistrationType = await res.json();
+  const trf:TestReportForm[] = await res1.json();
   const customers = await res2.json();
   const branches = await res3.json();
   const products = await res4.json();
-  const parameters:ParametersType = await res5.json();
+  const parameters:FullParametersType[] = await res5.json();
 
-  const batches = registration.batches.map((batch: any) => ({
+  const batches = registration.batches.map((batch) => ({
     ...batch,
     expiry_date: new Date(batch.expiry_date).toISOString().split("T")[0],
     manufactured_date: new Date(batch.manufactured_date)
@@ -99,7 +102,7 @@ async function getData(id: string) {
   registration.batches = batches;
   const microParameters = parameters.filter((para) => para.test_type_id == 1);
   const mechParameters = parameters.filter((para) => para.test_type_id == 2);
-  const trflist = trf.map((t: any) => ({ label: t.trf_code, value: t.id }));
+  const trflist = trf.map((t) => ({ label: t.trf_code, value: t.id.toString() }));
   registration.test_params_micro = registration.test_params.filter(
     (para:any) => para.test_parameter.test_type_id == 1,
   );
@@ -108,7 +111,7 @@ async function getData(id: string) {
   );
   registration.test_types = registration.test_types.map(
     (type:any) => ""+type.test_type_id,
-  );
+  )??[];
   console.log( registration.test_types)
   return {
     registration,
@@ -128,7 +131,7 @@ const EditRegistrationPage = async ({
 }: {
   params: { id: string };
 }) => {
-  const data = await getData(id);
+  const data:UpdateDataType = await getData(id);
   const updateRegistrationWithId = updateRegistration.bind(null, id);
   return (
     <>

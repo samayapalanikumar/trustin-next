@@ -1,3 +1,5 @@
+// @ts-nocheck
+// Ignoring type check because stepper packages have type issue
 "use client";
 import { Stepper, Step } from "react-form-stepper";
 

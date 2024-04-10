@@ -1,7 +1,7 @@
 "use client";
 import { SERVER_API_URL } from "@/app/constant";
 import { useEffect, useState } from "react";
-import { useFieldArray, useForm, useWatch, Form } from "react-hook-form";
+import { useFieldArray, useForm, useWatch, Form, FieldValues } from "react-hook-form";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Trash2 } from "lucide-react";
 import { createRegistration } from "../actions";
@@ -19,7 +19,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Checkbox } from "@/components/ui/checkbox";
-import { CreateData, Data } from "../typings";
+import { CreateData, Data, ParametersType, TestType } from "../typings";
+import { TestDetail, TestReportForm } from "@/app/trf/typings";
 
 const TESTTYPE = {
   1: "MICRO",
@@ -39,7 +40,7 @@ const initialState: InitialState = {
 };
 
 const RegistrationForm = ({ data }: { data: Data }) => {
-  const [parameters, setParameters] = useState([]);
+  const [parameters, setParameters] = useState<TestDetail[]>([]);
 
   const form = useForm<CreateData>({
     defaultValues: {
@@ -90,7 +91,7 @@ const RegistrationForm = ({ data }: { data: Data }) => {
             },
           },
         );
-        const data = await response.json();
+        const data: TestReportForm = await response.json();
         console.log(data);
         // Update form value with the fetched data
         form.setValue("branch_id", data.branch_id);
@@ -122,9 +123,9 @@ const RegistrationForm = ({ data }: { data: Data }) => {
 
     // Check if the field value is not empty before making the API call
     if (watchedFieldValue) {
-      const { trf_code }: { trf_code: string } = data.trf?.find(
-        (t: any) => t.id == watchedFieldValue,
-      );
+      const { trf_code }: { trf_code: string | undefined } = data.trf?.find(
+        (t) => t.id == watchedFieldValue,
+      ) ?? { trf_code: undefined };
       if (trf_code) fetchData(trf_code);
     }
   }, [watchedFieldValue, form.setValue, form, data.trf]);
@@ -136,9 +137,11 @@ const RegistrationForm = ({ data }: { data: Data }) => {
       console.log(watchedTestTypeValue);
       console.log(parameters);
       console.log(data.microParameters);
-      const listParameters = parameters.map((para) => para.parameter_id);
+      const listParameters: number[] = parameters.map(
+        (para) => para.parameter_id,
+      );
       console.log(listParameters);
-      if (watchedTestTypeValue?.includes("1" )) {
+      if ((watchedTestTypeValue as any)?.includes("1")) {
         data?.microParameters.length &&
           data.microParameters.forEach((para) => {
             if (listParameters.includes(para.id)) {
@@ -147,7 +150,7 @@ const RegistrationForm = ({ data }: { data: Data }) => {
             }
           });
       }
-      if (watchedTestTypeValue?.includes("2")) {
+      if ((watchedTestTypeValue as any)?.includes("2")) {
         console.log("Micro");
         data?.mechParameters.length &&
           data?.mechParameters?.forEach((para) => {
@@ -189,15 +192,7 @@ const RegistrationForm = ({ data }: { data: Data }) => {
     }
   }, [state, router]);
 
-  const handleSubmit = async ({
-    formdata,
-    data,
-    formDataJson,
-  }: {
-    formdata: FormData;
-    data: CreateData;
-    formDataJson: {};
-  }) => {
+  const handleForm = async (data: CreateData) => {
     console.log(data);
     const res = await createRegistration(data);
     console.log(res);
@@ -206,7 +201,7 @@ const RegistrationForm = ({ data }: { data: Data }) => {
 
   return (
     <UiForm {...form}>
-      <Form control={form.control} onSubmit={handleSubmit}>
+      <form onSubmit={form.handleSubmit(handleForm)}>
         <div className="p-6.5">
           <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
             <div className="w-full xl:w-1/2">
@@ -493,7 +488,7 @@ const RegistrationForm = ({ data }: { data: Data }) => {
                       Test Type
                     </label>
                   </div>
-                  {Object.entries(TESTTYPE).map(([key, value]) => (
+                  {Object.entries(TESTTYPE).map(([key, value]: [any, any]) => (
                     <FormField
                       key={key}
                       control={form.control}
@@ -814,7 +809,7 @@ const RegistrationForm = ({ data }: { data: Data }) => {
             {form.formState.isSubmitting ? "Loading..." : "Submit"}
           </button>
         </div>
-      </Form>
+      </form>
     </UiForm>
   );
 };

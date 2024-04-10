@@ -8,7 +8,6 @@ import Combobox from "@/components/combo-box";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
-
 import {
   Form as UiForm,
   FormControl,
@@ -19,6 +18,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Checkbox } from "@/components/ui/checkbox";
+import { UpdateData, UpdateDataType } from "../typings";
 
 const TESTTYPE = {
   1: "MICRO",
@@ -37,15 +37,18 @@ const initialState: InitialState = {
   message: null,
 };
 
-
 const RegistrationForm = ({
   data,
   updateFn,
 }: {
-  data: any;
-  updateFn: (data: any) => Promise<{ fieldErrors: null; type: string; message: string | undefined; } | undefined>;
+  data: UpdateDataType;
+  updateFn: (
+    data: any,
+  ) => Promise<
+    { fieldErrors: null; type: string; message: string | undefined } | undefined
+  >;
 }) => {
-  const form = useForm({
+  const form = useForm<UpdateData>({
     defaultValues: {
       trf_id: data?.registration?.trf_id,
       branch_id: data?.registration?.branch_id,
@@ -58,11 +61,11 @@ const RegistrationForm = ({
       state: data?.registration?.state,
       pincode_no: data?.registration?.pincode_no,
       gst: data?.registration?.gst,
-      test_types: data?.registration?.test_types,
+      test_types: data?.registration?.test_types ?? [] ,
       date_of_received: new Date(data?.registration?.date_of_received)
         .toISOString()
         .split("T")[0],
-      batches: data?.registration?.batches.map((batch: any) => ({
+      batches: data?.registration?.batches.map((batch) => ({
         id: batch.id,
         batch_no: batch.batch_no,
         manufactured_date: batch.manufactured_date,
@@ -70,10 +73,10 @@ const RegistrationForm = ({
         batch_size: batch.batch_size,
         received_quantity: batch.received_quantity,
       })),
-      test_params_micro: data?.registration?.test_params_micro.map((param: any) => ({
+      test_params_micro: data?.registration?.test_params_micro.map((param) => ({
         test_params_id: param.test_params_id,
       })),
-      test_params_mech: data?.registration?.test_params_mech.map((param: any) => ({
+      test_params_mech: data?.registration?.test_params_mech.map((param) => ({
         test_params_id: param.test_params_id,
       })),
     },
@@ -104,11 +107,10 @@ const RegistrationForm = ({
   const watchedTestTypeValue = useWatch({
     control: form.control,
     name: "test_types",
-  }); 
+  });
 
   const [state, setState] = useState<InitialState | undefined>(initialState);
   const router = useRouter();
-
 
   useEffect(() => {
     // Make API call when the watched field value changes
@@ -152,9 +154,9 @@ const RegistrationForm = ({
 
     // Check if the field value is not empty before making the API call
     if (watchedFieldValue) {
-      const { trf_code }: { trf_code: string } = data.trf?.find(
-        (t: any) => t.id == watchedFieldValue,
-      );
+      const { trf_code }: { trf_code: string | undefined } = data.trf?.find(
+        (t) => t.id == watchedFieldValue,
+      ) ?? { trf_code: undefined };
       if (trf_code) fetchData(trf_code);
     }
   }, [watchedFieldValue, form.setValue, data.trf]);
@@ -177,15 +179,7 @@ const RegistrationForm = ({
     }
   }, [state, router]);
 
-  const handleSubmit = async ({
-    formdata,
-    data,
-    formDataJson,
-  }: {
-    formdata: FormData;
-    data: {};
-    formDataJson: {};
-  }) => {
+  const handleForm = async (data: UpdateData) => {
     console.log(data);
     const res = await updateFn(data);
     console.log(res);
@@ -193,7 +187,7 @@ const RegistrationForm = ({
   };
   return (
     <UiForm {...form}>
-      <Form control={form.control} onSubmit={handleSubmit}>
+      <form onSubmit={form.handleSubmit(handleForm)}>
         <div className="p-6.5">
           <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
             <div className="w-full xl:w-1/2">
@@ -477,9 +471,11 @@ const RegistrationForm = ({
               render={() => (
                 <FormItem>
                   <div className="mb-4">
-                    <label className="mb-2.5 block text-black dark:text-white">Test Type</label>
+                    <label className="mb-2.5 block text-black dark:text-white">
+                      Test Type
+                    </label>
                   </div>
-                  {Object.entries(TESTTYPE).map(([key, value]) => (
+                  {Object.entries(TESTTYPE).map(([key, value]: [any, any]) => (
                     <FormField
                       key={key}
                       control={form.control}
@@ -525,7 +521,8 @@ const RegistrationForm = ({
               </TabsTrigger>
               <TabsTrigger value="micro-parameters">
                 Micro Test Parameters
-              </TabsTrigger>            </TabsList>
+              </TabsTrigger>{" "}
+            </TabsList>
             <TabsContent value="batches">
               {" "}
               <div className="mb-4">
@@ -804,7 +801,7 @@ const RegistrationForm = ({
             {form.formState.isSubmitting ? "Loading..." : "Submit"}
           </button>
         </div>
-      </Form>
+      </form>
     </UiForm>
   );
 };

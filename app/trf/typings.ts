@@ -15,13 +15,13 @@ type Followup = {
     name: string;
     created_at: string;
     updated_at: string | null;
-    id: number;
+    id: number|string;
     description: string;
   };
   
-  type TestDetail = {
+  export type TestDetail = {
     priority_order: number;
-    parameter_id: number;
+    parameter_id: number; 
     id: number;
     trf_id: number;
   };

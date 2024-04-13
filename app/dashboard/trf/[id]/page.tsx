@@ -26,7 +26,7 @@ async function getData(id:string) {
       tags:["TRF"]
     }
   });
-  const res2 = await fetch(`${SERVER_API_URL}/products/trf`, {
+  const res2 = await fetch(`${SERVER_API_URL}/products1/trf`, {
     headers: {
       "Content-Type": "application/json",
     },

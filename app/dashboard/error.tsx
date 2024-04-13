@@ -16,12 +16,11 @@ export default function Error({
   }, [error])
  
   return (
-    <div className='flex items-center justify-center'>
-      <div className='grid lg:grid-cols-2 items-center justify-items-center border-2 p-4'>
-        <div className='lg:h-40'>
+    <div className='flex flex-col items-center justify-center'>
+        <div className='lg:h-60'>
       <Image
            className="w-full h-full"
-           src={"/images/error/error-img.png"}
+           src={"/images/error/error-img-two.webp"}
            alt="Logo"
            width={176}
            height={32}
@@ -43,6 +42,5 @@ export default function Error({
       </button>
       </div>
       </div>
-    </div>
   )
 }

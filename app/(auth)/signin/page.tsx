@@ -5,7 +5,7 @@ import { Metadata } from "next";
 import SigninForm from "./signin-form";
 
 export const metadata: Metadata = {
-  title: "Signin Page | Next.js E-commerce Dashboard Template",
+  title: "Signin  | Trustin",
   description: "This is Signin page for TailAdmin Next.js",
   // other metadata
 };
@@ -13,10 +13,10 @@ export const metadata: Metadata = {
 export default function SignIn() {
   return (
     <>
-      <div className="lg:h-full grid items-center justify-items-center rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+      <div className="grid items-center justify-items-center rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark lg:h-full">
         <div className="flex flex-wrap items-center">
           <div className="hidden w-full lg:block lg:w-1/2">
-            <div className="py-17.5 px-26 text-center">
+            <div className="px-26 py-17.5 text-center">
               <Link className="mb-5.5 inline-block" href="/">
                 <Image
                   className="hidden dark:block"
@@ -37,8 +37,8 @@ export default function SignIn() {
               </Link>
 
               <p className="2xl:px-20">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit
-              suspendisse.
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit
+                suspendisse.
               </p>
 
               <span className="mt-15 inline-block">
@@ -172,7 +172,7 @@ export default function SignIn() {
                 Sign In to Trustin
               </h2>
 
-             <SigninForm />
+              <SigninForm />
             </div>
           </div>
         </div>

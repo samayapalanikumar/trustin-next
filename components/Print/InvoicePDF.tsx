@@ -174,7 +174,9 @@ const MyDocument = ({ data }: { data: any }) => {
                 padding: 1,
               }}
             >
-              <Text style={{ borderRight: "1 solid #000" }}>Company Name</Text>
+              <Text style={{ borderRight: "1 solid #000", width: 180 }}>
+                Company Name
+              </Text>
               <Text>{data.sample.registration.company_name}</Text>
             </View>
             <View
@@ -187,7 +189,9 @@ const MyDocument = ({ data }: { data: any }) => {
                 padding: 1,
               }}
             >
-              <Text style={{ borderRight: "1 solid #000" }}>Batch No</Text>
+              <Text style={{ borderRight: "1 solid #000", width: 180 }}>
+                Batch No
+              </Text>
               <Text>{data.sample.batch.batch_no}</Text>
             </View>
             <View
@@ -200,7 +204,9 @@ const MyDocument = ({ data }: { data: any }) => {
                 padding: 1,
               }}
             >
-              <Text style={{ borderRight: "1 solid #000" }}>Test Type</Text>
+              <Text style={{ borderRight: "1 solid #000", width: 180 }}>
+                Test Type
+              </Text>
               <Text>{data.sample.test_type_id === 2 ? "Mech" : "Micro"}</Text>
             </View>
             <View
@@ -213,7 +219,9 @@ const MyDocument = ({ data }: { data: any }) => {
                 padding: 1,
               }}
             >
-              <Text style={{ borderRight: "1 solid #000" }}>Product Name</Text>
+              <Text style={{ borderRight: "1 solid #000", width: 180 }}>
+                Product Name
+              </Text>
               <Text>
                 {data?.sample?.registration?.product_data?.product_name}
               </Text>
@@ -228,7 +236,9 @@ const MyDocument = ({ data }: { data: any }) => {
                 padding: 1,
               }}
             >
-              <Text style={{ borderRight: "1 solid #000" }}>Product Code</Text>
+              <Text style={{ borderRight: "1 solid #000", width: 180 }}>
+                Product Code
+              </Text>
               <Text>
                 {data?.sample?.registration?.product_data?.product_code}
               </Text>

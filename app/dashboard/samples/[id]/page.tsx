@@ -121,6 +121,11 @@ export type Data = {
       state: string;
       pincode_no: string;
       gst: string;
+      product_data:{
+        id:number;
+        product_code: string;
+        product_name: string;
+      };
     };
     sample_workflows: {
       id: number;

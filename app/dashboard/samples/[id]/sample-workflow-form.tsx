@@ -255,7 +255,7 @@ const SampleWorkflowForm = ({
         {/* <h2>This is a modal</h2>
         <p>Modal content goes here...</p> */}
         <PDFViewer width="1000" height="600">
-          <MyDocument />
+          <MyDocument data={data} />
         </PDFViewer>
         {/* <PDFDownloadLink document={< MyDocument/>} fileName="somename.pdf">
       {({ blob, url, loading, error }) => (loading ? 'Loading document...' : 'Download now!')}
@@ -453,13 +453,13 @@ const SampleWorkflowForm = ({
                   data?.sample?.assignee?.last_name}
               </p>
             </div>
-
+            {/* 
             <div className="w-full xl:w-1/5">
               <p className="mb-2.5 block font-semibold text-black dark:text-white">
                 Department:
               </p>
               <p>{data?.sample?.assignee?.department}</p>
-            </div>
+            </div> */}
           </div>
           {data.currentUser.department_id !== 3 && (
             <div className="mb-4.5 ml-2 flex flex-col gap-6 p-2 xl:flex-row">
@@ -508,6 +508,22 @@ const SampleWorkflowForm = ({
               </div>
             </div>
           )}
+
+          <div className="mb-4.5 ml-2 flex flex-col gap-6 p-2 xl:flex-row">
+            <div className="w-full xl:w-1/2">
+              <p className="mb-2.5 block font-semibold text-black dark:text-white">
+                Product Name :
+              </p>
+              <p>{data?.sample?.registration?.product_data?.product_name}</p>
+            </div>
+
+            <div className="w-full xl:w-1/3">
+              <p className="mb-2.5 block font-semibold text-black dark:text-white">
+                Product Code:
+              </p>
+              <p> {data?.sample?.registration?.product_data?.product_code}</p>
+            </div>
+          </div>
 
           <div className="border-b border-stroke px-2 py-4 dark:border-strokedark">
             <h3 className="font-bold text-black dark:text-white">

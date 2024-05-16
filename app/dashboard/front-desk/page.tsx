@@ -1,14 +1,13 @@
 import Link from "next/link";
 import { cookies } from "next/headers";
-import CustomerTable from "./customer";
+import FrontDeskTable from "./front-desk";
 import { redirect } from "next/navigation";
-
 import { Metadata } from "next";
 import { SERVER_API_URL } from "@/app/constant";
 
 export const metadata: Metadata = {
-  title: "Customers | Trustin",
-  description: "This is Customers page ",
+  title: "Front Desk | Trustin",
+  description: "This is Front Desk page ",
   // other metadata
 };
 
@@ -16,13 +15,13 @@ async function getData() {
   const cookieStore = cookies();
   const access_token = cookieStore.get("access_token");
   console.log(access_token);
-  const res = await fetch(`${SERVER_API_URL}/customers/`, {
+  const res = await fetch(`${SERVER_API_URL}/front-desks/`, {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${access_token?.value}`,
     },
     next: {
-      tags: ["Customers"],
+      tags: ["front-desk"],
     },
   });
   // The return value is *not* serialized
@@ -43,30 +42,30 @@ export type Data = {
   id: number;
   company_name: string;
   company_id: string;
-  customer_code: string;
+  frontdesk_code: string;
   email: string;
 }[];
 
-const CustomerPage = async () => {
-  const data: Data = await getData();
+const FrontDeskPage = async () => {
+  const data = await getData();
   return (
     <>
       <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <h2 className="text-title-md2 font-semibold text-black dark:text-white">
-          Customers
+          Front Desk
         </h2>
         <Link
-          href="customers/new"
+          href="front-desk/new"
           className="inline-flex items-center justify-center rounded-md border border-black px-5 py-4 text-center font-medium text-black hover:bg-opacity-90 dark:border-white dark:text-white lg:px-8 xl:px-10"
         >
-          New Customers
+          New Front Desk
         </Link>
       </div>
       <div className="flex flex-col gap-10">
-        <CustomerTable data={data} />
+        <FrontDeskTable data={data} />
       </div>
     </>
   );
 };
 
-export default CustomerPage;
+export default FrontDeskPage;

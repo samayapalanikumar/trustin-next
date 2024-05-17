@@ -5,6 +5,7 @@ import { Trash2 } from "lucide-react";
 import Select from "@/components/select-input";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { createSamples } from "../actions";
 
 type Sample = {
   name: string;
@@ -90,8 +91,8 @@ const SamplesAddForm = ({ data }: { data: any }) => {
   }, [state, router]);
 
   const handleForm = async (data: Sample) => {
-    // const res = await createFn(data);
-    // setState(res);
+    const res = await createSamples(data);
+    setState(res);
     console.log(data);
   };
 

@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 import { SERVER_API_URL } from "@/app/constant";
 import { Metadata } from "next";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Samples | Trustin",
@@ -48,12 +49,12 @@ const SamplePage = async () => {
         <h2 className="text-title-md2 font-semibold text-black dark:text-white">
           Samples
         </h2>
-        {/* <Link
-          href="registrations/new"
+        <Link
+          href="samples/new"
           className="inline-flex items-center justify-center rounded-md border border-black py-4 px-5 text-center font-medium text-black hover:bg-opacity-90 lg:px-8 xl:px-10"
         >
-          New Registration
-        </Link> */}
+          New Sample
+        </Link>
       </div>
       <div className="flex flex-col gap-10">
         <SampleTable data={data} />

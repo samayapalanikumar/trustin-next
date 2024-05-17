@@ -57,7 +57,7 @@ const NewSamplePage = async () => {
   const data = await getData();
   return (
     <>
-      <Breadcrumb pageName="Add New Product" />
+      <Breadcrumb pageName="Add New Sample" />
 
       <div className="grid grid-cols-1 gap-9 sm:grid-cols-1">
         <div className="flex flex-col gap-9">

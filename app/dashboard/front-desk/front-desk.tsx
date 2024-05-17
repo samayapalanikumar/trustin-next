@@ -13,10 +13,10 @@ const FrontDeskTable = ({ data }) => {
                 Company Name
               </th>
               <th className="min-w-[150px] px-4 py-4 font-medium text-black dark:text-white">
-                Email
+                Courier Name
               </th>
               <th className="min-w-[120px] px-4 py-4 font-medium text-black dark:text-white">
-                Company Code
+                date of received
               </th>
               <th className="px-4 py-4 font-medium text-black dark:text-white">
                 Actions

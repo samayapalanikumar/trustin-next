@@ -56,7 +56,7 @@ const SampleTable = ({ data }: { data: RegisterType  }) => {
                 </td>
                 <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
                   <h5 className="font-medium text-black dark:text-white">
-                    {packageItem.registration.code ?? "---"}
+                    {packageItem?.registration?.code ?? "---"}
                   </h5>
                 </td>
                 

@@ -50,14 +50,10 @@ const FrontDeskAddForm = ({ data }) => {
     <form action={formAction}>
       <div className="p-6.5">
         <div className="mb-4.5">
-          <Select
-            label="Customer"
-            name="customer_id"
-            error={state?.fieldErrors?.customer_id}
-          >
-            {data.map((Customer) => (
-              <option value={Customer.id} key={Customer.id}>
-                {Customer.company_name}
+          <Select label="Customer" name="customer_id">
+            {data.map((customer) => (
+              <option value={customer.id} key={customer.id}>
+                {customer.company_name}
               </option>
             ))}
           </Select>

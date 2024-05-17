@@ -17,7 +17,13 @@ async function getData(id: string) {
   const access_token = cookieStore.get("access_token");
   console.log(access_token);
   try {
-    const res = await fetch(`${SERVER_API_URL}/customers/${id}`, {
+    const res = await fetch(`${SERVER_API_URL}/customers/`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${access_token?.value}`,
+      },
+    });
+    const res1 = await fetch(`${SERVER_API_URL}/front-desks/${id}`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${access_token?.value}`,
@@ -33,8 +39,9 @@ async function getData(id: string) {
       console.log("error");
     }
 
-    const resjson = await res.json();
-    return resjson;
+    const customers = await res.json();
+    const frontDesk = await res1.json();
+    return {customers, frontDesk};
   } catch (e) {
     console.log(e);
   }
@@ -45,7 +52,7 @@ const FrontDeskForm = async ({
 }: {
   params: { id: string };
 }) => {
-  const data: Customer = await getData(id);
+  const data = await getData(id);
   const updateWithId = updateCustomers.bind(null, id);
   console.log(data);
   return (

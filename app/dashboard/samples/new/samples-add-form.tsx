@@ -8,11 +8,11 @@ import { useRouter } from "next/navigation";
 
 type Sample = {
   name: string;
-  batch_id: number;
+  batch_id: number|string;
   test_type_id: string;
   test_params: Array<{
     test_parameter_id: string;
-    order: number;
+    order: number|string;
   }>;
 };
 
@@ -32,17 +32,13 @@ const initialState: InitialState = {
   message: null,
 };
 
-const SamplesAddForm = ({
-  data
-}: {
-  data: any;
-}) => {
+const SamplesAddForm = ({ data }: { data: any }) => {
   const {
     control,
     register,
     formState: { isLoading, isSubmitting },
     handleSubmit,
-  } = useForm<FormDatas>({
+  } = useForm<Sample>({
     defaultValues: {
      
         name: "",
@@ -57,24 +53,19 @@ const SamplesAddForm = ({
      
     },
   });
-  // const { fields, append, remove, replace } = useFieldArray({
-  //   control: control,
-  //   name: "samples", // Name of the array in your schema
-  // });
+
 
   const sampleWatch = useWatch({
     control,
     name: "test_type_id",
   });
 
-  const [filterId, setFilterId] = useState(
-    data.batches.map((batch: any, idx: number) => 1),
-  );
+  const [filterId, setFilterId] = useState("1");
 
   useEffect(() => {
     // TODO: need some imporvement in future
     // const ids = sampleWatch.map((field, idx) => field.test_type_id);
-    // setFilterId(ids);
+    setFilterId(sampleWatch);
   }, [sampleWatch]);
 
   const [state, setState] = useState<InitialState | undefined>(initialState);
@@ -98,71 +89,69 @@ const SamplesAddForm = ({
     }
   }, [state, router]);
 
-  const handleForm = async (data: FormDatas) => {
+  const handleForm = async (data: Sample) => {
     // const res = await createFn(data);
     // setState(res);
-    console.log(data)
+    console.log(data);
   };
 
   return (
     <form onSubmit={handleSubmit(handleForm)}>
       <div className="p-6.5">
-       
-          <div>
-           
-            <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
-              <div className="w-full xl:w-1/4">
-                <label className="mb-2.5 block text-black dark:text-white">
-                  Batch
-                </label>
+        <div>
+          <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
+            <div className="w-full xl:w-1/4">
+              <label className="mb-2.5 block text-black dark:text-white">
+                Batch
+              </label>
 
-                <div className="relative z-20 bg-transparent dark:bg-form-input">
-                  <select
-                    {...register(`batch_id`)}
-                    className="relative z-20 w-full appearance-none rounded border border-stroke bg-transparent px-5 py-3 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+              <div className="relative z-20 bg-transparent dark:bg-form-input">
+                <select
+                  {...register(`batch_id`)}
+                  className="relative z-20 w-full appearance-none rounded border border-stroke bg-transparent px-5 py-3 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                >
+                  <option value={0}>------------</option>
+                  {data?.batches?.map((t: any) => (
+                    <option value={t.id} key={t.id}>
+                      {t.batch_no}
+                    </option>
+                  ))}
+                </select>
+                <span className="absolute right-4 top-1/2 z-30 -translate-y-1/2">
+                  <svg
+                    className="fill-current"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
                   >
-                    <option value={0}>------------</option>
-                    {data?.batches?.map((t: any) => (
-                      <option value={t.id} key={t.id}>
-                        {t.batch_no}
-                      </option>
-                    ))}
-                  </select>
-                  <span className="absolute right-4 top-1/2 z-30 -translate-y-1/2">
-                    <svg
-                      className="fill-current"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <g opacity="0.8">
-                        <path
-                          fillRule="evenodd"
-                          clipRule="evenodd"
-                          d="M5.29289 8.29289C5.68342 7.90237 6.31658 7.90237 6.70711 8.29289L12 13.5858L17.2929 8.29289C17.6834 7.90237 18.3166 7.90237 18.7071 8.29289C19.0976 8.68342 19.0976 9.31658 18.7071 9.70711L12.7071 15.7071C12.3166 16.0976 11.6834 16.0976 11.2929 15.7071L5.29289 9.70711C4.90237 9.31658 4.90237 8.68342 5.29289 8.29289Z"
-                          fill=""
-                        ></path>
-                      </g>
-                    </svg>
-                  </span>
-                </div>
+                    <g opacity="0.8">
+                      <path
+                        fillRule="evenodd"
+                        clipRule="evenodd"
+                        d="M5.29289 8.29289C5.68342 7.90237 6.31658 7.90237 6.70711 8.29289L12 13.5858L17.2929 8.29289C17.6834 7.90237 18.3166 7.90237 18.7071 8.29289C19.0976 8.68342 19.0976 9.31658 18.7071 9.70711L12.7071 15.7071C12.3166 16.0976 11.6834 16.0976 11.2929 15.7071L5.29289 9.70711C4.90237 9.31658 4.90237 8.68342 5.29289 8.29289Z"
+                        fill=""
+                      ></path>
+                    </g>
+                  </svg>
+                </span>
               </div>
+            </div>
 
-              <div className="w-full xl:w-1/4">
-                <label className="mb-2.5 block text-black dark:text-white">
-                  Sample Name
-                </label>
-                <input
-                  type="text"
-                  {...register(`name`)}
-                  placeholder="Enter Sample Name"
-                  className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-                />
-              </div>
+            <div className="w-full xl:w-1/4">
+              <label className="mb-2.5 block text-black dark:text-white">
+                Sample Name
+              </label>
+              <input
+                type="text"
+                {...register(`name`)}
+                placeholder="Enter Sample Name"
+                className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+              />
+            </div>
 
-              {/* <div className="w-full xl:w-1/4">
+            {/* <div className="w-full xl:w-1/4">
                 <label className="mb-2.5 block text-black dark:text-white">
                   Department
                 </label>
@@ -174,49 +163,49 @@ const SamplesAddForm = ({
                 />
               </div>*/}
 
-              <div className="w-full xl:w-1/4">
-                <label className="mb-2.5 block text-black dark:text-white">
-                  Batch
-                </label>
+            <div className="w-full xl:w-1/4">
+              <label className="mb-2.5 block text-black dark:text-white">
+                Test Type
+              </label>
 
-                <div className="relative z-20 bg-transparent dark:bg-form-input">
-                  <select
-                    {...register(`test_type_id`)}
-                    className="relative z-20 w-full appearance-none rounded border border-stroke bg-transparent px-5 py-3 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+              <div className="relative z-20 bg-transparent dark:bg-form-input">
+                <select
+                  {...register(`test_type_id`)}
+                  className="relative z-20 w-full appearance-none rounded border border-stroke bg-transparent px-5 py-3 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                >
+                  <option value={"1"}>Micro</option>
+                  <option value={"2"}>Mech</option>
+                </select>
+                <span className="absolute right-4 top-1/2 z-30 -translate-y-1/2">
+                  <svg
+                    className="fill-current"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
                   >
-                    <option value={"1"}>Micro</option>
-                    <option value={"2"}>Mech</option>
-                  </select>
-                  <span className="absolute right-4 top-1/2 z-30 -translate-y-1/2">
-                    <svg
-                      className="fill-current"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <g opacity="0.8">
-                        <path
-                          fillRule="evenodd"
-                          clipRule="evenodd"
-                          d="M5.29289 8.29289C5.68342 7.90237 6.31658 7.90237 6.70711 8.29289L12 13.5858L17.2929 8.29289C17.6834 7.90237 18.3166 7.90237 18.7071 8.29289C19.0976 8.68342 19.0976 9.31658 18.7071 9.70711L12.7071 15.7071C12.3166 16.0976 11.6834 16.0976 11.2929 15.7071L5.29289 9.70711C4.90237 9.31658 4.90237 8.68342 5.29289 8.29289Z"
-                          fill=""
-                        ></path>
-                      </g>
-                    </svg>
-                  </span>
-                </div>
+                    <g opacity="0.8">
+                      <path
+                        fillRule="evenodd"
+                        clipRule="evenodd"
+                        d="M5.29289 8.29289C5.68342 7.90237 6.31658 7.90237 6.70711 8.29289L12 13.5858L17.2929 8.29289C17.6834 7.90237 18.3166 7.90237 18.7071 8.29289C19.0976 8.68342 19.0976 9.31658 18.7071 9.70711L12.7071 15.7071C12.3166 16.0976 11.6834 16.0976 11.2929 15.7071L5.29289 9.70711C4.90237 9.31658 4.90237 8.68342 5.29289 8.29289Z"
+                        fill=""
+                      ></path>
+                    </g>
+                  </svg>
+                </span>
               </div>
             </div>
-            {/* // Test Params */}
-            <TestParamsForm
-              filterId={filterId}
-              data={data}
-              {...{ control, register }}
-            />
           </div>
-    
+          {/* // Test Params */}
+          <TestParamsForm
+            filterId={filterId}
+            data={data}
+            {...{ control, register }}
+          />
+        </div>
+
         <button
           type="submit"
           className="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray"
@@ -238,7 +227,7 @@ const TestParamsForm = ({
   control: any;
   register: any;
   data: any;
-  filterId: [];
+  filterId: []|number|string;
 }) => {
   const { fields, append, remove } = useFieldArray({
     control,
@@ -273,12 +262,11 @@ const TestParamsForm = ({
               {data.test_params
                 ?.filter(
                   (t: any) =>
-                    t.test_parameter.test_type_id.toString() ===
-                    filterId
+                    t.test_type_id.toString() === filterId,
                 )
                 .map((t: any) => (
-                  <option value={t.test_parameter.id} key={t.id}>
-                    {t.test_parameter.testing_parameters}
+                  <option value={t.id} key={t.id}>
+                    {t.testing_parameters}
                   </option>
                 ))}
             </Select>

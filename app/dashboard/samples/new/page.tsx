@@ -7,7 +7,7 @@ import SamplesAddForm from "./samples-add-form";
 
 
 export const metadata: Metadata = {
-  title: "Add New Product | Trustin",
+  title: "Add New Sample | Trustin",
   description: "This is Form Layout page for TailAdmin Next.js",
   // other metadata
 };
@@ -16,12 +16,19 @@ async function getData() {
   const cookieStore = cookies();
   const access_token = cookieStore.get("access_token");
 
-  const res = await fetch(`${SERVER_API_URL}/branch/`, {
+  const res = await fetch(`${SERVER_API_URL}/batches/`, {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${access_token?.value}`,
     },
   });
+  const res1 = await fetch(`${SERVER_API_URL}/parameters/`, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${access_token?.value}`,
+    },
+  });
+ 
 
   // The return value is *not* serialized
   // You can return Date, Map, Set, etc.
@@ -31,12 +38,14 @@ async function getData() {
     // console.log(res)
     // throw new Error("Failed to fetch data");
     console.log("error");
-    redirect("/signin");
   }
 
-  const branches = await res.json();
+  if (res.status === 401) redirect("/signin");
 
-  return branches;
+  const batches = await res.json();
+  const parameters = await res1.json();
+ 
+  return { batches, test_params: parameters };
 }
 
 export type Data = {
@@ -44,8 +53,8 @@ export type Data = {
   branch_name: string;
 }[];
 
-const NewProductPage = async () => {
-  const data: Data = await getData();
+const NewSamplePage = async () => {
+  const data = await getData();
   return (
     <>
       <Breadcrumb pageName="Add New Product" />
@@ -67,4 +76,4 @@ const NewProductPage = async () => {
   );
 };
 
-export default NewProductPage;
+export default NewSamplePage;

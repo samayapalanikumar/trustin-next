@@ -31,7 +31,7 @@ const FrontDeskEditForm = ({
   data,
   actionFn,
 }: {
-  data: Customer;
+  data: any;
   actionFn: (
     prevState: any,
     formData: FormData,
@@ -66,11 +66,12 @@ const FrontDeskEditForm = ({
           <Select
             label="Customer"
             name="customer_id"
-            error={state?.fieldErrors?.customer_id}
+            defaultValue={data.frontDesk.customer_id}
+
           >
-            {data.map((Customer) => (
-              <option value={Customer.id} key={Customer.id}>
-                {Customer.company_name}
+            {data.customers.map((customer) => (
+              <option value={customer.id} key={customer.id}>
+                {customer.company_name}
               </option>
             ))}
           </Select>
@@ -93,6 +94,7 @@ const FrontDeskEditForm = ({
             type="text"
             name="courier_name"
             placeholder="Courier Name"
+            defaultValue={data.frontDesk.courier_name}
             className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
           />
         </div>
@@ -105,6 +107,7 @@ const FrontDeskEditForm = ({
             type="date"
             name="date_of_received"
             placeholder="Date Received"
+            defaultValue={new Date(data.frontDesk.date_of_received).toISOString().split("T")[0]}
             className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
           />
         </div>

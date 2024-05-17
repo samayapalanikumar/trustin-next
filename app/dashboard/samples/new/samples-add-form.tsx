@@ -9,11 +9,11 @@ import { createSamples } from "../actions";
 
 type Sample = {
   name: string;
-  batch_id: number|string;
+  batch_id: number | string;
   test_type_id: string;
   test_params: Array<{
     test_parameter_id: string;
-    order: number|string;
+    order: number | string;
   }>;
 };
 
@@ -41,20 +41,17 @@ const SamplesAddForm = ({ data }: { data: any }) => {
     handleSubmit,
   } = useForm<Sample>({
     defaultValues: {
-     
-        name: "",
-        batch_id: "",
-        test_type_id: "1",
-        test_params: [
-          {
-            test_parameter_id: "",
-            order: "",
-          },
-        ],
-     
+      name: "",
+      batch_id: "",
+      test_type_id: "1",
+      test_params: [
+        {
+          test_parameter_id: "",
+          order: "",
+        },
+      ],
     },
   });
-
 
   const sampleWatch = useWatch({
     control,
@@ -228,12 +225,53 @@ const TestParamsForm = ({
   control: any;
   register: any;
   data: any;
-  filterId: []|number|string;
+  filterId: [] | number | string;
 }) => {
   const { fields, append, remove } = useFieldArray({
     control,
     name: `test_params`,
   });
+
+  const test_watch = useWatch({
+    control: control,
+    name: "test_params",
+  });
+
+  const [testTypesName, setTestTypesName] = useState<string[]>([]);
+  const [methods, setMethods] = useState<string[]>([]);
+
+  useEffect(() => {
+    const ids = test_watch.map((field, idx) => {
+      if (field.test_parameter_id !== "") return field.test_parameter_id.toString();
+    });
+    console.log(ids);
+    const tests = data.test_params.filter((para) =>
+      ids.includes(para.id.toString()),
+    );
+
+    console.log(tests)
+
+    const test_names: string[] = [];
+
+    ids.forEach((id) => {
+      const test_name =
+        tests?.find((t) => t.id.toString() === id)?.test_type?.name ??
+        undefined;
+      if (test_name) test_names.push(test_name);
+    });
+
+    const methods: string[] = [];
+    ids.forEach((id) => {
+      const method =
+        tests?.find((t) => t.id.toString() === id)?.method_or_spec ?? undefined;
+      if (method) methods.push(method);
+    });
+    console.log(test_names);
+
+    setTestTypesName(test_names);
+    setMethods(methods);
+  }, [data.test_params, test_watch]);
+
   return (
     <div className="mb-4">
       {fields.map((item, index) => (
@@ -261,10 +299,7 @@ const TestParamsForm = ({
             >
               <option value="">------------</option>
               {data.test_params
-                ?.filter(
-                  (t: any) =>
-                    t.test_type_id.toString() === filterId,
-                )
+                ?.filter((t: any) => t.test_type_id.toString() === filterId)
                 .map((t: any) => (
                   <option value={t.id} key={t.id}>
                     {t.testing_parameters}
@@ -280,6 +315,22 @@ const TestParamsForm = ({
                 {...register(`test_params.${index}.order`)}
                 className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
               />
+            </div>
+            <div className="w-full xl:w-1/5">
+              <label className="mb-2.5 block text-black dark:text-white">
+                Method
+              </label>
+              <h5 className="font-medium text-black dark:text-white">
+                {methods[index]}
+              </h5>
+            </div>
+            <div className="w-full xl:w-1/5">
+              <label className="mb-2.5 block text-black dark:text-white">
+                Test Type
+              </label>
+              <h5 className="font-medium text-black dark:text-white">
+                {testTypesName[index]}
+              </h5>
             </div>
           </div>
         </div>

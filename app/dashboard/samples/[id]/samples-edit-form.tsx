@@ -33,7 +33,7 @@ const initialState: InitialState = {
   message: null,
 };
 
-const SamplesAddForm = ({ data }: { data: any }) => {
+const SamplesEditForm = ({ data }: { data: any }) => {
   const {
     control,
     register,
@@ -358,4 +358,4 @@ const TestParamsForm = ({
   );
 };
 
-export default SamplesAddForm;
+export default SamplesEditForm;

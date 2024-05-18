@@ -29,6 +29,7 @@ import MyDocument from "@/components/Print/InvoicePDF";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { useEffect } from "react";
+import SamplesEditForm from "./samples-edit-form";
 
 type Props = {
   data: Data;
@@ -269,6 +270,9 @@ const SampleWorkflowForm = ({
           <TabsTrigger value="history">History</TabsTrigger>
         </TabsList>
         <TabsContent value="status">
+          <div className="mb-3 w-full flex-col">
+            <SamplesEditForm data={data} />
+          </div>
           <div className="mb-3 w-full flex-col">
             <StatusStepper step={data?.sample?.status_id} />
             {/* <p>{data?.sample?.status}</p> */}

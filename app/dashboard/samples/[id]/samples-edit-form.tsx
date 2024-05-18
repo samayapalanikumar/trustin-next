@@ -6,6 +6,7 @@ import Select from "@/components/select-input";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { createSamples } from "../actions";
+import { SERVER_API_URL } from "@/app/constant";
 
 type Sample = {
   name: string;
@@ -15,10 +16,6 @@ type Sample = {
     test_parameter_id: string;
     order: number | string;
   }>;
-};
-
-type FormDatas = {
-  samples: Sample[];
 };
 
 type InitialState = {
@@ -33,7 +30,17 @@ const initialState: InitialState = {
   message: null,
 };
 
-const SamplesEditForm = ({ data }: { data: any }) => {
+const SamplesEditForm = ({
+  data,
+  actionFn,
+}: {
+  data: any;
+  actionFn: (
+    data: any,
+  ) => Promise<
+    { fieldErrors: null; type: string; message: string | undefined } | undefined
+  >;
+}) => {
   const {
     control,
     register,
@@ -41,15 +48,10 @@ const SamplesEditForm = ({ data }: { data: any }) => {
     handleSubmit,
   } = useForm<Sample>({
     defaultValues: {
-      name: "",
-      batch_id: "",
-      test_type_id: "1",
-      test_params: [
-        {
-          test_parameter_id: "",
-          order: "",
-        },
-      ],
+      name: data?.sample?.name,
+      batch_id: data?.sample?.batch_id,
+      test_type_id: data?.sample?.test_type_id,
+      test_params: [{ test_parameter_id: "", order: 0 }],
     },
   });
 
@@ -57,14 +59,44 @@ const SamplesEditForm = ({ data }: { data: any }) => {
     control,
     name: "test_type_id",
   });
+  const batchWatch = useWatch({
+    control,
+    name: "batch_id",
+  });
 
-  const [filterId, setFilterId] = useState("1");
+  const [filterId, setFilterId] = useState(
+    data?.sample?.test_type_id.toString(),
+  );
+  const [parameters, setParameters] = useState<[]>([]);
+  const [selectedBatch, setSelectBatch] = useState<{} | null>(null);
 
   useEffect(() => {
     // TODO: need some imporvement in future
     // const ids = sampleWatch.map((field, idx) => field.test_type_id);
     setFilterId(sampleWatch);
   }, [sampleWatch]);
+
+  useEffect(() => {
+    async function fetchTestParameters(query: string, product: string) {
+      let res = await fetch(
+        `${SERVER_API_URL}/parameters/product/${product}?${query}`,
+      );
+      const response: any = await res.json();
+      console.log(response);
+      setParameters(response);
+    }
+
+    if (filterId && batchWatch) {
+      const query = `test_type=${encodeURIComponent(filterId)}`;
+      const batch = data.batches.find(
+        (batch: any) => batch.id.toString() === batchWatch.toString(),
+      );
+      setSelectBatch(batch);
+      if (batch) {
+        fetchTestParameters(query, batch.product_id.toString());
+      }
+    }
+  }, [batchWatch, data.batches, data, filterId]);
 
   const [state, setState] = useState<InitialState | undefined>(initialState);
   const router = useRouter();
@@ -88,7 +120,7 @@ const SamplesEditForm = ({ data }: { data: any }) => {
   }, [state, router]);
 
   const handleForm = async (data: Sample) => {
-    const res = await createSamples(data);
+    const res = await actionFn(data);
     setState(res);
     console.log(data);
   };
@@ -199,16 +231,19 @@ const SamplesEditForm = ({ data }: { data: any }) => {
               <label className="mb-2.5 block text-black dark:text-white">
                 Product Name
               </label>
-              <input
-                type="text"
-                placeholder="Product Id"
-                className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-              />
+              <h5>{selectedBatch?.product?.product_name}</h5>
+            </div>
+            <div className="w-full xl:w-full">
+              <label className="mb-2.5 block text-black dark:text-white">
+                Company Name
+              </label>
+              <h5>{selectedBatch?.customer?.company_name}</h5>
             </div>
           </div>
           {/* // Test Params */}
           <TestParamsForm
             filterId={filterId}
+            parameters={parameters}
             data={data}
             {...{ control, register }}
           />
@@ -231,13 +266,15 @@ const TestParamsForm = ({
   register,
   data,
   filterId,
+  parameters,
 }: {
   control: any;
   register: any;
   data: any;
+  parameters: any;
   filterId: [] | number | string;
 }) => {
-  const { fields, append, remove } = useFieldArray({
+  const { fields, append, remove, replace } = useFieldArray({
     control,
     name: `test_params`,
   });
@@ -251,14 +288,30 @@ const TestParamsForm = ({
   const [methods, setMethods] = useState<string[]>([]);
 
   useEffect(() => {
+    if (parameters && parameters?.length) {
+      replace([]);
+      data?.sample?.sample_test_parameters.forEach((test) => {
+        append({
+          test_parameter_id: test.test_parameter_id.toString(),
+          order: test.order,
+        });
+      });
+    }
+  }, [
+    append,
+    data?.trf?.test_details,
+    parameters,
+    parameters?.length,
+    replace,
+  ]);
+
+  useEffect(() => {
     const ids = test_watch.map((field, idx) => {
       if (field.test_parameter_id !== "")
         return field.test_parameter_id.toString();
     });
     console.log(ids);
-    const tests = data.test_params.filter((para) =>
-      ids.includes(para.id.toString()),
-    );
+    const tests = parameters.filter((para) => ids.includes(para.id.toString()));
 
     console.log(tests);
 
@@ -281,7 +334,7 @@ const TestParamsForm = ({
 
     setTestTypesName(test_names);
     setMethods(methods);
-  }, [data.test_params, test_watch]);
+  }, [parameters, test_watch]);
 
   return (
     <div className="mb-4">
@@ -309,13 +362,11 @@ const TestParamsForm = ({
               width="w-full xl:w-1/5 "
             >
               <option value="">------------</option>
-              {data.test_params
-                ?.filter((t: any) => t.test_type_id.toString() === filterId)
-                .map((t: any) => (
-                  <option value={t.id} key={t.id}>
-                    {t.testing_parameters}
-                  </option>
-                ))}
+              {parameters.map((t: any) => (
+                <option value={t.id} key={t.id}>
+                  {t.testing_parameters}
+                </option>
+              ))}
             </Select>
             <div className="w-full xl:w-1/5">
               <label className="mb-2.5 block text-black dark:text-white">

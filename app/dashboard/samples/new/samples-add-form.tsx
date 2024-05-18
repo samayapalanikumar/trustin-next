@@ -6,6 +6,7 @@ import Select from "@/components/select-input";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { createSamples } from "../actions";
+import { SERVER_API_URL } from "@/app/constant";
 
 type Sample = {
   name: string;
@@ -57,14 +58,42 @@ const SamplesAddForm = ({ data }: { data: any }) => {
     control,
     name: "test_type_id",
   });
+  const batchWatch = useWatch({
+    control,
+    name: "batch_id",
+  });
 
   const [filterId, setFilterId] = useState("1");
+  const [parameters, setParameters] = useState<[]>([]);
+  const [selectedBatch, setSelectBatch] = useState<{}|null>(null);
+
 
   useEffect(() => {
     // TODO: need some imporvement in future
     // const ids = sampleWatch.map((field, idx) => field.test_type_id);
     setFilterId(sampleWatch);
   }, [sampleWatch]);
+
+  useEffect(() => {
+    async function fetchTestParameters(query: string, product: string) {
+      let res = await fetch(
+        `${SERVER_API_URL}/parameters/product/${product}?${query}`,
+      );
+      const response: any = await res.json();
+      setParameters(response);
+    }
+
+    if (filterId && batchWatch) {
+      const query = `test_type=${encodeURIComponent(filterId)}`;
+      const batch = data.batches.find(
+        (batch: any) => batch.id.toString() === batchWatch.toString(),
+      );
+      setSelectBatch(batch)
+      if (batch) {
+        fetchTestParameters(query, batch.product_id.toString());
+      }
+    }
+  }, [batchWatch, data.batches, filterId]);
 
   const [state, setState] = useState<InitialState | undefined>(initialState);
   const router = useRouter();
@@ -199,17 +228,19 @@ const SamplesAddForm = ({ data }: { data: any }) => {
               <label className="mb-2.5 block text-black dark:text-white">
                 Product Name
               </label>
-              <input
-                type="text"
-                placeholder="Product Id"
-                className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-              />
+              <h5>{selectedBatch?.product?.product_name}</h5>
+            </div>
+            <div className="w-full xl:w-full">
+              <label className="mb-2.5 block text-black dark:text-white">
+                Company Name
+              </label>
+              <h5>{selectedBatch?.customer?.company_name}</h5>
             </div>
           </div>
           {/* // Test Params */}
           <TestParamsForm
             filterId={filterId}
-            data={data}
+            data={parameters}
             {...{ control, register }}
           />
         </div>
@@ -256,7 +287,7 @@ const TestParamsForm = ({
         return field.test_parameter_id.toString();
     });
     console.log(ids);
-    const tests = data.test_params.filter((para) =>
+    const tests = data.filter((para) =>
       ids.includes(para.id.toString()),
     );
 
@@ -281,7 +312,7 @@ const TestParamsForm = ({
 
     setTestTypesName(test_names);
     setMethods(methods);
-  }, [data.test_params, test_watch]);
+  }, [data, test_watch]);
 
   return (
     <div className="mb-4">
@@ -309,7 +340,7 @@ const TestParamsForm = ({
               width="w-full xl:w-1/5 "
             >
               <option value="">------------</option>
-              {data.test_params
+              {data
                 ?.filter((t: any) => t.test_type_id.toString() === filterId)
                 .map((t: any) => (
                   <option value={t.id} key={t.id}>

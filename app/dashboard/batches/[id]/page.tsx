@@ -2,7 +2,7 @@ import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import { Metadata } from "next";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { updateProducts } from "../actions";
+import { updateBatches } from "../actions";
 import { SERVER_API_URL } from "@/app/constant";
 import BatchesEditForm from "./batches-form";
 
@@ -16,22 +16,12 @@ async function getData(id: string) {
   const cookieStore = cookies();
   const access_token = cookieStore.get("access_token");
 
-  const res = await fetch(`${SERVER_API_URL}/Batches/${id}`, {
+  const res = await fetch(`${SERVER_API_URL}/batches/${id}`, {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${access_token?.value}`,
     },
   });
-
-  const res2 = await fetch(`${SERVER_API_URL}/branch/`, {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${access_token?.value}`,
-    },
-  });
-
-  // The return value is *not* serialized
-  // You can return Date, Map, Set, etc.
 
   if (!res.ok) {
     // This will activate the closest `error.js` Error Boundary
@@ -40,33 +30,76 @@ async function getData(id: string) {
     console.log("error");
     redirect("/signin");
   }
+
+  const res1 = await fetch(`${SERVER_API_URL}/customers/`,{
+    headers:{
+      "Content-Type":"application/json",
+      Authorization:`Bearer ${access_token?.value}`
+    }
+  })
+
+  if(!res1.ok){
+    console.log("error");
+    redirect("/signin");
+  }
+
+ 
+
+  const res2 = await fetch(`${SERVER_API_URL}/products/`, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${access_token?.value}`,
+    },
+  });
+
+  if(!res2.ok){
+    console.log("error");
+    redirect("/signin");
+  }
+
+  // The return value is *not* serialized
+  // You can return Date, Map, Set, etc.
+
+ 
   const data = await res.json();
-  const branches = await res2.json();
+  const customer = await res1.json();
+  const product = await res2.json();
+  
   return {
-    product: data,
-    branches,
+    batches: data,
+    customer,
+    product
   };
 }
 
 export type Data = {
-  product: {
-    branch_id: number;
-    product_name: string;
-    description: string;
-  };
-  branches: {
+  batches:{
     id: number;
-    branch_name: string;
-  }[];
-};
+  product:{
+    product_name: string | null;
 
+  };
+  customer:{
+    company_name: string | null;
+  };
+  } 
+  product:{
+    product_name: string | null;
+
+  };
+  customer:{
+    company_name: string | null;
+  };
+  
+  
+};
 const BatchesEditPage = async ({
   params: { id },
 }: {
   params: { id: string };
 }) => {
   const data: Data = await getData(id);
-  const updateProductWithId = updateProducts.bind(null, id);
+  const updateBatchesWithId = updateBatches.bind(null, id);
 
   return (
     <>
@@ -81,7 +114,7 @@ const BatchesEditPage = async ({
                 Contact Form
               </h3>
             </div> */}
-            <BatchesEditForm data={data} actionFn={updateProductWithId} />
+            <BatchesEditForm data={data} actionFn={updateBatchesWithId} />
           </div>
         </div>
       </div>

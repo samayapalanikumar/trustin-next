@@ -5,12 +5,12 @@ import { SERVER_API_URL } from "@/app/constant";
 import { getErrorMessage } from "@/lib/utils";
 import { revalidateTag } from "next/cache";
 
-export async function createProduct(prevState:any, formData: FormData) {
+export async function createBatches(prevState:any, formData: FormData) {
   let jsonObject = Object.fromEntries(formData.entries());
 
   const access_token = cookies().get("access_token");
 
-  const res = await fetch(`${SERVER_API_URL}/products/`, {
+  const res = await fetch(`${SERVER_API_URL}/batches/`, {
     method: "POST", // *GET, POST, PUT, DELETE, etc.
     // mode: "cors", // no-cors, *cors, same-origin
     headers: {
@@ -32,24 +32,24 @@ export async function createProduct(prevState:any, formData: FormData) {
     };
   }
 
-  revalidateTag("Products");
+  revalidateTag("Batches");
 
   if (res.status === 201) {
     return {
       fieldErrors: null,
       type: "Success",
-      message: "Product Created Successfully",
+      message: "Batches Created Successfully",
     };
   }
   // if (res.status === 201) redirect("/dashboard/products");
 }
 
-export async function updateProducts(id: string, prevState:any, formData: FormData) {
+export async function updateBatches(id: string, prevState:any, formData: FormData) {
   let jsonObject = Object.fromEntries(formData.entries());
 
   const access_token = cookies().get("access_token");
 
-  const res = await fetch(`${SERVER_API_URL}/products/${id}`, {
+  const res = await fetch(`${SERVER_API_URL}/batches/${id}`, {
     method: "PUT", // *GET, POST, PUT, DELETE, etc.
     // mode: "cors", // no-cors, *cors, same-origin
     headers: {
@@ -71,13 +71,13 @@ export async function updateProducts(id: string, prevState:any, formData: FormDa
     };
   }
 
-  revalidateTag("Products");
+  revalidateTag("Batches");
 
   if (res.status === 204) {
     return {
       fieldErrors: null,
       type: "Success",
-      message: "Product Updated Successfully",
+      message: "Batches Updated Successfully",
     };
   }
   // if (res.status === 204) redirect("/dashboard/products");

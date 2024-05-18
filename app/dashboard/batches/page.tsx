@@ -19,7 +19,7 @@ export const metadata: Metadata = {
 async function getData() {
   const cookieStore = cookies();
   const access_token = cookieStore.get("access_token");
-    const res = await fetch(`${SERVER_API_URL}/Batches/`, {
+    const res = await fetch(`${SERVER_API_URL}/batches/`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${access_token?.value}`,
@@ -28,6 +28,8 @@ async function getData() {
         tags:['Batches'],
       }
     });
+
+   
     // The return value is *not* serialized
     // You can return Date, Map, Set, etc.
 
@@ -52,7 +54,7 @@ const BatchesPage = async () => {
         Batches
         </h2>
         <Link
-          href="Batches/new"
+          href="batches/new"
           className="inline-flex items-center justify-center rounded-md border border-black py-4 px-5 text-center font-medium text-black hover:bg-opacity-90 lg:px-8 xl:px-10 dark:text-white dark:border-white"
         >
           New Batches

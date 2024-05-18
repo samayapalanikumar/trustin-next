@@ -15,7 +15,7 @@ async function getData() {
   const cookieStore = cookies();
   const access_token = cookieStore.get("access_token");
 
-  const res = await fetch(`${SERVER_API_URL}/branch/`, {
+  const res = await fetch(`${SERVER_API_URL}/batches/`, {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${access_token?.value}`,
@@ -33,18 +33,69 @@ async function getData() {
     redirect("/signin");
   }
 
-  const branches = await res.json();
+  const batches = await res.json();
 
-  return branches;
+  const res1 = await fetch(`${SERVER_API_URL}/customers/`,{
+    headers:{
+      "Content-Type":"application/json",
+      Authorization:`Bearer ${access_token?.value}`
+    }
+  })
+
+  if(!res1.ok){
+    console.log("error");
+    redirect("/signin");
+  }
+
+  const customer = await res1.json();
+
+  const res2 = await fetch(`${SERVER_API_URL}/products/`,{
+    headers:{
+      "Content-Type":"application/json",
+      Authorization:`Bearer ${access_token?.value}`
+    }
+  });
+
+  if(!res2.ok){
+    console.log("error");
+    redirect("/signin")
+  }
+
+  const product = await res2.json();
+
+  return {batches,
+    customer,
+    product
+  };
 }
 
 export type Data = {
-  id: number;
-  branch_name: string;
-}[];
+  batches:{
+    id: number;
+  product:{
+    product_name: string | null;
+
+  };
+  customer:{
+    company_name: string | null;
+  };
+  } 
+  product:{
+    product_name: string | null;
+
+  };
+  customer:{
+    company_name: string | null;
+  };
+  
+  
+};
+
+
 
 const NewBatchesPage = async () => {
-  const data: Data = await getData();
+  const data:Data = await getData();
+  // console.log(data);
   return (
     <>
       <Breadcrumb pageName="Add New Batches" />

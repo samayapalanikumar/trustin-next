@@ -23,7 +23,7 @@ export async function createBatches(prevState:any, formData: FormData) {
 
   if (res.status === 401) redirect("/signin");
 
-  if (res.status !== 201) {
+  if (res.status !== 200) {
     const error = await res.json();
     return {
       fieldErrors: null,
@@ -34,7 +34,7 @@ export async function createBatches(prevState:any, formData: FormData) {
 
   revalidateTag("Batches");
 
-  if (res.status === 201) {
+  if (res.status === 200) {
     return {
       fieldErrors: null,
       type: "Success",
@@ -62,7 +62,7 @@ export async function updateBatches(id: string, prevState:any, formData: FormDat
 
   if (res.status === 401) redirect("/signin");
 
-  if (res.status !== 204) {
+  if (res.status !== 200) {
     const error = await res.json();
     return {
       fieldErrors: null,
@@ -73,7 +73,7 @@ export async function updateBatches(id: string, prevState:any, formData: FormDat
 
   revalidateTag("Batches");
 
-  if (res.status === 204) {
+  if (res.status === 200) {
     return {
       fieldErrors: null,
       type: "Success",

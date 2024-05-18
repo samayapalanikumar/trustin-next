@@ -62,34 +62,36 @@ async function getData(id: string) {
 
  
   const data = await res.json();
-  const customer = await res1.json();
-  const product = await res2.json();
+  const customers = await res1.json();
+  const products = await res2.json();
   
   return {
-    batches: data,
-    customer,
-    product
+    batch: data,
+    customers,
+    products
   };
 }
 
 export type Data = {
-  batches:{
+  batch:{
     id: number;
-  product:{
-    product_name: string | null;
-
-  };
-  customer:{
-    company_name: string | null;
-  };
+    batch_no: string;
+    manufactured_date: string; // using string to represent ISO date-time
+    expiry_date: string;       // using string to represent ISO date-time
+    batch_size: number;
+    received_quantity: number;
+    product_id: number;
+    customer_id: number;
   } 
-  product:{
+  products:{
+    id: number;
     product_name: string | null;
 
-  };
-  customer:{
+  }[];
+  customers:{
+    id: number;
     company_name: string | null;
-  };
+  }[];
   
   
 };

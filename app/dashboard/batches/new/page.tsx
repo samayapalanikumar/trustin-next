@@ -15,26 +15,6 @@ async function getData() {
   const cookieStore = cookies();
   const access_token = cookieStore.get("access_token");
 
-  const res = await fetch(`${SERVER_API_URL}/batches/`, {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${access_token?.value}`,
-    },
-  });
-
-  // The return value is *not* serialized
-  // You can return Date, Map, Set, etc.
-
-  if (!res.ok) {
-    // This will activate the closest `error.js` Error Boundary
-    // console.log(res)
-    // throw new Error("Failed to fetch data");
-    console.log("error");
-    redirect("/signin");
-  }
-
-  const batches = await res.json();
-
   const res1 = await fetch(`${SERVER_API_URL}/customers/`,{
     headers:{
       "Content-Type":"application/json",
@@ -47,7 +27,7 @@ async function getData() {
     redirect("/signin");
   }
 
-  const customer = await res1.json();
+  const customers = await res1.json();
 
   const res2 = await fetch(`${SERVER_API_URL}/products/`,{
     headers:{
@@ -61,32 +41,25 @@ async function getData() {
     redirect("/signin")
   }
 
-  const product = await res2.json();
+  const products = await res2.json();
 
-  return {batches,
-    customer,
-    product
+  return {
+    customers,
+    products
   };
 }
 
 export type Data = {
-  batches:{
+
+  products:{
     id: number;
-  product:{
     product_name: string | null;
 
-  };
-  customer:{
+  }[];
+  customers:{
+    id: number;
     company_name: string | null;
-  };
-  } 
-  product:{
-    product_name: string | null;
-
-  };
-  customer:{
-    company_name: string | null;
-  };
+  }[];
   
   
 };

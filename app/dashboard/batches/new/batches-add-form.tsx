@@ -20,7 +20,7 @@ const initialState: InitialState = {
   message: null,
 };
 
-const BatchesAddForm = ({data}:{data:Data}) => {
+const BatchesAddForm = ({ data }: { data: Data }) => {
   const [state, formAction] = useFormState(createBatches, initialState);
   const router = useRouter();
   useEffect(() => {
@@ -43,13 +43,13 @@ const BatchesAddForm = ({data}:{data:Data}) => {
   return (
     <form action={formAction}>
       <div className="p-6.5 pt-4">
-      <div className="mb-4.5">
+        <div className="mb-4.5">
           <label className="mb-2.5 block text-black dark:text-white">
             Batch No <span className="text-meta-1">*</span>
           </label>
           <input
             type="Text"
-            name="product_name"
+            name="batch_no"
             className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
           />
         </div>
@@ -59,12 +59,12 @@ const BatchesAddForm = ({data}:{data:Data}) => {
           </label>
           <div className="relative z-20 bg-transparent dark:bg-form-input">
             <select
-              name="branch_id"
+              name="customer_id"
               className="relative z-20 w-full appearance-none rounded border border-stroke bg-transparent px-5 py-3 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
             >
-              {data?.customer?.map((customerList,id) => (
-                <option value={id} key={id}>
-                  {customerList?.company_name}
+              {data?.customers?.map((customer) => (
+                <option value={customer.id} key={customer.id}>
+                  {customer?.company_name}
                 </option>
               ))}
             </select>
@@ -95,12 +95,12 @@ const BatchesAddForm = ({data}:{data:Data}) => {
           </label>
           <div className="relative z-20 bg-transparent dark:bg-form-input">
             <select
-              name="branch_id"
+              name="product_id"
               className="relative z-20 w-full appearance-none rounded border border-stroke bg-transparent px-5 py-3 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
             >
-              {data?.product?.map((productIteam,id) => (
-                <option value={id} key={id}>
-                  {productIteam.product_name}
+              {data?.products?.map((product) => (
+                <option value={product.id} key={product.id}>
+                  {product.product_name}
                 </option>
               ))}
             </select>
@@ -125,50 +125,49 @@ const BatchesAddForm = ({data}:{data:Data}) => {
             </span>
           </div>
         </div>
-        <div className="mb-4.5 md:flex items-center justify-between gap-5">
-          <div className="w-full mb-4.5 md:mb-0 ">
-          <label className="mb-2.5 block text-black dark:text-white">
-           Manufacture Date <span className="text-meta-1">*</span>
-          </label>
-          <input
-            type="date"
-            name="product_name"
-            className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-          />
+        <div className="mb-4.5 items-center justify-between gap-5 md:flex">
+          <div className="mb-4.5 w-full md:mb-0 ">
+            <label className="mb-2.5 block text-black dark:text-white">
+              Manufacture Date <span className="text-meta-1">*</span>
+            </label>
+            <input
+              type="date"
+              name="manufactured_date"
+              className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+            />
           </div>
           <div className="w-full">
-          <label className="mb-2.5 block text-black dark:text-white">
-           Expiry Date <span className="text-meta-1">*</span>
-          </label>
-          <input
-            type="date"
-            name="product_name"
-            className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-          />
+            <label className="mb-2.5 block text-black dark:text-white">
+              Expiry Date <span className="text-meta-1">*</span>
+            </label>
+            <input
+              type="date"
+              name="expiry_date"
+              className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+            />
           </div>
         </div>
-        
-    
-        <div className="mb-4.5 md:flex items-center justify-between gap-5">
-          <div className="w-full mb-4.5 md:mb-0">
-          <label className="mb-2.5 block text-black dark:text-white">
-           Batch Size <span className="text-meta-1">*</span>
-          </label>
-          <input
-            type="Text"
-            name="product_name"
-            className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-          />
+
+        <div className="mb-4.5 items-center justify-between gap-5 md:flex">
+          <div className="mb-4.5 w-full md:mb-0">
+            <label className="mb-2.5 block text-black dark:text-white">
+              Batch Size <span className="text-meta-1">*</span>
+            </label>
+            <input
+              type="Text"
+              name="batch_size"
+              className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+            />
           </div>
           <div className="w-full">
-          <label className="mb-2.5 block text-black dark:text-white">
-          Receive Quantity <span className="text-meta-1">*</span>
-          </label>
-          <input
-            type="Text"
-            name="product_name"
-            className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-          />
+            <label className="mb-2.5 block text-black dark:text-white">
+              Receive Quantity <span className="text-meta-1">*</span>
+            </label>
+            <input
+              type="Text"
+              name="received_quantity"
+              className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+            />
           </div>
         </div>
 

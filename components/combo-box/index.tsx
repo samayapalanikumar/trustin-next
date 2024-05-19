@@ -88,7 +88,7 @@ const Combobox = ({
                   </Button>
                 </FormControl>
               </PopoverTrigger>
-              <PopoverContent className="w-[470px] p-0">
+              <PopoverContent className="w-[470px] p-0 z-99999">
                 <Command className="w-full">
                   <CommandInput placeholder="Search Trf..." />
                   <CommandEmpty>{emptyMessage}</CommandEmpty>

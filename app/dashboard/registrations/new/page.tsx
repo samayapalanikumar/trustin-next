@@ -46,12 +46,18 @@ async function getData() {
       Authorization: `Bearer ${access_token?.value}`,
     },
   });
-  const res5 = await fetch(`${SERVER_API_URL}/parameters/`, {
+  const res6 = await fetch(`${SERVER_API_URL}/samples/without-reg`, {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${access_token?.value}`,
     },
   });
+  // const res5 = await fetch(`${SERVER_API_URL}/parameters/`, {
+  //   headers: {
+  //     "Content-Type": "application/json",
+  //     Authorization: `Bearer ${access_token?.value}`,
+  //   },
+  // });
 
   // The return value is *not* serialized
   // You can return Date, Map, Set, etc.
@@ -68,20 +74,24 @@ async function getData() {
   if (res3.status === 401) redirect("/signin");
   if (res4.status === 401) redirect("/signin");
   if (res4.status === 401) redirect("/signin");
-  if (res5.status === 401) redirect("/signin");
+  if (res6.status === 401) redirect("/signin");
+  // if (res5.status === 401) redirect("/signin");
 
   const trf:TestReportForm[] = await res.json();
   const customers:Customer[] = await res2.json();
   const branches:BranchType = await res3.json();
   const products = await res4.json();
-  const parameters:FullParametersType[] = await res5.json();
-  console.log(parameters)
+  const samples = await res6.json();
+  // const parameters:FullParametersType[] = await res5.json();
+  // console.log(parameters)
 
-  const microParameters = parameters.filter(para=>para.test_type_id ==1)
-  const mechParameters = parameters.filter(para=>para.test_type_id ==2)
+  // const microParameters = parameters.filter(para=>para.test_type_id ==1)
+  // const mechParameters = parameters.filter(para=>para.test_type_id ==2)
 
-  const trflist = trf.map((t) => ({ label: t.trf_code, value: t.id.toString() })) ;
-  return { trf: trf, trflist, customers, branches, products, parameters, microParameters, mechParameters };
+  // const trflist = trf.map((t) => ({ label: t.trf_code, value: t.id.toString() })) ;
+  // return { trf: trf, trflist, customers, branches, products, parameters, microParameters, mechParameters };
+  // return { trf: trf, trflist, customers, branches, products, parameters, microParameters, mechParameters };
+  return {  customers, branches, products, samples};
 }
 
 const NewRegistrationPage = async () => {

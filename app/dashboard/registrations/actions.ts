@@ -10,18 +10,18 @@ export async function createRegistration(jsonObject: any) {
   console.log("CREATE");
   console.log(jsonObject);
 
-  jsonObject.test_types = jsonObject.test_types.map((type: any) => ({
-    test_type_id: type,
-  }));
-  jsonObject.test_params = [
-    ...jsonObject.test_params_mech,
-    ...jsonObject.test_params_micro,
-  ];
+  // jsonObject.test_types = jsonObject.test_types.map((type: any) => ({
+  //   test_type_id: type,
+  // }));
+  // jsonObject.test_params = [
+  //   ...jsonObject.test_params_mech,
+  //   ...jsonObject.test_params_micro,
+  // ];
 
-  delete jsonObject.test_params_mech;
-  delete jsonObject.test_params_micro;
+  // delete jsonObject.test_params_mech;
+  // delete jsonObject.test_params_micro;
 
-  console.log(jsonObject);
+  // console.log(jsonObject);
 
   const access_token = cookies().get("access_token");
 
@@ -70,16 +70,16 @@ export async function createRegistration(jsonObject: any) {
 export async function updateRegistration(id: string, data: any) {
   let jsonObject = data;
 
-  jsonObject.test_types = jsonObject.test_types.map((type: any) => ({
-    test_type_id: type,
-  }));
-  jsonObject.test_params = [
-    ...jsonObject.test_params_mech,
-    ...jsonObject.test_params_micro,
-  ];
+  // jsonObject.test_types = jsonObject.test_types.map((type: any) => ({
+  //   test_type_id: type,
+  // }));
+  // jsonObject.test_params = [
+  //   ...jsonObject.test_params_mech,
+  //   ...jsonObject.test_params_micro,
+  // ];
 
-  delete jsonObject.test_params_mech;
-  delete jsonObject.test_params_micro;
+  // delete jsonObject.test_params_mech;
+  // delete jsonObject.test_params_micro;
 
   const access_token = cookies().get("access_token");
 

@@ -29,6 +29,7 @@ import MyDocument from "@/components/Print/InvoicePDF";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { useEffect } from "react";
+import SamplesEditForm from "./samples-edit-form";
 
 type Props = {
   data: Data;
@@ -44,6 +45,11 @@ type Props = {
     { fieldErrors: null; type: string; message: string | undefined } | undefined
   >;
   actionFnReject: (
+    data: any,
+  ) => Promise<
+    { fieldErrors: null; type: string; message: string | undefined } | undefined
+  >;
+  actionUpdateSample : (
     data: any,
   ) => Promise<
     { fieldErrors: null; type: string; message: string | undefined } | undefined
@@ -172,6 +178,7 @@ const SampleWorkflowForm = ({
   actionFn,
   actionFnResult,
   actionFnReject,
+  actionUpdateSample,
 }: Props) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -269,311 +276,325 @@ const SampleWorkflowForm = ({
           <TabsTrigger value="history">History</TabsTrigger>
         </TabsList>
         <TabsContent value="status">
-          <div className="mb-3 w-full flex-col">
-            <StatusStepper step={data?.sample?.status_id} />
-            {/* <p>{data?.sample?.status}</p> */}
+          {data?.sample?.status_id === 1 && (
+            <div className="mb-3 w-full flex-col">
+              <SamplesEditForm data={data}  actionFn={actionUpdateSample}/>
+            </div>
+          )}
+          {data?.sample?.registration_id && (
+            <div>
+              <div className="mb-3 w-full flex-col">
+                <StatusStepper step={data?.sample?.status_id} />
+                {/* <p>{data?.sample?.status}</p> */}
 
-            <div className="mt-1 flex flex-col gap-9 ">
-              {data?.sample?.status_id === 1 && (
-                <WorkFlowForm
-                  rejectActionData={actionFnReject}
-                  currentStep={data?.sample?.status_id}
-                  actionData={formAction}
-                  assign={data?.sample?.assigned_to}
-                  status={
-                    data?.sample?.status != "Submitted" ? "Submitted" : ""
-                  }
-                  status_id={2}
-                  buttonName="Submit for Review"
-                />
-              )}
-              {data?.sample?.status_id === 2 && (
-                <>
-                  <WorkFlowForm
-                    showRejectButton={true}
-                    rejectActionData={actionFnReject}
-                    currentStep={data?.sample?.status_id}
-                    actionData={formAction}
-                    assign={data.sample.assigned_to}
-                    status_id={3}
-                    buttonName="Approve"
-                  />
-                </>
-              )}
+                <div className="mt-1 flex flex-col gap-9 ">
+                  {data?.sample?.status_id === 1 && (
+                    <WorkFlowForm
+                      rejectActionData={actionFnReject}
+                      currentStep={data?.sample?.status_id}
+                      actionData={formAction}
+                      assign={data?.sample?.assigned_to}
+                      status={
+                        data?.sample?.status != "Submitted" ? "Submitted" : ""
+                      }
+                      status_id={2}
+                      buttonName="Submit for Review"
+                    />
+                  )}
+                  {data?.sample?.status_id === 2 && (
+                    <>
+                      <WorkFlowForm
+                        showRejectButton={true}
+                        rejectActionData={actionFnReject}
+                        currentStep={data?.sample?.status_id}
+                        actionData={formAction}
+                        assign={data.sample.assigned_to}
+                        status_id={3}
+                        buttonName="Approve"
+                      />
+                    </>
+                  )}
 
-              {data.sample.status_id === 3 && (
-                <WorkFlowForm
-                  showRejectButton={true}
-                  rejectActionData={actionFnReject}
-                  currentStep={data?.sample?.status_id}
-                  actionData={formAction}
-                  assign={data.sample.assigned_to}
-                  status_id={4}
-                  buttonName="Sample Received"
-                  showComment={true}
-                />
-              )}
+                  {data.sample.status_id === 3 && (
+                    <WorkFlowForm
+                      showRejectButton={true}
+                      rejectActionData={actionFnReject}
+                      currentStep={data?.sample?.status_id}
+                      actionData={formAction}
+                      assign={data.sample.assigned_to}
+                      status_id={4}
+                      buttonName="Sample Received"
+                      showComment={true}
+                    />
+                  )}
 
-              {data.sample.status_id === 4 && (
-                <WorkFlowForm
-                  showRejectButton={true}
-                  rejectActionData={actionFnReject}
-                  currentStep={data?.sample?.status_id}
-                  actionData={formAction}
-                  assign={data.sample.assigned_to}
-                  status_id={5}
-                  buttonName="Assign"
-                  assigneeData={data.users}
-                  showComment={true}
-                />
-              )}
+                  {data.sample.status_id === 4 && (
+                    <WorkFlowForm
+                      showRejectButton={true}
+                      rejectActionData={actionFnReject}
+                      currentStep={data?.sample?.status_id}
+                      actionData={formAction}
+                      assign={data.sample.assigned_to}
+                      status_id={5}
+                      buttonName="Assign"
+                      assigneeData={data.users}
+                      showComment={true}
+                    />
+                  )}
 
-              {data.sample.status_id === 5 && (
-                <UnderTestingForm
-                  showRejectButton={true}
-                  rejectActionData={actionFnReject}
-                  currentStep={data?.sample?.status_id}
-                  assigned_to={data.sample.assigned_to}
-                  parameters={data.sample.sample_test_parameters}
-                  patchFn={actionFnResult}
-                  step={6}
-                />
-              )}
-              {data.sample.status_id === 6 && (
-                <UnderTestingForm
-                  showRejectButton={true}
-                  rejectActionData={actionFnReject}
-                  currentStep={data?.sample?.status_id}
-                  assigned_to={data.sample.assigned_to}
-                  parameters={data.sample.sample_test_parameters}
-                  patchFn={actionFnResult}
-                  step={7}
-                />
-              )}
-              {data.sample.status_id === 7 && (
-                <div className="text-center text-title-xl2 font-bold">
-                  <h4>Sample WorkFlow Completed</h4>
+                  {data.sample.status_id === 5 && (
+                    <UnderTestingForm
+                      showRejectButton={true}
+                      rejectActionData={actionFnReject}
+                      currentStep={data?.sample?.status_id}
+                      assigned_to={data.sample.assigned_to}
+                      parameters={data.sample.sample_test_parameters}
+                      patchFn={actionFnResult}
+                      step={6}
+                    />
+                  )}
+                  {data.sample.status_id === 6 && (
+                    <UnderTestingForm
+                      showRejectButton={true}
+                      rejectActionData={actionFnReject}
+                      currentStep={data?.sample?.status_id}
+                      assigned_to={data.sample.assigned_to}
+                      parameters={data.sample.sample_test_parameters}
+                      patchFn={actionFnResult}
+                      step={7}
+                    />
+                  )}
+                  {data.sample.status_id === 7 && (
+                    <div className="text-center text-title-xl2 font-bold">
+                      <h4>Sample WorkFlow Completed</h4>
+                    </div>
+                  )}
                 </div>
-              )}
-            </div>
-          </div>
+              </div>
 
-          <div className="mb-4.5 ml-2 flex flex-col gap-6 p-2 xl:flex-row">
-            <div className="w-full xl:w-1/5">
-              <p className="mb-2.5 block font-semibold text-black dark:text-white">
-                Sample ID:
-              </p>
-              <p>{data.sample.sample_id}</p>
-            </div>
-            <div className="w-full xl:w-1/5">
-              <p className="mb-2.5 block font-semibold text-black dark:text-white">
-                Sample Name:
-              </p>
-              <p>{data.sample.name}</p>
-            </div>
+              <div className="mb-4.5 ml-2 flex flex-col gap-6 p-2 xl:flex-row">
+                <div className="w-full xl:w-1/5">
+                  <p className="mb-2.5 block font-semibold text-black dark:text-white">
+                    Sample ID:
+                  </p>
+                  <p>{data.sample.sample_id}</p>
+                </div>
+                <div className="w-full xl:w-1/5">
+                  <p className="mb-2.5 block font-semibold text-black dark:text-white">
+                    Sample Name:
+                  </p>
+                  <p>{data.sample.name}</p>
+                </div>
 
-            <div className="w-full xl:w-1/5">
-              <p className="mb-2.5 block font-semibold text-black dark:text-white">
-                Registration ID:
-              </p>
-              <p>{data.sample?.registration?.code}</p>
-            </div>
+                <div className="w-full xl:w-1/5">
+                  <p className="mb-2.5 block font-semibold text-black dark:text-white">
+                    Registration ID:
+                  </p>
+                  <p>{data.sample?.registration?.code}</p>
+                </div>
 
-            <div className="w-full xl:w-1/5">
-              <p className="mb-2.5 block font-semibold text-black dark:text-white">
-                Department:
-              </p>
-              <p>{data.sample.department}</p>
-            </div>
+                <div className="w-full xl:w-1/5">
+                  <p className="mb-2.5 block font-semibold text-black dark:text-white">
+                    Department:
+                  </p>
+                  <p>{data.sample.department}</p>
+                </div>
 
-            <div className="w-full xl:w-1/5">
-              <p className="mb-2.5 block font-semibold text-black dark:text-white">
-                Status
-              </p>
-              <p>
-                <strong>{data.sample.status}</strong>
-              </p>
-            </div>
-          </div>
+                <div className="w-full xl:w-1/5">
+                  <p className="mb-2.5 block font-semibold text-black dark:text-white">
+                    Status
+                  </p>
+                  <p>
+                    <strong>{data.sample.status}</strong>
+                  </p>
+                </div>
+              </div>
 
-          <div className="mb-4.5 ml-2 flex flex-col gap-6 p-2 xl:flex-row">
-            <div className="w-full xl:w-1/5">
-              <p className="mb-2.5 block font-semibold text-black dark:text-white">
-                Batch No:
-              </p>
-              <p>{data.sample.batch.batch_no}</p>
-            </div>
-            <div className="w-full xl:w-1/5">
-              <p className="mb-2.5 block font-semibold text-black dark:text-white">
-                Manufactured Date:
-              </p>
-              <p>
-                {
-                  new Date(data.sample.batch.manufactured_date)
-                    .toISOString()
-                    .split("T")[0]
-                }
-              </p>
-            </div>
+              <div className="mb-4.5 ml-2 flex flex-col gap-6 p-2 xl:flex-row">
+                <div className="w-full xl:w-1/5">
+                  <p className="mb-2.5 block font-semibold text-black dark:text-white">
+                    Batch No:
+                  </p>
+                  <p>{data.sample.batch.batch_no}</p>
+                </div>
+                <div className="w-full xl:w-1/5">
+                  <p className="mb-2.5 block font-semibold text-black dark:text-white">
+                    Manufactured Date:
+                  </p>
+                  <p>
+                    {
+                      new Date(data.sample.batch.manufactured_date)
+                        .toISOString()
+                        .split("T")[0]
+                    }
+                  </p>
+                </div>
 
-            <div className="w-full xl:w-1/5">
-              <p className="mb-2.5 block font-semibold text-black dark:text-white">
-                Expiry Date:
-              </p>
-              <p>
-                {
-                  new Date(data.sample.batch.expiry_date)
-                    .toISOString()
-                    .split("T")[0]
-                }
-              </p>
-            </div>
-            <div className="w-full xl:w-1/5">
-              <p className="mb-2.5 block font-semibold text-black dark:text-white">
-                Batch Size:
-              </p>
-              <p>{data.sample.batch.batch_size}</p>
-            </div>
-            <div className="w-full xl:w-1/5">
-              <p className="mb-2.5 block font-semibold text-black dark:text-white">
-                Receiverd Quantity:
-              </p>
-              <p>{data.sample.batch.received_quantity}</p>
-            </div>
-          </div>
+                <div className="w-full xl:w-1/5">
+                  <p className="mb-2.5 block font-semibold text-black dark:text-white">
+                    Expiry Date:
+                  </p>
+                  <p>
+                    {
+                      new Date(data.sample.batch.expiry_date)
+                        .toISOString()
+                        .split("T")[0]
+                    }
+                  </p>
+                </div>
+                <div className="w-full xl:w-1/5">
+                  <p className="mb-2.5 block font-semibold text-black dark:text-white">
+                    Batch Size:
+                  </p>
+                  <p>{data.sample.batch.batch_size}</p>
+                </div>
+                <div className="w-full xl:w-1/5">
+                  <p className="mb-2.5 block font-semibold text-black dark:text-white">
+                    Receiverd Quantity:
+                  </p>
+                  <p>{data.sample.batch.received_quantity}</p>
+                </div>
+              </div>
 
-          <div className="mb-4.5 ml-2 flex flex-col gap-6 p-2 xl:flex-row">
-            <div className="w-full xl:w-1/5">
-              <p className="mb-2.5 block font-semibold text-black dark:text-white">
-                Assignee:
-              </p>
-              <p>
-                {data?.sample?.assignee?.first_name +
-                  " " +
-                  data?.sample?.assignee?.last_name}
-              </p>
-            </div>
-            {/* 
+              <div className="mb-4.5 ml-2 flex flex-col gap-6 p-2 xl:flex-row">
+                <div className="w-full xl:w-1/5">
+                  <p className="mb-2.5 block font-semibold text-black dark:text-white">
+                    Assignee:
+                  </p>
+                  <p>
+                    {data?.sample?.assignee?.first_name +
+                      " " +
+                      data?.sample?.assignee?.last_name}
+                  </p>
+                </div>
+                {/* 
             <div className="w-full xl:w-1/5">
               <p className="mb-2.5 block font-semibold text-black dark:text-white">
                 Department:
               </p>
               <p>{data?.sample?.assignee?.department}</p>
             </div> */}
-          </div>
-          {data.currentUser.department_id !== 3 && (
-            <div className="mb-4.5 ml-2 flex flex-col gap-6 p-2 xl:flex-row">
-              <div className="w-full xl:w-1/5">
-                <p className="mb-2.5 block font-semibold text-black dark:text-white">
-                  Company Name:
-                </p>
-                <p>{data.sample?.registration?.company_name}</p>
+              </div>
+              {data.currentUser.department_id !== 3 && (
+                <div className="mb-4.5 ml-2 flex flex-col gap-6 p-2 xl:flex-row">
+                  <div className="w-full xl:w-1/5">
+                    <p className="mb-2.5 block font-semibold text-black dark:text-white">
+                      Company Name:
+                    </p>
+                    <p>{data.sample?.registration?.company_name}</p>
+                  </div>
+
+                  <div className="w-full xl:w-1/5">
+                    <p className="mb-2.5 block font-semibold text-black dark:text-white">
+                      Adderess Line 1:
+                    </p>
+                    <p>{data?.sample?.registration?.customer_address_line1}</p>
+                  </div>
+                  <div className="w-full xl:w-1/5">
+                    <p className="mb-2.5 block font-semibold text-black dark:text-white">
+                      Adderess Line 2:
+                    </p>
+                    <p>{data?.sample?.registration?.customer_address_line2}</p>
+                  </div>
+                  <div className="w-full xl:w-1/5">
+                    <p className="mb-2.5 block font-semibold text-black dark:text-white">
+                      City:
+                    </p>
+                    <p>{data?.sample?.registration?.city}</p>
+                  </div>
+                  <div className="w-full xl:w-1/5">
+                    <p className="mb-2.5 block font-semibold text-black dark:text-white">
+                      State:
+                    </p>
+                    <p>{data?.sample?.registration?.state}</p>
+                  </div>
+                  <div className="w-full xl:w-1/5">
+                    <p className="mb-2.5 block font-semibold text-black dark:text-white">
+                      Pincode:
+                    </p>
+                    <p>{data?.sample?.registration?.pincode_no}</p>
+                  </div>
+                  <div className="w-full xl:w-1/5">
+                    <p className="mb-2.5 block font-semibold text-black dark:text-white">
+                      GST:
+                    </p>
+                    <p>{data?.sample?.registration?.gst}</p>
+                  </div>
+                </div>
+              )}
+
+              <div className="mb-4.5 ml-2 flex flex-col gap-6 p-2 xl:flex-row">
+                <div className="w-full xl:w-1/2">
+                  <p className="mb-2.5 block font-semibold text-black dark:text-white">
+                    Product Name :
+                  </p>
+                  <p>
+                    {data?.sample?.registration?.product_data?.product_name}
+                  </p>
+                </div>
+
+                <div className="w-full xl:w-1/3">
+                  <p className="mb-2.5 block font-semibold text-black dark:text-white">
+                    Product Code:
+                  </p>
+                  <p>
+                    {" "}
+                    {data?.sample?.registration?.product_data?.product_code}
+                  </p>
+                </div>
               </div>
 
-              <div className="w-full xl:w-1/5">
-                <p className="mb-2.5 block font-semibold text-black dark:text-white">
-                  Adderess Line 1:
-                </p>
-                <p>{data?.sample?.registration?.customer_address_line1}</p>
+              <div className="border-b border-stroke px-2 py-4 dark:border-strokedark">
+                <h3 className="font-bold text-black dark:text-white">
+                  Test Parameters
+                </h3>
               </div>
-              <div className="w-full xl:w-1/5">
-                <p className="mb-2.5 block font-semibold text-black dark:text-white">
-                  Adderess Line 2:
-                </p>
-                <p>{data?.sample?.registration?.customer_address_line2}</p>
-              </div>
-              <div className="w-full xl:w-1/5">
-                <p className="mb-2.5 block font-semibold text-black dark:text-white">
-                  City:
-                </p>
-                <p>{data?.sample?.registration?.city}</p>
-              </div>
-              <div className="w-full xl:w-1/5">
-                <p className="mb-2.5 block font-semibold text-black dark:text-white">
-                  State:
-                </p>
-                <p>{data?.sample?.registration?.state}</p>
-              </div>
-              <div className="w-full xl:w-1/5">
-                <p className="mb-2.5 block font-semibold text-black dark:text-white">
-                  Pincode:
-                </p>
-                <p>{data?.sample?.registration?.pincode_no}</p>
-              </div>
-              <div className="w-full xl:w-1/5">
-                <p className="mb-2.5 block font-semibold text-black dark:text-white">
-                  GST:
-                </p>
-                <p>{data?.sample?.registration?.gst}</p>
-              </div>
+
+              {data.sample.sample_test_parameters.map((testParameter) => (
+                <div
+                  className="mb-4.5 ml-2 flex flex-col gap-6 p-2 xl:flex-row"
+                  key={testParameter.id}
+                >
+                  <div className="w-full xl:w-1/5">
+                    <p className="mb-2.5 block font-semibold text-black dark:text-white">
+                      Test Paramenter Code:
+                    </p>
+                    <p>{testParameter.test_parameter.parameter_code}</p>
+                  </div>
+
+                  <div className="w-full xl:w-1/5">
+                    <p className="mb-2.5 block font-semibold text-black dark:text-white">
+                      Test Paramenter Name:
+                    </p>
+                    <p>{testParameter.test_parameter.testing_parameters}</p>
+                  </div>
+                  <div className="w-full xl:w-1/5">
+                    <p className="mb-2.5 block font-semibold text-black dark:text-white">
+                      Test Method:
+                    </p>
+                    <p>{testParameter.test_parameter.method_or_spec}</p>
+                  </div>
+                  {data.sample.status_id >= 6 && (
+                    <>
+                      {" "}
+                      <div className="w-full xl:w-1/5">
+                        <p className="mb-2.5 block font-semibold text-black dark:text-white">
+                          Value
+                        </p>
+                        <p>{testParameter?.value ?? ""}</p>
+                      </div>
+                      <div className="w-full xl:w-1/5">
+                        <p className="mb-2.5 block font-semibold text-black dark:text-white">
+                          Result
+                        </p>
+                        <p>{testParameter?.result ? "true" : "false"}</p>
+                      </div>
+                    </>
+                  )}
+                </div>
+              ))}
             </div>
           )}
-
-          <div className="mb-4.5 ml-2 flex flex-col gap-6 p-2 xl:flex-row">
-            <div className="w-full xl:w-1/2">
-              <p className="mb-2.5 block font-semibold text-black dark:text-white">
-                Product Name :
-              </p>
-              <p>{data?.sample?.registration?.product_data?.product_name}</p>
-            </div>
-
-            <div className="w-full xl:w-1/3">
-              <p className="mb-2.5 block font-semibold text-black dark:text-white">
-                Product Code:
-              </p>
-              <p> {data?.sample?.registration?.product_data?.product_code}</p>
-            </div>
-          </div>
-
-          <div className="border-b border-stroke px-2 py-4 dark:border-strokedark">
-            <h3 className="font-bold text-black dark:text-white">
-              Test Parameters
-            </h3>
-          </div>
-
-          {data.sample.sample_test_parameters.map((testParameter) => (
-            <div
-              className="mb-4.5 ml-2 flex flex-col gap-6 p-2 xl:flex-row"
-              key={testParameter.id}
-            >
-              <div className="w-full xl:w-1/5">
-                <p className="mb-2.5 block font-semibold text-black dark:text-white">
-                  Test Paramenter Code:
-                </p>
-                <p>{testParameter.test_parameter.parameter_code}</p>
-              </div>
-
-              <div className="w-full xl:w-1/5">
-                <p className="mb-2.5 block font-semibold text-black dark:text-white">
-                  Test Paramenter Name:
-                </p>
-                <p>{testParameter.test_parameter.testing_parameters}</p>
-              </div>
-              <div className="w-full xl:w-1/5">
-                <p className="mb-2.5 block font-semibold text-black dark:text-white">
-                  Test Method:
-                </p>
-                <p>{testParameter.test_parameter.method_or_spec}</p>
-              </div>
-              {data.sample.status_id >= 6 && (
-                <>
-                  {" "}
-                  <div className="w-full xl:w-1/5">
-                    <p className="mb-2.5 block font-semibold text-black dark:text-white">
-                      Value
-                    </p>
-                    <p>{testParameter?.value ?? ""}</p>
-                  </div>
-                  <div className="w-full xl:w-1/5">
-                    <p className="mb-2.5 block font-semibold text-black dark:text-white">
-                      Result
-                    </p>
-                    <p>{testParameter?.result ? "true" : "false"}</p>
-                  </div>
-                </>
-              )}
-            </div>
-          ))}
         </TabsContent>
         <TabsContent value="workflow">
           <div className="min-h-28">

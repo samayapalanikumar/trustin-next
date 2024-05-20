@@ -7,6 +7,7 @@ import {
   patchSampleWorkflow,
   patchSampleWorkflowTestResult,
   rejectSampleWorkflow,
+  updateSamples,
 } from "../actions";
 import SampleWorkflowForm from "./sample-workflow-form";
 
@@ -39,12 +40,20 @@ async function getData(id: string) {
       Authorization: `Bearer ${access_token?.value}`,
     },
   });
-  const res4 = await fetch(`${SERVER_API_URL}/users/me/`, {
+  const res4 = await fetch(`${SERVER_API_URL}/users/me`, {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${access_token?.value}`,
     },
   });
+
+  const res5 = await fetch(`${SERVER_API_URL}/batches/`, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${access_token?.value}`,
+    },
+  });
+ 
 
   // The return value is *not* serialized
   // You can return Date, Map, Set, etc.
@@ -55,16 +64,48 @@ async function getData(id: string) {
     // throw new Error("Failed to fetch data");
     console.log("error");
   }
+  if (!res.ok) {
+    // This will activate the closest `error.js` Error Boundary
+    // console.log(res)
+    // throw new Error("Failed to fetch data");
+    console.log("error");
+  }
+  if (!res2.ok) {
+    // This will activate the closest `error.js` Error Boundary
+    // console.log(res)
+    // throw new Error("Failed to fetch data");
+    console.log("error2");
+  }
+  if (!res3.ok) {
+    // This will activate the closest `error.js` Error Boundary
+    // console.log(res)
+    // throw new Error("Failed to fetch data");
+    console.log("error3");
+  }
+  if (!res4.ok) {
+    // This will activate the closest `error.js` Error Boundary
+    // console.log(res)
+    // throw new Error("Failed to fetch data");
+    console.log("error4");
+  }
+  if (!res5.ok) {
+    // This will activate the closest `error.js` Error Boundary
+    // console.log(res)
+    // throw new Error("Failed to fetch data");
+    console.log("error5");
+  }
   const sample = await res.json();
   const branches = await res2.json();
   const users = await res3.json();
   const currentUser = await res4.json();
+  const batches = await res5.json();
   // console.log(sample);
   return {
     sample,
     branches,
     users,
-    currentUser
+    currentUser,
+    batches,
   };
 }
 
@@ -172,6 +213,20 @@ export type Data = {
       created_by: number;
       updated_by: number;
     };
+    parameters: {
+      id: number;
+      branch_id: number;
+      test_type_id: number;
+      product_id: number;
+      customer_id: number;
+      created_at: "2024-03-10T08:14:48.411Z";
+      updated_at: "2024-03-10T08:14:48.411Z";
+      parameter_code: string;
+      testing_parameters: string;
+      amount: number;
+      method_or_spec: string;
+      group_of_test_parameters: "string";
+    };
   };
 
   branches: {
@@ -183,6 +238,17 @@ export type Data = {
     first_name: string;
     last_name: string;
   }[];
+
+  batches: {
+    id: number;
+    batch_no: string;
+    manufactured_date: string;
+    expiry_date: string;
+    batch_size: number;
+    received_quantity: number;
+    created_by: number;
+    updated_by: number;
+  };
 };
 
 const EditSamplePage = async ({
@@ -201,6 +267,10 @@ const EditSamplePage = async ({
     null,
     id,
   );
+  const updateSampleWithId = updateSamples.bind(
+    null,
+    id,
+  );
 
   return (
     <>
@@ -214,6 +284,7 @@ const EditSamplePage = async ({
             actionFn={patchSampleWorkflowWithId}
             actionFnResult={patchSampleWorkflowResultWithId}
             actionFnReject={rejectSampleWorkflowWithId}
+            actionUpdateSample = {updateSampleWithId}
           />
         </div>
       </div>

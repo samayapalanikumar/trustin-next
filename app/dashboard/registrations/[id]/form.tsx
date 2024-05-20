@@ -18,7 +18,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Checkbox } from "@/components/ui/checkbox";
-import { UpdateData, UpdateDataType } from "../typings";
+import { SampleRecord, UpdateData, UpdateDataType } from "../typings";
 
 const TESTTYPE = {
   1: "MICRO",
@@ -50,7 +50,7 @@ const RegistrationForm = ({
 }) => {
   const form = useForm<UpdateData>({
     defaultValues: {
-      trf_id: data?.registration?.trf_id,
+      // trf_id: data?.registration?.trf_id,
       branch_id: data?.registration?.branch_id,
       product: data?.registration?.product,
       company_id: data?.registration?.company_id,
@@ -61,56 +61,77 @@ const RegistrationForm = ({
       state: data?.registration?.state,
       pincode_no: data?.registration?.pincode_no,
       gst: data?.registration?.gst,
-      test_types: data?.registration?.test_types ?? [] ,
       date_of_received: new Date(data?.registration?.date_of_received)
         .toISOString()
         .split("T")[0],
-      batches: data?.registration?.batches.map((batch) => ({
-        id: batch.id,
-        batch_no: batch.batch_no,
-        manufactured_date: batch.manufactured_date,
-        expiry_date: batch.expiry_date,
-        batch_size: batch.batch_size,
-        received_quantity: batch.received_quantity,
-      })),
-      test_params_micro: data?.registration?.test_params_micro.map((param) => ({
-        test_params_id: param.test_params_id,
-      })),
-      test_params_mech: data?.registration?.test_params_mech.map((param) => ({
-        test_params_id: param.test_params_id,
-      })),
+
+      registration_samples: data?.registration?.reg_samples?.map((sample) => ({
+        sample_id: sample.sample_id,
+      })) ?? [{ sample_id: "" }],
     },
   });
+
+  // const { fields, append, remove, replace } = useFieldArray({
+  //   control: form.control,
+  //   name: "batches", // Name of the array in your schema
+  // });
+  // const {
+  //   fields: testMechFields,
+  //   append: testMechAppend,
+  //   remove: testMechRemove,
+  //   replace: testMechReplace,
+  // } = useFieldArray({
+  //   control: form.control,
+  //   name: "test_params_mech", // Name of the array in your schema
+  // });
+  // const {
+  //   fields: testMicroFields,
+  //   append: testMicroAppend,
+  //   remove: testMicroRemove,
+  //   replace: testMicroReplace,
+  // } = useFieldArray({
+  //   control: form.control,
+  //   name: "test_params_micro", // Name of the array in your schema
+  // });
+  // const watchedFieldValue = useWatch({ control: form.control, name: "trf_id" }); // Replace 'fieldName' with the actual name of your field
+  // const watchedTestTypeValue = useWatch({
+  //   control: form.control,
+  //   name: "test_types",
+  // });
+
   const { fields, append, remove, replace } = useFieldArray({
     control: form.control,
-    name: "batches", // Name of the array in your schema
+    name: "registration_samples", // Name of the array in your schema
   });
-  const {
-    fields: testMechFields,
-    append: testMechAppend,
-    remove: testMechRemove,
-    replace: testMechReplace,
-  } = useFieldArray({
+
+  const samples_watch = useWatch({
     control: form.control,
-    name: "test_params_mech", // Name of the array in your schema
+    name: "registration_samples",
   });
-  const {
-    fields: testMicroFields,
-    append: testMicroAppend,
-    remove: testMicroRemove,
-    replace: testMicroReplace,
-  } = useFieldArray({
+
+  const watchCompanyFieldValue = useWatch({
     control: form.control,
-    name: "test_params_micro", // Name of the array in your schema
-  });
-  const watchedFieldValue = useWatch({ control: form.control, name: "trf_id" }); // Replace 'fieldName' with the actual name of your field
-  const watchedTestTypeValue = useWatch({
-    control: form.control,
-    name: "test_types",
+    name: "company_id",
   });
 
   const [state, setState] = useState<InitialState | undefined>(initialState);
   const router = useRouter();
+
+  const [samples, setSamples] = useState<SampleRecord[]>([]);
+
+  useEffect(() => {
+    const ids = samples_watch.map((field, idx) => {
+      if (field.sample_id !== "") return field.sample_id.toString();
+    });
+
+    const samples: SampleRecord[] = [];
+    ids.forEach((id) => {
+      const sample = data?.samples.find((t) => t.id.toString() === id);
+      if (sample) samples.push(sample);
+    });
+
+    setSamples(samples);
+  }, [data?.samples, samples_watch]);
 
   useEffect(() => {
     // Make API call when the watched field value changes
@@ -153,13 +174,12 @@ const RegistrationForm = ({
     };
 
     // Check if the field value is not empty before making the API call
-    if (watchedFieldValue) {
-      const { trf_code }: { trf_code: string | undefined } = data.trf?.find(
-        (t) => t.id == watchedFieldValue,
-      ) ?? { trf_code: undefined };
-      if (trf_code) fetchData(trf_code);
+    if (watchCompanyFieldValue) {
+      const comapany_id = watchCompanyFieldValue;
+
+      if (comapany_id) fetchData(comapany_id);
     }
-  }, [watchedFieldValue, form.setValue, data.trf]);
+  }, [watchCompanyFieldValue, form.setValue, data.samples]);
 
   useEffect(() => {
     if (state?.type === null) return;
@@ -190,7 +210,7 @@ const RegistrationForm = ({
       <form onSubmit={form.handleSubmit(handleForm)}>
         <div className="p-6.5">
           <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
-            <div className="w-full xl:w-1/2">
+            {/* <div className="w-full xl:w-1/2">
               <label className="mb-2.5 block text-black dark:text-white">
                 Customer Ref / Po / Trf No
               </label>
@@ -201,40 +221,9 @@ const RegistrationForm = ({
                 label="Customer Ref / Po / Trf No"
                 emptyMessage="NO TRF Found"
               />
-              {/* <div className="relative z-20 bg-transparent dark:bg-form-input">
-                <select
-                  {...form.register("trf_id")}
-                  className="relative z-20 w-full appearance-none rounded border border-stroke bg-transparent px-5 py-3 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-                >
-                  <option value="">------------</option>
-                  {data.trf.map((t: any) => (
-                    <option value={t.id} key={t.id}>
-                      {t.trf_code}
-                    </option>
-                  ))}
-                </select>
-                <span className="absolute right-4 top-1/2 z-30 -translate-y-1/2">
-                  <svg
-                    className="fill-current"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <g opacity="0.8">
-                      <path
-                        fillRule="evenodd"
-                        clipRule="evenodd"
-                        d="M5.29289 8.29289C5.68342 7.90237 6.31658 7.90237 6.70711 8.29289L12 13.5858L17.2929 8.29289C17.6834 7.90237 18.3166 7.90237 18.7071 8.29289C19.0976 8.68342 19.0976 9.31658 18.7071 9.70711L12.7071 15.7071C12.3166 16.0976 11.6834 16.0976 11.2929 15.7071L5.29289 9.70711C4.90237 9.31658 4.90237 8.68342 5.29289 8.29289Z"
-                        fill=""
-                      ></path>
-                    </g>
-                  </svg>
-                </span>
-              </div> */}
-            </div>
-            <div className="w-full xl:w-1/2">
+              
+            </div> */}
+            <div className="w-full ">
               <label className="mb-2.5 block text-black dark:text-white">
                 Branch
               </label>
@@ -288,7 +277,7 @@ const RegistrationForm = ({
                   <option value="">------------</option>
                   {data.customers.map((t: any) => (
                     <option value={t.id} key={t.id}>
-                      {t.customer_code}
+                      {t.customer_code} - {t.company_name}
                     </option>
                   ))}
                 </select>
@@ -320,7 +309,7 @@ const RegistrationForm = ({
               <input
                 type="text"
                 {...form.register("company_name")}
-                placeholder="Enter id"
+                placeholder="Enter Company Name"
                 className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
               />
             </div>
@@ -375,11 +364,11 @@ const RegistrationForm = ({
           <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
             <div className="w-full xl:w-1/2">
               <label className="mb-2.5 block text-black dark:text-white">
-                Pin
+                Pincode
               </label>
               <input
                 {...form.register("pincode_no")}
-                placeholder="Enter Pin"
+                placeholder="Enter Pincode"
                 className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
               />
             </div>
@@ -403,7 +392,7 @@ const RegistrationForm = ({
               <input
                 type="date"
                 {...form.register("date_of_received")}
-                placeholder="Enter Date Of Recived"
+                placeholder="Enter Date Of Received"
                 className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
               />
             </div>
@@ -464,7 +453,7 @@ const RegistrationForm = ({
           </div>
         </div> */}
 
-          <div className="mb-4.5">
+          {/* <div className="mb-4.5">
             <FormField
               control={form.control}
               {...form.register("test_types")}
@@ -512,8 +501,8 @@ const RegistrationForm = ({
                 </FormItem>
               )}
             />
-          </div>
-          <Tabs defaultValue="batches" className="w-full">
+          </div> */}
+          {/* <Tabs defaultValue="batches" className="w-full">
             <TabsList>
               <TabsTrigger value="batches">Batches</TabsTrigger>
               <TabsTrigger value="mech-parameters">
@@ -788,6 +777,120 @@ const RegistrationForm = ({
                   }
                 >
                   Add Test Parameters
+                </button>
+              </div>
+            </TabsContent>
+          </Tabs> */}
+
+          <Tabs defaultValue="samples" className="w-full">
+            <TabsList>
+              <TabsTrigger value="samples">Samples</TabsTrigger>
+            </TabsList>
+            <TabsContent value="samples">
+              <div className="mb-4">
+                {fields.map((item, index) => (
+                  <div key={item.id} className="mb-4 mt-2">
+                    <div className="mb-2 flex  justify-between border-b-2">
+                      <p>
+                        Sample <strong>#{index + 1}:</strong>
+                      </p>
+                      <div>
+                        <button
+                          type="button"
+                          className="flex  justify-center rounded-full p-2   font-medium text-black hover:bg-gray "
+                          onClick={() => remove(index)}
+                        >
+                          <Trash2 className="w-4" />
+                        </button>
+                      </div>
+                    </div>
+                    <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
+                      <div className="w-full xl:w-1/5">
+                        <label className="mb-2.5 block text-black dark:text-white">
+                          Samples <span className="text-meta-1">*</span>
+                        </label>
+
+                        <div className="relative z-20 bg-transparent dark:bg-form-input">
+                          <select
+                            {...form.register(
+                              `registration_samples.${index}.sample_id`,
+                            )}
+                            className="relative z-20 w-full appearance-none rounded border border-stroke bg-transparent px-5 py-3 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                          >
+                            <option value="">------------</option>
+                            {data.samples.map((t) => (
+                              <option value={t.id} key={t.id}>
+                                {t.name}
+                              </option>
+                            ))}
+                          </select>
+                          <span className="absolute right-4 top-1/2 z-30 -translate-y-1/2">
+                            <svg
+                              className="fill-current"
+                              width="24"
+                              height="24"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <g opacity="0.8">
+                                <path
+                                  fillRule="evenodd"
+                                  clipRule="evenodd"
+                                  d="M5.29289 8.29289C5.68342 7.90237 6.31658 7.90237 6.70711 8.29289L12 13.5858L17.2929 8.29289C17.6834 7.90237 18.3166 7.90237 18.7071 8.29289C19.0976 8.68342 19.0976 9.31658 18.7071 9.70711L12.7071 15.7071C12.3166 16.0976 11.6834 16.0976 11.2929 15.7071L5.29289 9.70711C4.90237 9.31658 4.90237 8.68342 5.29289 8.29289Z"
+                                  fill=""
+                                ></path>
+                              </g>
+                            </svg>
+                          </span>
+                        </div>
+                      </div>
+                      <div className="w-full xl:w-1/5">
+                        <label className="mb-2.5 block text-black dark:text-white">
+                          Batch{" "}
+                        </label>
+                        <h5>{samples[index]?.batch?.batch_no}</h5>
+                      </div>
+
+                      <div className="w-full xl:w-1/5">
+                        <label className="mb-2.5 block text-black dark:text-white">
+                          Product Name
+                        </label>
+                        <h5>{samples[index]?.batch?.product?.product_name}</h5>
+                      </div>
+
+                      <div className="w-full xl:w-1/5">
+                        <label className="mb-2.5 block text-black dark:text-white">
+                          Test Type
+                        </label>
+                        <h5>
+                          {samples[index]?.test_type_id
+                            ? samples[index]?.test_type_id === 1
+                              ? "Micro"
+                              : "Mech"
+                            : ""}
+                        </h5>
+                      </div>
+
+                      <div className="w-full xl:w-1/5">
+                        <label className="mb-2.5 block text-black dark:text-white">
+                          Received Quantity{" "}
+                        </label>
+                        <h5>{samples[index]?.batch?.received_quantity} </h5>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+                <button
+                  type="button"
+                  className="mt-2 flex justify-center rounded bg-primary p-3 font-medium text-gray"
+                  onClick={() =>
+                    append({
+                      sample_id: "",
+                    })
+                  }
+                >
+                  Add Sample
                 </button>
               </div>
             </TabsContent>

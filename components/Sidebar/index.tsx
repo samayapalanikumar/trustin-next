@@ -64,17 +64,27 @@ const menulist = [
     pathname: "customers",
     icon: <Users />,
   },
+  // {
+  //   name: "Customer Followup",
+  //   pathname: "followup",
+  //   icon: <UserCheck />,
+  // },
   {
-    name: "Customer Followup",
-    pathname: "followup",
+    name: "Front Desk",
+    pathname: "front-desk",
+    icon: <UserCheck />,
+  },
+  {
+    name: "Batches",
+    pathname: "batches",
     icon: <UserCheck />,
   },
 
-  {
-    name: "TRF",
-    pathname: "trf",
-    icon: <LibraryBig />,
-  },
+  // {
+  //   name: "TRF",
+  //   pathname: "trf",
+  //   icon: <LibraryBig />,
+  // },
   {
     name: "Registrations",
     pathname: "registrations",

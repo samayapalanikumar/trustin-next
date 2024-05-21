@@ -15,6 +15,7 @@ import {
   Users,
   ClipboardPlus,
   TestTube2,
+  SwatchBook
 } from "lucide-react";
 import { MenuType } from "@/app/dashboard/layout";
 
@@ -77,7 +78,7 @@ const menulist = [
   {
     name: "Batches",
     pathname: "batches",
-    icon: <UserCheck />,
+    icon:  <SwatchBook />,
   },
 
   // {

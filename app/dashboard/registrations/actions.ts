@@ -46,7 +46,7 @@ export async function createRegistration(jsonObject: any) {
 
   if (res.status === 401) redirect("/signin");
 
-  if (res.status !== 200) {
+  if (res.status !== 201) {
     const error = await res.json();
     return {
       fieldErrors: null,
@@ -57,7 +57,7 @@ export async function createRegistration(jsonObject: any) {
 
   revalidateTag("Registration");
 
-  if (res.status === 200) {
+  if (res.status === 201) {
     return {
       fieldErrors: null,
       type: "Success",

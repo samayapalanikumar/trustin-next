@@ -37,7 +37,6 @@ async function getData() {
   const menusRes = await res1.json();
 
   const menus = menusRes.map((menu: { id: number; name: string }) => menu.name);
-
   return { user, menus };
 }
 

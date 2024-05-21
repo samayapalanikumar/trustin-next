@@ -47,6 +47,11 @@ const styles = StyleSheet.create({
     borderStyle: "solid",
     borderWidth: 1,
   },
+  row: { flexDirection: "row", fontSize: "12px", },
+  cell: { padding: 5, backgroundColor: "#ffffff", borderBottomWidth: 1, borderBottomColor: "#000000", borderRightWidth: 1, borderRightColor: "#000000" },
+  firstCell: { borderLeftWidth: 1, borderLeftColor: "#000000" },
+  lastCell: { borderRightWidth: 1 },
+  tableBody: { marginTop: 10,  borderTopWidth: 1, borderTopColor: "#000000"}
 });
 
 // Create PDF component
@@ -161,7 +166,7 @@ const MyDocument = ({ data }: { data: any }) => {
           </View> */}
 
           <View>
-            <View style={{ marginTop: 5, border: "1 solid #000" }}>
+            <View style={{ marginTop: 5, border: "1 solid #000", padding: 2 }}>
               <Text>Customer Information</Text>
             </View>
 
@@ -172,13 +177,13 @@ const MyDocument = ({ data }: { data: any }) => {
                 flexDirection: "row",
                 fontWeight: "bold",
                 fontSize: "12px",
-                padding: 1,
+                padding: 2,
               }}
             >
-              <Text style={{ borderRight: "1 solid #000", width: 180 }}>
+              <Text style={{ borderRight: "1 solid #000", width: 180, padding: 2 }}>
                 Company Name
               </Text>
-              <Text>{data.sample.registration.company_name}</Text>
+              <Text style={{  padding: 2 }}>{data.sample.registration.company_name}</Text>
             </View>
             <View
               style={{
@@ -187,19 +192,19 @@ const MyDocument = ({ data }: { data: any }) => {
                 flexDirection: "row",
                 fontWeight: "bold",
                 fontSize: "12px",
-                padding: 1,
+                padding: 2,
               }}
             >
-              <Text style={{ borderRight: "1 solid #000", width: 180 }}>
+              <Text style={{ borderRight: "1 solid #000", width: 180, padding: 2 }}>
                 Address
               </Text>
-              <Text>
+              <Text style={{  padding: 2 }}>
                 {data.sample.registration.customer_address_line1 +
                   " " +
                   data.sample.registration.customer_address_line2}
               </Text>
             </View>
-            <View style={{ marginTop: 5, border: "1 solid #000" }}>
+            <View style={{ marginTop: 5, border: "1 solid #000", padding: 2 }}>
               <Text>Sample Information</Text>
             </View>
             <View
@@ -209,20 +214,20 @@ const MyDocument = ({ data }: { data: any }) => {
                 flexDirection: "row",
                 fontWeight: "bold",
                 fontSize: "12px",
-                padding: 1,
+                padding: 2,
               }}
             >
-              <Text style={{ borderRight: "1 solid #000", width: 180 }}>
+              <Text style={{ borderRight: "1 solid #000", width: 180, padding: 2 }}>
                 Batch No
               </Text>
-              <Text style={{ borderRight: "1 solid #000", width: 180 }}>
+              <Text style={{ borderRight: "1 solid #000", width: 180, padding: 2 }}>
                 {data.sample.batch.batch_no}
               </Text>
 
-              <Text style={{ borderRight: "1 solid #000", width: 100 }}>
+              <Text style={{ borderRight: "1 solid #000", width: 100, padding: 2 }}>
                 Batch Size
               </Text>
-              <Text>{data.sample.batch.batch_size}</Text>
+              <Text style={{padding: 2}}>{data.sample.batch.batch_size}</Text>
             </View>
             <View
               style={{
@@ -231,22 +236,22 @@ const MyDocument = ({ data }: { data: any }) => {
                 flexDirection: "row",
                 fontWeight: "bold",
                 fontSize: "12px",
-                padding: 1,
+                padding: 2,
               }}
             >
-              <Text style={{ borderRight: "1 solid #000", width: 180 }}>
+              <Text style={{ borderRight: "1 solid #000", width: 180, padding: 2, }}>
                 Mfg No
               </Text>
-              <Text style={{ borderRight: "1 solid #000", width: 180 }}>
+              <Text style={{ borderRight: "1 solid #000", width: 180, padding: 2 }}>
                 {new Date(
                   data.sample.batch.manufactured_date,
                 ).toLocaleDateString()}
               </Text>
 
-              <Text style={{ borderRight: "1 solid #000", width: 100 }}>
+              <Text style={{ borderRight: "1 solid #000", width: 100, padding: 2 }}>
                 Exp Size
               </Text>
-              <Text>
+              <Text style={{padding: 2 }}>
                 {" "}
                 {new Date(data.sample.batch.expiry_date).toLocaleDateString()}
               </Text>
@@ -258,13 +263,13 @@ const MyDocument = ({ data }: { data: any }) => {
                 flexDirection: "row",
                 fontWeight: "bold",
                 fontSize: "12px",
-                padding: 1,
+                padding: 2,
               }}
             >
-              <Text style={{ borderRight: "1 solid #000", width: 180 }}>
+              <Text style={{ borderRight: "1 solid #000", width: 180, padding: 2 }}>
                 Test Method
               </Text>
-              <Text>{data.sample.test_type_id === 2 ? "Mech" : "Micro"}</Text>
+              <Text style={{padding:2}} >{data.sample.test_type_id === 2 ? "Mech" : "Micro"}</Text>
             </View>
             <View
               style={{
@@ -273,13 +278,13 @@ const MyDocument = ({ data }: { data: any }) => {
                 flexDirection: "row",
                 fontWeight: "bold",
                 fontSize: "12px",
-                padding: 1,
+                padding: 2,
               }}
             >
-              <Text style={{ borderRight: "1 solid #000", width: 180 }}>
+              <Text style={{ borderRight: "1 solid #000", width: 180, padding: 2 }}>
                 Product Name
               </Text>
-              <Text>
+              <Text style={{ padding: 2 }}>
                 {data?.sample?.registration?.product_data?.product_name}
               </Text>
             </View>
@@ -290,13 +295,13 @@ const MyDocument = ({ data }: { data: any }) => {
                 flexDirection: "row",
                 fontWeight: "bold",
                 fontSize: "12px",
-                padding: 1,
+                padding: 2,
               }}
             >
-              <Text style={{ borderRight: "1 solid #000", width: 180 }}>
+              <Text style={{ borderRight: "1 solid #000", width: 180, padding: 2 }}>
                 Product Code
               </Text>
-              <Text>
+              <Text style={{padding: 2}}>
                 {data?.sample?.registration?.product_data?.product_code}
               </Text>
             </View>
@@ -307,21 +312,53 @@ const MyDocument = ({ data }: { data: any }) => {
                 flexDirection: "row",
                 fontWeight: "bold",
                 fontSize: "12px",
-                padding: 1,
+                padding: 2,
               }}
             >
-              <Text style={{ borderRight: "1 solid #000", width: 180 }}>
+              <Text style={{ borderRight: "1 solid #000", width: 180, padding: 2 }}>
                 Date of Received
               </Text>
-              <Text>
+              <Text style={{padding: 2}}>
                 {new Date(
                   data?.sample?.registration?.date_of_received,
                 ).toLocaleDateString()}
               </Text>
             </View>
           </View>
+          <View
+            style={{
+              marginTop: 10,
+              display: "flex",
+              justifyContent: "flex-end",
+              flexDirection: "column"
+            }}
+          >
+            </View>
+          <View style={[styles.row, styles.tableBody]}>
+            <Text style={[styles.cell, styles.firstCell, { width: '25%' }]}>Parameter Name</Text>
+            <Text style={[styles.cell, { width: '15%' }]}>Parameter Code</Text>
+            <Text style={[styles.cell, { width: '20%' }]}>Method</Text>
+            <Text style={[styles.cell, { width: '20%' }]}>Value</Text>
+            <Text style={[styles.cell, styles.lastCell, { width: '20%' }]}>Result</Text>
+        </View>
+      {/* Table Body */}
+      {data?.sample.sample_test_parameters.map((item, index) => (
+        <View key={index} style={styles.row}>
+          {/* <Text style={{ ...styles.cell, width: '25%' }}>{item.test_parameter.testing_parameters}</Text>
+          <Text style={{ ...styles.cell, width: '15%' }}>{item.test_parameter.parameter_code}</Text>
+          <Text style={{ ...styles.cell, width: '20%' }}>{item.test_parameter.method_or_spec}</Text>
+          <Text style={{ ...styles.cell, width: '20%' }}>{item.value}</Text>
+          <Text style={{ ...styles.cell, width: '20%' }}>{item.result ? "Pass" : "Fail"}</Text> */}
 
-          <View style={{ marginTop: 5 }}>
+          <Text style={[styles.cell, styles.firstCell, { width: '25%' }]}>{item.test_parameter.testing_parameters}</Text>
+          <Text style={[styles.cell, { width: '15%' }]}>{item.test_parameter.parameter_code}</Text>
+          <Text style={[styles.cell, { width: '20%' }]}>{item.test_parameter.method_or_spec}</Text>
+          <Text style={[styles.cell, { width: '20%' }]}>{item.value}</Text>
+          <Text style={[styles.cell, styles.lastCell, { width: '20%' }]}>{item.result ? "Pass" : "Fail"}</Text>
+        </View>
+          ))}
+
+          {/* <View style={{ marginTop: 5, padding: 2 }}>
             <View
               style={{
                 border: "1 solid #000",
@@ -330,6 +367,7 @@ const MyDocument = ({ data }: { data: any }) => {
                 justifyContent: "space-evenly",
                 fontWeight: "extrabold",
                 fontSize: "14px",
+                padding: 2
               }}
             >
               <Text style={{ borderRight: "1 solid #000" }}>
@@ -370,11 +408,13 @@ const MyDocument = ({ data }: { data: any }) => {
                 <Text>{item.result ? "Pass" : "Fail"}</Text>
               </View>
             ))}
-          </View>
+          </View> */}
+          
           <View
             style={{
               display: "flex",
               fontSize: 12,
+              padding:2
             }}
           >
             <Text style={{ fontWeight: "bold", textAlign: "left" }}>

@@ -76,13 +76,13 @@ const SamplesEditForm = ({
     setFilterId(sampleWatch);
   }, [sampleWatch]);
 
+  
   useEffect(() => {
     async function fetchTestParameters(query: string, product: string) {
       let res = await fetch(
         `${SERVER_API_URL}/parameters/product/${product}?${query}`,
       );
       const response: any = await res.json();
-      console.log(response);
       setParameters(response);
     }
 
@@ -92,11 +92,19 @@ const SamplesEditForm = ({
         (batch: any) => batch.id.toString() === batchWatch.toString(),
       );
       setSelectBatch(batch);
-      if (batch) {
-        fetchTestParameters(query, batch.product_id.toString());
+      if (filterId === "2") {
+        if (batch) {
+          fetchTestParameters(query, batch.product_id.toString());
+        }
+      }
+      if (filterId === "1") {
+        const micro_params = data.test_params.filter(
+          (test: any) => test.test_type_id.toString() === "1",
+        );
+        if (micro_params.length) setParameters(micro_params);
       }
     }
-  }, [batchWatch, data.batches, data, filterId]);
+  }, [batchWatch, data.batches, data.test_params,data, filterId]);
 
   const [state, setState] = useState<InitialState | undefined>(initialState);
   const router = useRouter();

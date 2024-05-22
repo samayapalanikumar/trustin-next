@@ -65,8 +65,7 @@ const SamplesAddForm = ({ data }: { data: any }) => {
 
   const [filterId, setFilterId] = useState("1");
   const [parameters, setParameters] = useState<[]>([]);
-  const [selectedBatch, setSelectBatch] = useState<{}|null>(null);
-
+  const [selectedBatch, setSelectBatch] = useState<{} | null>(null);
 
   useEffect(() => {
     // TODO: need some imporvement in future
@@ -88,12 +87,20 @@ const SamplesAddForm = ({ data }: { data: any }) => {
       const batch = data.batches.find(
         (batch: any) => batch.id.toString() === batchWatch.toString(),
       );
-      setSelectBatch(batch)
-      if (batch) {
-        fetchTestParameters(query, batch.product_id.toString());
+      setSelectBatch(batch);
+      if (filterId === "2") {
+        if (batch) {
+          fetchTestParameters(query, batch.product_id.toString());
+        }
+      }
+      if (filterId === "1") {
+        const micro_params = data.test_params.filter(
+          (test: any) => test.test_type_id.toString() === "1",
+        );
+        if (micro_params.length) setParameters(micro_params);
       }
     }
-  }, [batchWatch, data.batches, filterId]);
+  }, [batchWatch, data.batches, data.test_params, filterId]);
 
   const [state, setState] = useState<InitialState | undefined>(initialState);
   const router = useRouter();
@@ -287,9 +294,7 @@ const TestParamsForm = ({
         return field.test_parameter_id.toString();
     });
     console.log(ids);
-    const tests = data.filter((para) =>
-      ids.includes(para.id.toString()),
-    );
+    const tests = data.filter((para) => ids.includes(para.id.toString()));
 
     console.log(tests);
 
@@ -363,7 +368,7 @@ const TestParamsForm = ({
                 Method
               </label>
               <h5 className="font-medium text-black dark:text-white">
-                {methods[index]}
+                {methods[index] ?? ""}
               </h5>
             </div>
             <div className="w-full xl:w-1/5">
@@ -371,7 +376,7 @@ const TestParamsForm = ({
                 Test Type
               </label>
               <h5 className="font-medium text-black dark:text-white">
-                {testTypesName[index]}
+                {testTypesName[index] ?? ""}
               </h5>
             </div>
           </div>

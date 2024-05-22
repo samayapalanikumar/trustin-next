@@ -53,6 +53,13 @@ async function getData(id: string) {
       Authorization: `Bearer ${access_token?.value}`,
     },
   });
+
+  const res6 = await fetch(`${SERVER_API_URL}/parameters/`, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${access_token?.value}`,
+    },
+  });
  
 
   // The return value is *not* serialized
@@ -94,11 +101,18 @@ async function getData(id: string) {
     // throw new Error("Failed to fetch data");
     console.log("error5");
   }
+  if (!res6.ok) {
+    // This will activate the closest `error.js` Error Boundary
+    // console.log(res)
+    // throw new Error("Failed to fetch data");
+    console.log("error5");
+  }
   const sample = await res.json();
   const branches = await res2.json();
   const users = await res3.json();
   const currentUser = await res4.json();
   const batches = await res5.json();
+  const parameters = await res6.json();
   // console.log(sample);
   return {
     sample,
@@ -106,6 +120,7 @@ async function getData(id: string) {
     users,
     currentUser,
     batches,
+    test_params:parameters
   };
 }
 
@@ -248,6 +263,20 @@ export type Data = {
     received_quantity: number;
     created_by: number;
     updated_by: number;
+  };
+  parameters: {
+    id: number;
+    branch_id: number;
+    test_type_id: number;
+    product_id: number;
+    customer_id: number;
+    created_at: "2024-03-10T08:14:48.411Z";
+    updated_at: "2024-03-10T08:14:48.411Z";
+    parameter_code: string;
+    testing_parameters: string;
+    amount: number;
+    method_or_spec: string;
+    group_of_test_parameters: "string";
   };
 };
 

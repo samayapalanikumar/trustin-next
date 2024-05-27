@@ -1,4 +1,5 @@
-import React, { ReactNode } from "react";
+import Link from "next/link";
+import { ReactNode } from "react";
 
 interface CardDataStatsProps {
   title: string;
@@ -6,6 +7,7 @@ interface CardDataStatsProps {
   rate?: string;
   levelUp?: boolean;
   levelDown?: boolean;
+  pathName: string;
   children: ReactNode;
 }
 
@@ -15,9 +17,11 @@ const CardDataStats: React.FC<CardDataStatsProps> = ({
   rate,
   levelUp,
   levelDown,
+  pathName,
   children,
 }) => {
   return (
+    <Link href={`/dashboard/${pathName}`}>
     <div className="rounded-sm border border-stroke bg-white px-7.5 py-6 shadow-default dark:border-strokedark dark:bg-boxdark">
       <div className="flex h-11.5 w-11.5 items-center justify-center rounded-full bg-meta-2 dark:bg-meta-4">
         {children}
@@ -73,6 +77,7 @@ const CardDataStats: React.FC<CardDataStatsProps> = ({
         )}
       </div>
     </div>
+    </Link>
   );
 };
 

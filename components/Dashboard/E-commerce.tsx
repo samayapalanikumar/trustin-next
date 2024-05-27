@@ -6,7 +6,7 @@ import ChartTwo from "../Charts/ChartTwo";
 import ChatCard from "../Chat/ChatCard";
 import TableOne from "../Tables/TableOne";
 import CardDataStats from "../CardDataStats";
-import { DashboardInfo } from "@/app/dashboard/page";
+import { DashboardData, DashboardInfo } from "@/app/dashboard/page";
 import {
   ClipboardPlus,
   Syringe,
@@ -24,58 +24,73 @@ import FollowupCountTable from "./followup-count-table";
 //   ssr: false,
 // });
 
-const ECommerce = ({ data }: { data: DashboardInfo }) => {
+const ECommerce = ({ data }: { data: DashboardData }) => {
   return (
     <>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-5 2xl:gap-7.5">
-        {data?.customer && (
+        {data?.dashboard?.customer && (
           <CardDataStats
             title="Total Customers"
-            total={data.customer.toString()}
+            total={data.dashboard?.customer.toString()}
+            pathName={data.menus.includes("customers") ? "customers" : "#"}
           >
             <Users className="text-primary dark:text-white" />
           </CardDataStats>
         )}{" "}
-        {data?.product && (
-          <CardDataStats title="Total Products" total={data.product.toString()}>
+        {data?.dashboard?.product && (
+          <CardDataStats
+            title="Total Products"
+            total={data.dashboard?.product.toString()}
+            pathName={data.menus.includes("products") ? "products" : "#"}
+          >
             <Syringe className="text-primary dark:text-white" />
           </CardDataStats>
         )}
-        {data?.registration_count && (
+        {data?.dashboard?.registration_count && (
           <CardDataStats
             title="Total Registrations"
-            total={data.registration_count.toString()}
+            total={data.dashboard?.registration_count.toString()}
+            pathName={
+              data.menus.includes("registrations") ? "registrations" : "#"
+            }
           >
             <ClipboardPlus className="text-primary dark:text-white" />
           </CardDataStats>
         )}
-        {data?.followup_count && (
+        {data?.dashboard?.followup_count && (
           <CardDataStats
             title="Total Followup"
-            total={data.followup_count.toString()}
+            total={data.dashboard?.followup_count.toString()}
+            pathName="/dashboard/"
           >
             <UserCheck className="text-primary dark:text-white" />
           </CardDataStats>
         )}
-        {data?.sample_count && (
+        {data?.dashboard?.sample_count && (
           <CardDataStats
             title="Total Samples"
-            total={data.sample_count.toString()}
+            total={data.dashboard?.sample_count.toString()}
+            pathName={data.menus.includes("samples") ? "samples" : "#"}
           >
             <TestTube2 className="text-primary dark:text-white" />
           </CardDataStats>
         )}
       </div>
+      {data?.dashboard?.registration_data && (
+        <div className="mt-4 grid grid-cols-12 gap-4 md:mt-6 md:gap-6 2xl:mt-7.5 2xl:gap-7.5">
+          <RegistrationChart data={data.dashboard?.registration_data} />
+          {/* <ChartTwo /> */}
+          {/* <ChartThree /> */}
+          {/* <MapOne /> */}
 
-      <div className="mt-4 grid grid-cols-12 gap-4 md:mt-6 md:gap-6 2xl:mt-7.5 2xl:gap-7.5">
-        <RegistrationChart data={data.registration_data} />
-        {/* <ChartTwo /> */}
-        {/* <ChartThree /> */}
-        {/* <MapOne /> */}
-
-        {/* <ChatCard /> */}
-      </div>
-      <FollowupCountTable data={data.followup_count_by_assigned_to} />
+          {/* <ChatCard /> */}
+        </div>
+      )}
+      {data.dashboard?.followup_count_by_assigned_to && (
+        <FollowupCountTable
+          data={data.dashboard?.followup_count_by_assigned_to}
+        />
+      )}
     </>
   );
 };

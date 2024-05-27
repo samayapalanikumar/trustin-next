@@ -31,6 +31,13 @@ export type DashboardInfo = {
   followup_count_by_assigned_to: FollowupData[];
 };
 
+export type DashboardData = {
+  dashboard: DashboardInfo;
+  menus: string[]
+}
+
+
+
 async function getData() {
   const cookieStore = cookies();
   const access_token = cookieStore.get("access_token");
@@ -42,6 +49,15 @@ async function getData() {
     },
     next: {
       tags: ["Dashboard", "Users", "Followup", "Registration", "Samples"],
+      revalidate: 100000,
+    },
+  });
+  const res1 = await fetch(`${SERVER_API_URL}/users/menus/`, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${access_token?.value}`,
+    },
+    next: {
       revalidate: 100000,
     },
   });
@@ -57,14 +73,18 @@ async function getData() {
   }
 
   if (res.status === 401) redirect("/signin");
+  if (res1.status === 401) redirect("/signin");
 
   const dashboard = await res.json();
+  const menusRes = await res1.json();
 
-  return dashboard;
+  const menus = menusRes.map((menu: { id: number; name: string }) => menu.name);
+
+  return {dashboard, menus};
 }
 
 export default async function DashboardPage() {
-  const data:DashboardInfo = await getData(); 
+  const data:DashboardData = await getData(); 
   return (
     <>
       <ECommerce data={data}/>

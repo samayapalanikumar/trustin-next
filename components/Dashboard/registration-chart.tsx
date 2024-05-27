@@ -181,12 +181,12 @@ const RegistrationChart: React.FC<{ data: RegistrationData[] }> = ({
       </div>
 
       <div>
-        <div id="chartOne" className="m-2 -ml-5 h-[355px] w-[105%]">
+        <div id="chartOne" className=" ml-1 h-[355px] w-[100%]">
           <ReactApexChart
             options={{
               ...options,
               xaxis: {
-                type: "datetime",
+                type: "category",
                 categories: data.map((d) => d.week),
                 axisBorder: {
                   show: false,
@@ -203,7 +203,7 @@ const RegistrationChart: React.FC<{ data: RegistrationData[] }> = ({
               },
             ]}
             type="area"
-            width="95%"
+            width="100%"
             height="100%"
           />
         </div>

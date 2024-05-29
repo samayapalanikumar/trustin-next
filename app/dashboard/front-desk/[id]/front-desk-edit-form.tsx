@@ -111,6 +111,55 @@ const FrontDeskEditForm = ({
             className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
           />
         </div>
+        <div className="mb-4.5">
+          <label className="mb-2.5 block text-black dark:text-white">
+          Temperature
+          </label>
+          <input
+            type="text"
+            name="temperature"
+            placeholder="Temperature"
+            defaultValue={data.frontDesk.temperature}
+            className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+          />
+        </div>
+        <div className="mb-4.5">
+          <Select label="Parcel Recived" name="parcel_received"  defaultValue={data.frontDesk.parcel_received}>
+           <option value="SAMPLE">Sample</option>
+           <option value="Material">Material</option>
+          </Select>
+        </div>
+        <div className="mb-4.5">
+          <Select label="Received Condition" name="received_condition"  defaultValue={data.frontDesk.received_condition}>
+            
+              <option value="GOOD" >
+              Good
+              </option>
+              <option value="DAMAGED">Damaged</option>
+              
+           
+          </Select>
+        </div>
+        
+        <div className="mb-4.5">
+          <Select label="Department" name="deparment_id"  defaultValue={data.frontDesk.deparment_id}>
+            {data?.departments.map((department) => (
+              <option value={department.id} key={department.id}>
+                {department.name}
+              </option>
+            ))}
+          </Select>
+        </div>
+        <div className="mb-4.5">
+          <Select label="Status" name="status"  defaultValue={data.frontDesk.status}>
+          <option value="Not_REGISTRATION">
+                Not Registration
+              </option>
+              <option value="REGISTRATION">
+                Registration
+              </option>
+          </Select>
+        </div>
         <SubmitButton />
       </div>
     </form>

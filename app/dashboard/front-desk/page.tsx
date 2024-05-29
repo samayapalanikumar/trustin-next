@@ -35,6 +35,10 @@ async function getData() {
   }
   if (res.status === 401) redirect("/signin");
   const resjson = await res.json();
+  // resjson.forEach( items => {
+  //   console.log()
+  // });
+  console.log(resjson)
   return resjson;
 }
 

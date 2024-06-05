@@ -14,6 +14,7 @@ type UpdateBatchType = BatchCreate & { id: string | null };
 
 type TestParam = {
   test_params_id: number | string;
+  order: number|string;
 };
 type RegistrationSamples = {
   sample_id: number | string;
@@ -22,7 +23,7 @@ type RegistrationSamples = {
 export type TestType = string[] | number[];
 export type CreateData = {
   branch_id: number | string;
-  // trf_id: number | string;
+  trf_code:  string;
   company_id: number | string;
   company_name: string;
   customer_address_line1: string;
@@ -32,12 +33,9 @@ export type CreateData = {
   pincode_no: string;
   gst: string;
   date_of_received: string;
-  product: number;
-  // batches: Batch[];
-  // test_params_mech: TestParam[];
-  // test_params_micro: TestParam[];
-  // test_types: TestType[];
-  registration_samples: RegistrationSamples[]; 
+  product_id: number;
+  test_params: TestParam[];
+  samples: RegistrationSamples[]; 
 };
 
 export type UpdateData = {

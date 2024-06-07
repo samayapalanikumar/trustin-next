@@ -17,7 +17,12 @@ type TestParam = {
   order: number|string;
 };
 type RegistrationSamples = {
-  sample_id: number | string;
+  sample_name: string;
+  batch_or_lot_no: string;
+  manufactured_date: string;
+  expiry_date: string;
+  batch_size: number;
+  received_quantity: number;
 };
 
 export type TestType = string[] | number[];
@@ -34,6 +39,20 @@ export type CreateData = {
   gst: string;
   date_of_received: string;
   product_id: number;
+  test_type_id: number | string;
+  license_no: string;
+  nabl_logo: boolean;
+  testing_process: string;
+  sampled_by: string;
+  sample_disposal_process: string;
+  sample_name: string;
+  batch_or_lot_no: string;
+  manufactured_date: string;
+  expiry_date: string;
+  batch_size: number;
+  received_quantity: number;
+  no_of_samples: number;
+  reports_send_by: string;
   test_params: TestParam[];
   samples: RegistrationSamples[]; 
 };

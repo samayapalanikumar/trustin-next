@@ -52,12 +52,13 @@ async function getData() {
       revalidate: 100000,
     },
   });
-  const res1 = await fetch(`${SERVER_API_URL}/users/menus/`, {
+  const res1 = await fetch(`${SERVER_API_URL}/users/menus`, {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${access_token?.value}`,
     },
     next: {
+      tags:["Menus",],
       revalidate: 100000,
     },
   });
@@ -70,6 +71,12 @@ async function getData() {
     // console.log(res)
     // throw new Error("Failed to fetch data");
     console.log("error");
+  }
+  if (!res1.ok) {
+    // This will activate the closest `error.js` Error Boundary
+    // console.log(res)
+    // throw new Error("Failed to fetch data");
+    console.log("error1");
   }
 
   if (res.status === 401) redirect("/signin");

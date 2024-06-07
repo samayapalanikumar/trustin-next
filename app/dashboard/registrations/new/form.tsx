@@ -81,6 +81,14 @@ const RegistrationForm = ({ data }: { data: Data }) => {
 
   const [samples, setSamples] = useState<SampleRecord[]>([]);
 
+  const testingProcess = [{
+    BATCH_ANALYSIS : "BATCH_ANALYSIS",
+    METHOD_DEVELOPMENT : "METHOD_DEVELOPMENT",
+    METHOD_VALIDATION : "METHOD_VALIDATION",
+    RD_RESEARCH : "RD_RESEARCH",
+    REGULATORY : "REGULATORY"
+  }];
+
   // useEffect(() => {
   //   const ids = samples_watch.map((field, idx) => {
   //     if (field.sample_id !== "") return field.sample_id.toString();
@@ -361,6 +369,90 @@ const RegistrationForm = ({ data }: { data: Data }) => {
 
           <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
             <div className="w-full ">
+              <label className="mb-2.5 block text-black dark:text-white">
+                Product
+              </label>
+
+              <div className="relative z-20 bg-transparent dark:bg-form-input">
+                <select
+                  {...form.register("product_id")}
+                  className="relative z-20 w-full appearance-none rounded border border-stroke bg-transparent px-5 py-3 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                >
+                  <option value="">------------</option>
+                  {data.products.map((t: any) => (
+                    <option value={t.id} key={t.id}>
+                      {t.product_name}
+                    </option>
+                  ))}
+                </select>
+                <span className="absolute right-4 top-1/2 z-30 -translate-y-1/2">
+                  <svg
+                    className="fill-current"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <g opacity="0.8">
+                      <path
+                        fillRule="evenodd"
+                        clipRule="evenodd"
+                        d="M5.29289 8.29289C5.68342 7.90237 6.31658 7.90237 6.70711 8.29289L12 13.5858L17.2929 8.29289C17.6834 7.90237 18.3166 7.90237 18.7071 8.29289C19.0976 8.68342 19.0976 9.31658 18.7071 9.70711L12.7071 15.7071C12.3166 16.0976 11.6834 16.0976 11.2929 15.7071L5.29289 9.70711C4.90237 9.31658 4.90237 8.68342 5.29289 8.29289Z"
+                        fill=""
+                      ></path>
+                    </g>
+                  </svg>
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
+            <div className="w-full xl:w-9/12">
+              <label className="mb-2.5 block text-black dark:text-white">
+                Test type
+              </label>
+
+              <div className="relative z-20 bg-transparent dark:bg-form-input">
+                {/* <Combobox
+                data={data?.customers.map((customer)=>({label: `${customer.customer_code} - ${customer.company_name}`, value: customer.id.toString()}))}
+                name="company_id"
+                form={form}
+                label="Company ID"
+                emptyMessage="NO Customer Found"
+              /> */}
+                <select
+                  // {...form.register("company_id")}
+                  className="relative z-20 w-full appearance-none rounded border border-stroke bg-transparent px-5 py-3 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                >
+                  <option value="">------------</option>
+                 <option value="1">Micro</option>
+                 <option value="2">Mech</option>
+                </select>
+                <span className="absolute right-4 top-1/2 z-30 -translate-y-1/2">
+                  <svg
+                    className="fill-current"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <g opacity="0.8">
+                      <path
+                        fillRule="evenodd"
+                        clipRule="evenodd"
+                        d="M5.29289 8.29289C5.68342 7.90237 6.31658 7.90237 6.70711 8.29289L12 13.5858L17.2929 8.29289C17.6834 7.90237 18.3166 7.90237 18.7071 8.29289C19.0976 8.68342 19.0976 9.31658 18.7071 9.70711L12.7071 15.7071C12.3166 16.0976 11.6834 16.0976 11.2929 15.7071L5.29289 9.70711C4.90237 9.31658 4.90237 8.68342 5.29289 8.29289Z"
+                        fill=""
+                      ></path>
+                    </g>
+                  </svg>
+                </span>
+              </div>
+            </div>
+            
+            <div className="w-full xl:w-9/12">
               <label className="mb-2.5 block text-black dark:text-white">
                 Product
               </label>

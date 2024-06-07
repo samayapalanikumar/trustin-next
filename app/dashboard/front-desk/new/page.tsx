@@ -30,15 +30,47 @@ async function getData() {
   if (!res.ok) {
     // This will activate the closest `error.js` Error Boundary
     // console.log(res)
-    throw new Error("Failed to fetch data");
+    // throw new Error("Failed to fetch data");
     console.log("error");
   }
   if (res.status === 401) redirect("/signin");
-  const resjson = await res.json();
-  return resjson;
+
+  const res1 =await fetch(`${SERVER_API_URL}/departments/`,{
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${access_token?.value}`,
+    },
+  })
+  if(!res1.ok){
+    // throw new Error("Failed to fetch data");
+    console.log('error');
+  }
+  if(res1.status === 401) {
+    redirect("/signin");
+  }
+  const customers = await res.json();
+  const departments = await res1.json();
+  return{
+    customers,
+    departments
+  };
 }
+
+export type Data = {
+  customers:{
+    id:number;
+    company_name:string;
+
+  }[];
+  departments:{
+    id:number;
+    name:string;
+  }[]
+
+};
+
 const NewFrontDesk = async () => {
-  const data = await getData();
+  const data:Data = await getData();
   return (
     <>
       <Breadcrumb pageName="Add New Front Desk" />

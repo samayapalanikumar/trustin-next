@@ -3,6 +3,8 @@ import Link from "next/link";
 import { Data } from "./page";
 
 const FrontDeskTable = ({ data }) => {
+
+  console.log(data.date_of_received)
   return (
     <div className="rounded-sm border border-stroke bg-white px-5 pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
       <div className="max-w-full overflow-x-auto">
@@ -16,7 +18,10 @@ const FrontDeskTable = ({ data }) => {
                 Courier Name
               </th>
               <th className="min-w-[120px] px-4 py-4 font-medium text-black dark:text-white">
-                date of received
+                Date Of Received
+              </th>
+              <th className="min-w-[120px] px-4 py-4 pl-0 lg:pl-9 font-medium text-black dark:text-white">
+                Status
               </th>
               <th className="px-4 py-4 font-medium text-black dark:text-white">
                 Actions
@@ -40,7 +45,14 @@ const FrontDeskTable = ({ data }) => {
                   <p
                     className={`inline-flex rounded-full bg-opacity-10 px-3 py-1 text-sm font-medium `}
                   >
-                    {packageItem.date_of_received}
+                    {new Date(packageItem.date_of_received).toISOString().slice(0, 16)}
+                  </p>
+                </td>
+                <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark ">
+                  <p
+                    className={`inline-flex rounded-full bg-opacity-10 px-3 py-1 text-sm font-medium `}
+                  >
+                    {packageItem. status}
                   </p>
                 </td>
                 <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
@@ -67,7 +79,7 @@ const FrontDeskTable = ({ data }) => {
                         />
                       </svg>
                     </Link>
-                    <button className="hover:text-primary">
+                    {/* <button className="hover:text-primary">
                       <svg
                         className="fill-current"
                         width="18"
@@ -93,7 +105,7 @@ const FrontDeskTable = ({ data }) => {
                           fill=""
                         />
                       </svg>
-                    </button>
+                    </button> */}
                   </div>
                 </td>
               </tr>
